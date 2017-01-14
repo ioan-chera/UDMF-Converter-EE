@@ -9,7 +9,76 @@
 #include "z_zone.h"
 #include "m_argv.h"
 #include "m_collection.h"
+#include "m_qstr.h"
 #include "w_wad.h"
+
+// Lump order in a map WAD: each map needs a couple of lumps
+// to provide a complete scene geometry description.
+enum
+{
+   ML_LABEL,             // A separator, name, ExMx or MAPxx
+   ML_THINGS,            // Monsters, items..
+   ML_LINEDEFS,          // LineDefs, from editing
+   ML_SIDEDEFS,          // SideDefs, from editing
+   ML_VERTEXES,          // Vertices, edited and BSP splits generated
+   ML_SEGS,              // LineSegs, from LineDefs split by BSP
+   ML_SSECTORS,          // SubSectors, list of LineSegs
+   ML_NODES,             // BSP nodes
+   ML_SECTORS,           // Sectors, from editing
+   ML_REJECT,            // LUT, sector-sector visibility
+   ML_BLOCKMAP,          // LUT, motion clipping, walls/grid element
+   ML_BEHAVIOR,          // haleyjd 10/03/05: behavior, used to id hexen maps
+
+   // PSX
+   ML_LEAFS = ML_BEHAVIOR, // haleyjd 12/12/13: for identifying console map formats
+
+   // Doom 64
+   ML_LIGHTS,
+   ML_MACROS
+};
+
+// haleyjd 10/03/05: let P_CheckLevel determine the map format
+enum
+{
+   LEVEL_FORMAT_INVALID,
+   LEVEL_FORMAT_DOOM,
+   LEVEL_FORMAT_HEXEN,
+   LEVEL_FORMAT_PSX,
+   LEVEL_FORMAT_DOOM64,
+   // LEVEL_FORMAT_UDMF_[NAMESPACE] is the format for UDMF namespaces that need their own definition
+   LEVEL_FORMAT_UDMF_ETERNITY,
+};
+
+//
+// Map lumps table
+//
+// For Doom- and Hexen-format maps.
+//
+static const char *levellumps[] =
+{
+   "label",    // ML_LABEL,    A separator, name, ExMx or MAPxx
+   "THINGS",   // ML_THINGS,   Monsters, items..
+   "LINEDEFS", // ML_LINEDEFS, LineDefs, from editing
+   "SIDEDEFS", // ML_SIDEDEFS, SideDefs, from editing
+   "VERTEXES", // ML_VERTEXES, Vertices, edited and BSP splits generated
+   "SEGS",     // ML_SEGS,     LineSegs, from LineDefs split by BSP
+   "SSECTORS", // ML_SSECTORS, SubSectors, list of LineSegs
+   "NODES",    // ML_NODES,    BSP nodes
+   "SECTORS",  // ML_SECTORS,  Sectors, from editing
+   "REJECT",   // ML_REJECT,   LUT, sector-sector visibility
+   "BLOCKMAP", // ML_BLOCKMAP  LUT, motion clipping, walls/grid element
+   "BEHAVIOR"  // ML_BEHAVIOR  haleyjd: ACS bytecode; used to id hexen maps
+};
+
+//
+// Lumps that are used in console map formats
+//
+static const char *consolelumps[] =
+{
+   "LEAFS",
+   "LIGHTS",
+   "MACROS"
+};
 
 //
 // D_AddFile
@@ -68,7 +137,7 @@ static void loadWads(WadDirectory &dir)
 //
 // Picks the map from the command line
 //
-static int pickMap(const WadDirectory &dir)
+static int pickMap(const WadDirectory &dir, qstring &name)
 {
    int parm = M_CheckParm("-map");
    if(!parm || parm + 1 >= myargc)
@@ -81,7 +150,97 @@ static int pickMap(const WadDirectory &dir)
    {
       I_Error("Couldn't find map %s\n", myargv[parm + 1]);
    }
+   name = myargv[parm + 1];
    return mapnum;
+}
+
+//
+// P_checkConsoleFormat
+//
+// haleyjd 12/12/13: Check for supported console map formats
+//
+static int P_checkConsoleFormat(const WadDirectory &dir, int lumpnum)
+{
+   int          numlumps = dir.getNumLumps();
+   lumpinfo_t **lumpinfo = dir.getLumpInfo();
+
+   for(int i = ML_LEAFS; i <= ML_MACROS; i++)
+   {
+      int ln = lumpnum + i;
+      if(ln >= numlumps ||     // past the last lump?
+         strncmp(lumpinfo[ln]->name, consolelumps[i - ML_LEAFS], 8))
+      {
+         if(i == ML_LIGHTS)
+            return LEVEL_FORMAT_PSX; // PSX
+         else
+            return LEVEL_FORMAT_INVALID; // invalid map
+      }
+   }
+
+   // If we got here, dealing with Doom 64 format. (TODO: Not supported ... yet?)
+   return LEVEL_FORMAT_INVALID; //LEVEL_FORMAT_DOOM64;
+}
+
+//
+// Check the level now
+//
+int checkLevel(const WadDirectory &dir, int lumpnum)
+{
+   int numlumps = dir.getNumLumps();
+   lumpinfo_t **lumpinfo = dir.getLumpInfo();
+
+   for(int i = ML_THINGS; i <= ML_BEHAVIOR; i++)
+   {
+      int ln = lumpnum + i;
+      if(ln >= numlumps ||     // past the last lump?
+         strncmp(lumpinfo[ln]->name, levellumps[i], 8))
+      {
+         // If "BEHAVIOR" wasn't found, we assume we are dealing with
+         // a DOOM-format map, and it is not an error; any other missing
+         // lump means the map is invalid.
+
+         if(i == ML_BEHAVIOR)
+         {
+            // If the current lump is named LEAFS, it's a console map
+            if(ln < numlumps && !strncmp(lumpinfo[ln]->name, "LEAFS", 8))
+               return P_checkConsoleFormat(dir, lumpnum);
+            else
+               return LEVEL_FORMAT_DOOM;
+         }
+         else
+            return LEVEL_FORMAT_INVALID;
+      }
+   }
+
+   // if we got here, we're dealing with a Hexen-format map
+   return LEVEL_FORMAT_HEXEN;
+}
+
+//
+// Does much of what P_SetupLevel does in Eternity
+//
+static void setupLevel(const WadDirectory &dir, int lumpnum, const qstring &name)
+{
+
+   int format = checkLevel(dir, lumpnum);
+   switch (format) {
+      case LEVEL_FORMAT_INVALID:
+         I_Error("Invalid level %s\n", name.constPtr());
+      case LEVEL_FORMAT_PSX:
+         printf("%s is for PSX\n", name.constPtr());
+         break;
+      case LEVEL_FORMAT_DOOM:
+         printf("%s is of Doom format\n", name.constPtr());
+         break;
+      case LEVEL_FORMAT_HEXEN:
+         printf("%s is of Hexen format\n", name.constPtr());
+         break;
+      case LEVEL_FORMAT_DOOM64:
+         printf("%s is of Doom 64 format\n", name.constPtr());
+         break;
+      default:
+         I_Error("Invalid format %d for level %s\n", format, name.constPtr());
+   }
 }
 
 //
@@ -94,8 +253,9 @@ int main(int argc, const char * argv[])
    WadDirectory dir;
 
    loadWads(dir);
-   int mapnum = pickMap(dir);
+   qstring name;
+   int lumpnum = pickMap(dir, name);
 
-
+   setupLevel(dir, lumpnum, name);
    return 0;
 }
