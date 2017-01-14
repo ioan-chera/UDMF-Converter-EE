@@ -338,14 +338,6 @@ public:
    }
 };
 
-extern WadDirectory wGlobalDir; // the global wad directory
-
-int      W_CheckNumForName(const char *name);   // killough 4/17/98
-int      W_CheckNumForNameNS(const char *name, int li_namespace);
-int      W_GetNumForName(const char* name);
-
-int      W_LumpLength(int lump);
-
 #endif
 
 //----------------------------------------------------------------------------

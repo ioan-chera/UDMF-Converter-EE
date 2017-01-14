@@ -49,9 +49,6 @@
 // GLOBALS
 //
 
-// Location of each lump on disk.
-WadDirectory wGlobalDir;
-
 int WadDirectory::source;            // haleyjd 03/18/10: next source ID# to use
 int WadDirectory::IWADSource   = -1; // sf: the handle of the main iwad
 int WadDirectory::ResWADSource = -1; // haleyjd: track handle of first wad added
@@ -1225,26 +1222,6 @@ int WadDirectory::checkNumForName(const char *name, int li_namespace)
 }
 
 //
-// W_CheckNumForName
-//
-// haleyjd: Now a global directory convenience routine.
-//
-int W_CheckNumForName(const char *name)
-{
-   return wGlobalDir.checkNumForName(name);
-}
-
-//
-// W_CheckNumForNameNS
-//
-// haleyjd: Separated from W_CheckNumForName. Looks in a specific namespace.
-//
-int W_CheckNumForNameNS(const char *name, int li_namespace)
-{
-   return wGlobalDir.checkNumForName(name, li_namespace);
-}
-
-//
 // WadDirectory::checkNumForNameNSG
 //
 // haleyjd 12/24/13: Looks in both a specified namespace and the global
@@ -1295,11 +1272,6 @@ int WadDirectory::getNumForNameNSG(const char *name, int ns)
    if(i == -1)
       I_Error("WadDirectory::getNumForNameNSG: %.8s not found!\n", name);
    return i;
-}
-
-int W_GetNumForName(const char *name)
-{
-   return wGlobalDir.getNumForName(name);
 }
 
 //
@@ -1541,11 +1513,6 @@ int WadDirectory::lumpLength(int lump)
    if(lump < 0 || lump >= numlumps)
       I_Error("WadDirectory::LumpLength: %i >= numlumps\n", lump);
    return (int)lumpinfo[lump]->size;
-}
-
-int W_LumpLength(int lump)
-{
-   return wGlobalDir.lumpLength(lump);
 }
 
 //

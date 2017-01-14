@@ -41,12 +41,15 @@ static void addFile(const char *file, PODCollection<wfileadd_t> &adds)
    add.flags = flags;
 }
 
+//
+// Loads the wads from the command line into the directory
+//
 static void loadWads(WadDirectory &dir)
 {
    int parm = M_CheckParm("-file");
    if(!parm || parm + 1 >= myargc)
    {
-      puts("Please provide the -file with path to wad");
+      fprintf(stderr, "Please provide the -file with path to wad\n");
       exit(EXIT_FAILURE);
    }
 
@@ -62,6 +65,9 @@ static void loadWads(WadDirectory &dir)
    dir.initMultipleFiles(&adds[0]);
 }
 
+//
+// Entry point
+//
 int main(int argc, const char * argv[])
 {
    myargc = argc;
@@ -69,6 +75,12 @@ int main(int argc, const char * argv[])
    WadDirectory dir;
 
    loadWads(dir);
+   int parm = M_CheckParm("-map");
+   if(!parm || parm + 1 >= myargc)
+   {
+      fprintf(stderr, "Please provide the -map with the map name\n");
+      exit(EXIT_FAILURE);
+   }
    
 
    return 0;
