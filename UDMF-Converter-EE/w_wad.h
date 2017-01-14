@@ -297,7 +297,7 @@ public:
 
    // Public methods
    void  initMultipleFiles(wfileadd_t *files);
-   int   checkNumForName(const char *name, int li_namespace = lumpinfo_t::ns_global);
+   int   checkNumForName(const char *name, int li_namespace = lumpinfo_t::ns_global) const;
    int   checkNumForNameNSG(const char *name, int li_namespace);
    int   getNumForName(const char *name);
    int   getNumForNameNSG(const char *name, int ns);

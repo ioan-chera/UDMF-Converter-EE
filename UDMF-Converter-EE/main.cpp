@@ -66,6 +66,25 @@ static void loadWads(WadDirectory &dir)
 }
 
 //
+// Picks the map from the command line
+//
+static int pickMap(const WadDirectory &dir)
+{
+   int parm = M_CheckParm("-map");
+   if(!parm || parm + 1 >= myargc)
+   {
+      fprintf(stderr, "Please provide the -map with the map name\n");
+      exit(EXIT_FAILURE);
+   }
+   int mapnum = dir.checkNumForName(myargv[parm + 1]);
+   if(mapnum == -1)
+   {
+      I_Error("Couldn't find map %s\n", myargv[parm + 1]);
+   }
+   return mapnum;
+}
+
+//
 // Entry point
 //
 int main(int argc, const char * argv[])
@@ -75,13 +94,8 @@ int main(int argc, const char * argv[])
    WadDirectory dir;
 
    loadWads(dir);
-   int parm = M_CheckParm("-map");
-   if(!parm || parm + 1 >= myargc)
-   {
-      fprintf(stderr, "Please provide the -map with the map name\n");
-      exit(EXIT_FAILURE);
-   }
-   
+   int mapnum = pickMap(dir);
+
 
    return 0;
 }

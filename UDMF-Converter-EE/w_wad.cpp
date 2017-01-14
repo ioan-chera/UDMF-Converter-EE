@@ -1199,7 +1199,7 @@ unsigned int WadDirectory::LumpNameHash(const char *s)
 //
 // haleyjd 03/01/09: added InDir version.
 //
-int WadDirectory::checkNumForName(const char *name, int li_namespace)
+int WadDirectory::checkNumForName(const char *name, int li_namespace) const
 {
    // Hash function maps the name to one of possibly numlump chains.
    // It has been tuned so that the average chain length never exceeds 2.
