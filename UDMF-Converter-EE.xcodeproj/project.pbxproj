@@ -39,6 +39,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4F4DBB581EB5C8C5001F1CE9 /* m_binary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = m_binary.h; sourceTree = "<group>"; };
 		4FC0A94B1E2435C8006CEC45 /* UDMF-Converter-EE */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "UDMF-Converter-EE"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FC0A94E1E2435C8006CEC45 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4FC0A9551E243625006CEC45 /* m_argv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = m_argv.cpp; sourceTree = "<group>"; };
@@ -130,6 +131,7 @@
 				4FC0A9601E2437E3006CEC45 /* i_system.h */,
 				4FC0A9551E243625006CEC45 /* m_argv.cpp */,
 				4FC0A9561E243625006CEC45 /* m_argv.h */,
+				4F4DBB581EB5C8C5001F1CE9 /* m_binary.h */,
 				4FC0A9871E2A868E006CEC45 /* m_buffer.cpp */,
 				4FC0A9881E2A868E006CEC45 /* m_buffer.h */,
 				4FC0A9711E243A52006CEC45 /* m_collection.h */,
@@ -385,6 +387,7 @@
 				4FC0A9541E2435C8006CEC45 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -9,6 +9,7 @@
 #include "z_zone.h"
 #include "z_auto.h"
 #include "m_argv.h"
+#include "m_binary.h"
 #include "m_collection.h"
 #include "m_qstr.h"
 #include "w_wad.h"
@@ -118,10 +119,7 @@ static void loadWads(WadDirectory &dir)
 {
    int parm = M_CheckParm("-file");
    if(!parm || parm + 1 >= myargc)
-   {
-      fprintf(stderr, "Please provide the -file with path to wad\n");
-      exit(EXIT_FAILURE);
-   }
+      I_Error("Please provide the -file with path to wad\n");
 
    PODCollection<wfileadd_t> adds;
    for(++parm; parm < myargc; ++parm)
@@ -225,11 +223,31 @@ static void convertPSXMap(const WadDirectory &dir, int lumpnum)
 //
 // Handle Doom format map (may have ExtraData)
 //
-static void convertDoomMap(const WadDirectory &dir, int lumpnum)
+static void convertDoomMap(const WadDirectory &dir, int lumpnum, FILE *f)
 {
-   // We already know the lumps are valid
-   ZAutoBuffer buffer;
-   dir.cacheLumpAuto(lumpnum + ML_VERTEXES, buffer);
+   // We already know the lumps are valid. Read them in the order they are
+   // called in the game.
+   {
+      ZAutoBuffer buffer;
+      int num = lumpnum + ML_VERTEXES;
+      dir.cacheLumpAuto(num, buffer);
+      auto data = buffer.getAs<const byte *>();
+      int numvertices = dir.lumpLength(num) / 4;
+      for(int i = 0; i < numvertices; ++i)
+      {
+         int16_t x = GetBinaryWord(&data);
+         int16_t y = GetBinaryWord(&data);
+         fprintf(f, "vertex{x=%d;y=%d;}", x, y);
+      }
+   }
+   {
+      ZAutoBuffer buffer;
+      int num = lumpnum + ML_SECTORS;
+      dir.cacheLumpAuto(num, buffer);
+      auto data = buffer.getAs<const byte *>();
+      int numsectors = dir.lumpLength(num) / 26;
+
+   }
 }
 
 //
@@ -251,7 +269,8 @@ static void convertDoom64Map(const WadDirectory &dir, int lumpnum)
 //
 // Does much of what P_SetupLevel does in Eternity
 //
-static void setupLevel(const WadDirectory &dir, int lumpnum, const qstring &name)
+static void setupLevel(const WadDirectory &dir, int lumpnum, const qstring &name,
+                       FILE *f)
 {
 
    int format = checkLevel(dir, lumpnum);
@@ -264,7 +283,7 @@ static void setupLevel(const WadDirectory &dir, int lumpnum, const qstring &name
          break;
       case LEVEL_FORMAT_DOOM:
          printf("%s is of Doom format\n", name.constPtr());
-         convertDoomMap(dir, lumpnum);
+         convertDoomMap(dir, lumpnum, f);
          break;
       case LEVEL_FORMAT_HEXEN:
          printf("%s is of Hexen format\n", name.constPtr());
@@ -277,6 +296,20 @@ static void setupLevel(const WadDirectory &dir, int lumpnum, const qstring &name
       default:
          I_Error("Invalid format %d for level %s\n", format, name.constPtr());
    }
+   fclose(f);
+}
+
+static FILE *getOutput()
+{
+   int parm = M_CheckParm("-out");
+   if(!parm || parm + 1 >= myargc)
+      I_Error("Please provide the -out with the TEXTMAP file to write\n");
+   const char *outfile = myargv[parm + 1];
+   FILE *f = fopen(outfile, "wt");
+   if(!f)
+      I_Error("Failed opening the TEXTMAP output file (error %d)\n", errno);
+   fprintf(f, "namespace=\"eternity\";");
+   return f;
 }
 
 //
@@ -292,6 +325,6 @@ int main(int argc, const char * argv[])
    qstring name;
    int lumpnum = pickMap(dir, name);
 
-   setupLevel(dir, lumpnum, name);
+   setupLevel(dir, lumpnum, name, getOutput());
    return 0;
 }
