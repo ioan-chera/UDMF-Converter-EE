@@ -141,10 +141,7 @@ static int pickMap(const WadDirectory &dir, qstring &name)
 {
    int parm = M_CheckParm("-map");
    if(!parm || parm + 1 >= myargc)
-   {
-      fprintf(stderr, "Please provide the -map with the map name\n");
-      exit(EXIT_FAILURE);
-   }
+      I_Error("Please provide the -map with the map name\n");
    int mapnum = dir.checkNumForName(myargv[parm + 1]);
    if(mapnum == -1)
    {

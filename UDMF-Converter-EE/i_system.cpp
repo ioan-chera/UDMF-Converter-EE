@@ -53,7 +53,7 @@ void I_Error(const char *error, ...) // killough 3/20/98: add const
    va_start(ap, error);
    vfprintf(stderr, error, ap);
    va_end(ap);
-   exit(-1);
+   exit(EXIT_FAILURE);
 }
 
 //
