@@ -268,15 +268,15 @@ protected:
    namespace_t m_namespaces[lumpinfo_t::ns_max];
 
    // Protected methods
-   void initLumpHash();
+   void initLumpHash() const;
    void initLFNHash();
    void initResources();
-   void addInfoPtr(lumpinfo_t *infoptr);
+   void addInfoPtr(lumpinfo_t *infoptr) const;
    void coalesceMarkedResources();
-   void incrementSource(const openwad_t &openData);
+   void incrementSource(const openwad_t &openData) const;
    void handleOpenError(openwad_t &openData, const wfileadd_t &addInfo,
-                        const char *filename);
-   openwad_t openFile(const wfileadd_t &addInfo);
+                        const char *filename) const;
+   openwad_t openFile(const wfileadd_t &addInfo) const;
    lumpinfo_t *reAllocLumpInfo(int numnew, int startlump);
    bool addSingleFile(openwad_t &openData, wfileadd_t &addInfo, int startlump);
    bool addMemoryWad(openwad_t &openData, wfileadd_t &addInfo, int startlump);
@@ -285,8 +285,8 @@ protected:
    bool addDirectoryAsArchive(openwad_t &openData, wfileadd_t &addInfo,
                               int startlump);
    bool addFile(wfileadd_t &addInfo);
-   void freeDirectoryLumps();  // haleyjd 06/27/09
-   void freeDirectoryAllocs(); // haleyjd 06/06/10
+   void freeDirectoryLumps() const;  // haleyjd 06/27/09
+   void freeDirectoryAllocs() const; // haleyjd 06/06/10
 
    // Utilities
    static unsigned int LumpNameHash(const char *s);
@@ -298,11 +298,11 @@ public:
    // Public methods
    void  initMultipleFiles(wfileadd_t *files);
    int   checkNumForName(const char *name, int li_namespace = lumpinfo_t::ns_global) const;
-   int   checkNumForNameNSG(const char *name, int li_namespace);
-   int   getNumForName(const char *name);
-   int   getNumForNameNSG(const char *name, int ns);
-   int   checkNumForLFN(const char *lfn, int li_namespace = lumpinfo_t::ns_global);
-   int   checkNumForLFNNSG(const char *name, int ns);
+   int   checkNumForNameNSG(const char *name, int li_namespace) const;
+   int   getNumForName(const char *name) const;
+   int   getNumForNameNSG(const char *name, int ns) const;
+   int   checkNumForLFN(const char *lfn, int li_namespace = lumpinfo_t::ns_global) const;
+   int   checkNumForLFNNSG(const char *name, int ns) const;
 
    // sf: add a new wad file after the game has already begun
    bool  addNewFile(const char *filename);
@@ -310,19 +310,19 @@ public:
    bool  addNewPrivateFile(const char *filename);
    int   addDirectory(const char *dirpath);
    bool  addInMemoryWad(void *buffer, size_t size);
-   int   lumpLength(int lump);
-   void  readLump(int lump, void *dest, WadLumpLoader *lfmt = nullptr);
-   void *cacheLumpNum(int lump, int tag, WadLumpLoader *lfmt = nullptr);
-   void *cacheLumpName(const char *name, int tag, WadLumpLoader *lfmt = nullptr);
-   void  cacheLumpAuto(int lumpnum, ZAutoBuffer &buffer);
-   void  cacheLumpAuto(const char *name, ZAutoBuffer &buffer);
-   bool  writeLump(const char *lumpname, const char *destpath);
+   int   lumpLength(int lump) const;
+   void  readLump(int lump, void *dest, WadLumpLoader *lfmt = nullptr) const;
+   void *cacheLumpNum(int lump, int tag, WadLumpLoader *lfmt = nullptr) const;
+   void *cacheLumpName(const char *name, int tag, WadLumpLoader *lfmt = nullptr) const;
+   void  cacheLumpAuto(int lumpnum, ZAutoBuffer &buffer) const;
+   void  cacheLumpAuto(const char *name, ZAutoBuffer &buffer) const;
+   bool  writeLump(const char *lumpname, const char *destpath) const;
    void  close(); // haleyjd 03/09/11
 
    lumpinfo_t *getLumpNameChain(const char *name) const;
 
-   const char *getLumpName(int lumpnum);
-   const char *getLumpFileName(int lump);
+   const char *getLumpName(int lumpnum) const;
+   const char *getLumpFileName(int lump) const;
 
    // Accessors
    int   getType() const  { return type; }
