@@ -7,6 +7,7 @@
 //
 
 #include "z_zone.h"
+#include "z_auto.h"
 #include "m_argv.h"
 #include "m_collection.h"
 #include "m_qstr.h"
@@ -214,6 +215,40 @@ int checkLevel(const WadDirectory &dir, int lumpnum)
 }
 
 //
+// Handle PSX map
+//
+static void convertPSXMap(const WadDirectory &dir, int lumpnum)
+{
+   I_Error("PSX conversion not implemented yet!\n");
+}
+
+//
+// Handle Doom format map (may have ExtraData)
+//
+static void convertDoomMap(const WadDirectory &dir, int lumpnum)
+{
+   // We already know the lumps are valid
+   ZAutoBuffer buffer;
+   dir.cacheLumpAuto(lumpnum + ML_VERTEXES, buffer);
+}
+
+//
+// Handle Hexen format map
+//
+static void convertHexenMap(const WadDirectory &dir, int lumpnum)
+{
+   I_Error("Hexen format conversion not implemented yet!\n");
+}
+
+//
+// Handle Doom 64 format map
+//
+static void convertDoom64Map(const WadDirectory &dir, int lumpnum)
+{
+   I_Error("Doom format conversion not implemented yet!\n");
+}
+
+//
 // Does much of what P_SetupLevel does in Eternity
 //
 static void setupLevel(const WadDirectory &dir, int lumpnum, const qstring &name)
@@ -225,15 +260,19 @@ static void setupLevel(const WadDirectory &dir, int lumpnum, const qstring &name
          I_Error("Invalid level %s\n", name.constPtr());
       case LEVEL_FORMAT_PSX:
          printf("%s is for PSX\n", name.constPtr());
+         convertPSXMap(dir, lumpnum);
          break;
       case LEVEL_FORMAT_DOOM:
          printf("%s is of Doom format\n", name.constPtr());
+         convertDoomMap(dir, lumpnum);
          break;
       case LEVEL_FORMAT_HEXEN:
          printf("%s is of Hexen format\n", name.constPtr());
+         convertHexenMap(dir, lumpnum);
          break;
       case LEVEL_FORMAT_DOOM64:
          printf("%s is of Doom 64 format\n", name.constPtr());
+         convertDoom64Map(dir, lumpnum);
          break;
       default:
          I_Error("Invalid format %d for level %s\n", format, name.constPtr());
