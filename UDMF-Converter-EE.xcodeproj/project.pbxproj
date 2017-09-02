@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F8234B51F5AA04D00761B6E /* Converter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234B31F5AA04D00761B6E /* Converter.cpp */; };
+		4F8234B81F5AA11200761B6E /* Wad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234B61F5AA11200761B6E /* Wad.cpp */; };
+		4F8234BB1F5AA17800761B6E /* Lump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234B91F5AA17800761B6E /* Lump.cpp */; };
+		4F8234BE1F5AA25A00761B6E /* Result.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234BC1F5AA25A00761B6E /* Result.cpp */; };
+		4F8234C11F5AB98D00761B6E /* Helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234BF1F5AB98D00761B6E /* Helpers.cpp */; };
+		4F8234C41F5ABA5900761B6E /* Arguments.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234C21F5ABA5900761B6E /* Arguments.cpp */; };
 		4FC0A94F1E2435C8006CEC45 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A94E1E2435C8006CEC45 /* main.cpp */; };
 		4FC0A9571E243625006CEC45 /* m_argv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A9551E243625006CEC45 /* m_argv.cpp */; };
 		4FC0A95F1E2437C3006CEC45 /* w_wad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A95D1E2437C3006CEC45 /* w_wad.cpp */; };
@@ -40,6 +46,19 @@
 
 /* Begin PBXFileReference section */
 		4F4DBB581EB5C8C5001F1CE9 /* m_binary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = m_binary.h; sourceTree = "<group>"; };
+		4F8234B21F5A9FD700761B6E /* MapItems.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapItems.h; sourceTree = "<group>"; };
+		4F8234B31F5AA04D00761B6E /* Converter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Converter.cpp; sourceTree = "<group>"; };
+		4F8234B41F5AA04D00761B6E /* Converter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Converter.hpp; sourceTree = "<group>"; };
+		4F8234B61F5AA11200761B6E /* Wad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Wad.cpp; sourceTree = "<group>"; };
+		4F8234B71F5AA11200761B6E /* Wad.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Wad.hpp; sourceTree = "<group>"; };
+		4F8234B91F5AA17800761B6E /* Lump.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lump.cpp; sourceTree = "<group>"; };
+		4F8234BA1F5AA17800761B6E /* Lump.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Lump.hpp; sourceTree = "<group>"; };
+		4F8234BC1F5AA25A00761B6E /* Result.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Result.cpp; sourceTree = "<group>"; };
+		4F8234BD1F5AA25A00761B6E /* Result.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Result.hpp; sourceTree = "<group>"; };
+		4F8234BF1F5AB98D00761B6E /* Helpers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Helpers.cpp; sourceTree = "<group>"; };
+		4F8234C01F5AB98D00761B6E /* Helpers.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Helpers.hpp; sourceTree = "<group>"; };
+		4F8234C21F5ABA5900761B6E /* Arguments.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Arguments.cpp; sourceTree = "<group>"; };
+		4F8234C31F5ABA5900761B6E /* Arguments.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Arguments.hpp; sourceTree = "<group>"; };
 		4FC0A94B1E2435C8006CEC45 /* UDMF-Converter-EE */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "UDMF-Converter-EE"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FC0A94E1E2435C8006CEC45 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4FC0A9551E243625006CEC45 /* m_argv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = m_argv.cpp; sourceTree = "<group>"; };
@@ -99,26 +118,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4FC0A9421E2435C8006CEC45 = {
-			isa = PBXGroup;
-			children = (
-				4FC0A94D1E2435C8006CEC45 /* UDMF-Converter-EE */,
-				4FC0A94C1E2435C8006CEC45 /* Products */,
-				4FC0A99F1E2A9434006CEC45 /* Frameworks */,
-			);
-			indentWidth = 3;
-			sourceTree = "<group>";
-			tabWidth = 3;
-		};
-		4FC0A94C1E2435C8006CEC45 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4FC0A94B1E2435C8006CEC45 /* UDMF-Converter-EE */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		4FC0A94D1E2435C8006CEC45 /* UDMF-Converter-EE */ = {
+		4F8234B11F5A9FA900761B6E /* ee-code */ = {
 			isa = PBXGroup;
 			children = (
 				4FC0A98B1E2A88A3006CEC45 /* d_dehtbl.cpp */,
@@ -126,7 +126,6 @@
 				4FC0A9591E24369C006CEC45 /* d_io.h */,
 				4FC0A95A1E24369C006CEC45 /* d_keywds.h */,
 				4FC0A96D1E243A52006CEC45 /* doomtype.h */,
-				4FC0A96F1E243A52006CEC45 /* hal */,
 				4FC0A9821E243AB7006CEC45 /* i_system.cpp */,
 				4FC0A9601E2437E3006CEC45 /* i_system.h */,
 				4FC0A9551E243625006CEC45 /* m_argv.cpp */,
@@ -150,7 +149,6 @@
 				4FC0A9751E243A52006CEC45 /* m_swap.h */,
 				4FC0A9801E243A71006CEC45 /* m_utils.cpp */,
 				4FC0A9761E243A52006CEC45 /* m_utils.h */,
-				4FC0A94E1E2435C8006CEC45 /* main.cpp */,
 				4FC0A9911E2A9146006CEC45 /* w_formats.cpp */,
 				4FC0A97A1E243A52006CEC45 /* w_formats.h */,
 				4FC0A9931E2A9168006CEC45 /* w_hacks.cpp */,
@@ -162,6 +160,48 @@
 				4FC0A97D1E243A52006CEC45 /* z_auto.h */,
 				4FC0A97E1E243A52006CEC45 /* z_native.cpp */,
 				4FC0A9581E24365E006CEC45 /* z_zone.h */,
+			);
+			name = "ee-code";
+			sourceTree = "<group>";
+		};
+		4FC0A9421E2435C8006CEC45 = {
+			isa = PBXGroup;
+			children = (
+				4FC0A94D1E2435C8006CEC45 /* UDMF-Converter-EE */,
+				4FC0A94C1E2435C8006CEC45 /* Products */,
+				4FC0A99F1E2A9434006CEC45 /* Frameworks */,
+			);
+			indentWidth = 3;
+			sourceTree = "<group>";
+			tabWidth = 3;
+		};
+		4FC0A94C1E2435C8006CEC45 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4FC0A94B1E2435C8006CEC45 /* UDMF-Converter-EE */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4FC0A94D1E2435C8006CEC45 /* UDMF-Converter-EE */ = {
+			isa = PBXGroup;
+			children = (
+				4F8234C21F5ABA5900761B6E /* Arguments.cpp */,
+				4F8234C31F5ABA5900761B6E /* Arguments.hpp */,
+				4F8234B31F5AA04D00761B6E /* Converter.cpp */,
+				4F8234B41F5AA04D00761B6E /* Converter.hpp */,
+				4F8234B11F5A9FA900761B6E /* ee-code */,
+				4FC0A96F1E243A52006CEC45 /* hal */,
+				4F8234B91F5AA17800761B6E /* Lump.cpp */,
+				4F8234BA1F5AA17800761B6E /* Lump.hpp */,
+				4FC0A94E1E2435C8006CEC45 /* main.cpp */,
+				4F8234B21F5A9FD700761B6E /* MapItems.h */,
+				4F8234BC1F5AA25A00761B6E /* Result.cpp */,
+				4F8234BD1F5AA25A00761B6E /* Result.hpp */,
+				4F8234BF1F5AB98D00761B6E /* Helpers.cpp */,
+				4F8234C01F5AB98D00761B6E /* Helpers.hpp */,
+				4F8234B61F5AA11200761B6E /* Wad.cpp */,
+				4F8234B71F5AA11200761B6E /* Wad.hpp */,
 			);
 			path = "UDMF-Converter-EE";
 			sourceTree = "<group>";
@@ -245,17 +285,23 @@
 			files = (
 				4FC0A9851E2A85F8006CEC45 /* w_zip.cpp in Sources */,
 				4FC0A9991E2A92F4006CEC45 /* m_strcasestr.cpp in Sources */,
+				4F8234BE1F5AA25A00761B6E /* Result.cpp in Sources */,
+				4F8234B51F5AA04D00761B6E /* Converter.cpp in Sources */,
 				4FC0A98C1E2A88A3006CEC45 /* d_dehtbl.cpp in Sources */,
 				4FC0A9831E243AB7006CEC45 /* i_system.cpp in Sources */,
 				4FC0A9811E243A71006CEC45 /* m_utils.cpp in Sources */,
+				4F8234B81F5AA11200761B6E /* Wad.cpp in Sources */,
 				4FC0A9901E2A89E2006CEC45 /* i_directory.cpp in Sources */,
 				4FC0A9891E2A868E006CEC45 /* m_buffer.cpp in Sources */,
 				4FC0A94F1E2435C8006CEC45 /* main.cpp in Sources */,
 				4FC0A97F1E243A52006CEC45 /* z_native.cpp in Sources */,
+				4F8234BB1F5AA17800761B6E /* Lump.cpp in Sources */,
 				4FC0A9941E2A9168006CEC45 /* w_hacks.cpp in Sources */,
 				4FC0A9921E2A9146006CEC45 /* w_formats.cpp in Sources */,
 				4FC0A9961E2A924B006CEC45 /* m_qstr.cpp in Sources */,
+				4F8234C11F5AB98D00761B6E /* Helpers.cpp in Sources */,
 				4FC0A99E1E2A9411006CEC45 /* i_platform.cpp in Sources */,
+				4F8234C41F5ABA5900761B6E /* Arguments.cpp in Sources */,
 				4FC0A9571E243625006CEC45 /* m_argv.cpp in Sources */,
 				4FC0A95F1E2437C3006CEC45 /* w_wad.cpp in Sources */,
 				4FC0A99B1E2A939D006CEC45 /* m_hash.cpp in Sources */,
