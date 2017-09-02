@@ -37,7 +37,7 @@
 #include "w_wad.h"
 #include "w_zip.h"
 
-#include <zlib.h>
+#include "../zlib/zlib.h"
 
 // Internal ZIP file structures
 

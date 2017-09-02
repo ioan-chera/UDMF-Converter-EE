@@ -22,6 +22,7 @@
 // Authors: Ioan Chera
 //
 
+#include "d_keywds.h"
 #include "Converter.hpp"
 #include "Helpers.hpp"
 #include "Wad.hpp"

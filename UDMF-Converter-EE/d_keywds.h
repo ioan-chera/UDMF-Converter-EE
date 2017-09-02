@@ -76,8 +76,8 @@
 #endif
 
 #ifdef _MSC_VER
-#define strcasecmp  stricmp
-#define strncasecmp strnicmp
+#define strcasecmp  _stricmp
+#define strncasecmp _strnicmp
 #endif
 
 #endif // D_KEYWDS_H__

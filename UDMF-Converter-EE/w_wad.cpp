@@ -42,7 +42,6 @@
 #include "w_formats.h"
 #include "w_hacks.h"
 #include "w_wad.h"
-#include "w_zip.h"
 #include "z_auto.h"
 
 //
@@ -66,7 +65,6 @@ struct lumptype_t
 static size_t W_DirectReadLump(lumpinfo_t *, void *);
 static size_t W_MemoryReadLump(lumpinfo_t *, void *);
 static size_t W_FileReadLump  (lumpinfo_t *, void *);
-static size_t W_ZipReadLump   (lumpinfo_t *, void *);
 
 static lumptype_t LumpHandlers[lumpinfo_t::lump_numtypes] =
 {
@@ -83,11 +81,6 @@ static lumptype_t LumpHandlers[lumpinfo_t::lump_numtypes] =
    // directory file lump
    {
       W_FileReadLump,
-   },
-
-   // zip file lump
-   {
-      W_ZipReadLump,
    },
 };
 
@@ -127,10 +120,9 @@ public:
    }
 
    PODCollection<lumpinfo_t *>  infoptrs; // lumpinfo_t allocations
-   DLListItem<ZipFile>         *zipFiles; // zip files attached to this waddir
 
    WadDirectoryPimpl()
-      : ZoneObject(), infoptrs(), zipFiles(nullptr)
+      : ZoneObject(), infoptrs()
    {
    }
 };
@@ -523,78 +515,6 @@ bool WadDirectory::addWadFile(openwad_t &openData, wfileadd_t &addInfo, int star
 }
 
 //
-// WadDirectory::addZipFile
-//
-// Add a zip file into the directory.
-//
-bool WadDirectory::addZipFile(openwad_t &openData, wfileadd_t &addInfo, int startlump)
-{
-   std::unique_ptr<ZipFile> zip(new ZipFile());
-   int         numZipLumps;
-   lumpinfo_t *lump_p;
-
-   // Read in the ZIP file's header and directory information
-   if(!zip->readFromFile(openData.handle))
-   {
-      handleOpenError(openData, addInfo, openData.filename);
-      return false;
-   }
-
-   if(!(numZipLumps = zip->getNumLumps()))
-   {
-      // load was successful, but this zip file is useless.
-      return true;
-   }
-
-   // update IWAD handle? 
-   if(!(addInfo.flags & WFA_PRIVATE) && this->ispublic)
-   {
-      if(IWADSource < 0 && (addInfo.flags & WFA_ISIWADFILE))
-         IWADSource = source;
-   }
-
-   // Allocate lumpinfo_t structures for the zip file's internal file lumps
-   lump_p = reAllocLumpInfo(numZipLumps, startlump);
-
-   // Initialize the wad directory copies of the zip lumps
-   for(int i = startlump; i < numlumps; i++, lump_p++)
-   {
-      ZipLump &zipLump = zip->getLump(i - startlump);
-
-      lump_p->type   = lumpinfo_t::lump_zip;
-      lump_p->size   = zipLump.size;
-      lump_p->source = source;
-
-      // setup for zip file IO
-      lump_p->zip.zipLump = &zipLump;
-
-      // Initialize short name, if found appropriate to do so. Lumps that are
-      // not given a short name or namespace here will not be hashed by
-      // WadDirectory::initLumpHash.
-      int li_namespace;
-      if((li_namespace = W_NamespaceForFilePath(zipLump.name)) != -1)
-      {
-         lump_p->li_namespace = li_namespace;
-         W_LumpNameFromFilePath(zipLump.name, lump_p->name, li_namespace);
-      }
-
-      // Copy lfn
-      lump_p->lfn = estrdup(zipLump.name);
-   }
-
-   // Hook the ZipFile instance into the WadDirectory's list of zips
-   zip->linkTo(&pImpl->zipFiles);
-
-   incrementSource(openData);
-
-   // Check for embedded wad files
-   zip->checkForWadFiles(*this);
-
-   zip.release(); // don't destroy the ZipFile
-   return true;
-}
-
-//
 // WadDirectory::addFile
 //
 // All files are optional, but at least one file must be found (PWAD, if all 
@@ -613,7 +533,6 @@ bool WadDirectory::addFile(wfileadd_t &addInfo)
    static AddFileCB fileadders[W_FORMAT_MAX] =
    {
       &WadDirectory::addWadFile,             // W_FORMAT_WAD
-      &WadDirectory::addZipFile,             // W_FORMAT_ZIP
       &WadDirectory::addSingleFile,          // W_FORMAT_FILE
       &WadDirectory::addDirectoryAsArchive   // W_FORMAT_DIR
    };
@@ -1796,20 +1715,6 @@ static size_t W_FileReadLump(lumpinfo_t *l, void *dest)
    }
    
    return sizeread;
-}
-
-//
-// ZIP lumps -- files embedded inside a ZIP archive. The ZipFile
-// and ZipLump classes take care of all the specifics.
-//
-
-static size_t W_ZipReadLump(lumpinfo_t *l, void *dest)
-{
-   l->zip.zipLump->read(dest);
-
-   // if I_Error wasn't invoked, we can assume the full read was
-   // successful.
-   return l->size;
 }
 
 //----------------------------------------------------------------------------
