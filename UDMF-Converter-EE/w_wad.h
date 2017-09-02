@@ -123,7 +123,6 @@ struct lumpinfo_t
       lump_direct,  // lump accessed via stdio (physical file)
       lump_memory,  // lump is a memory buffer
       lump_file,    // lump is a directory file; must be opened to use
-      lump_zip,     // lump is inside a zip file
       lump_numtypes
    }; 
    int type;

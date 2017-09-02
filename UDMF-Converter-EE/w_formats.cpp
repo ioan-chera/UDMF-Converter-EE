@@ -115,29 +115,6 @@ static bool W_isWadFile(FILE *f, long baseoffset)
 }
 
 //
-// W_isZipFile
-//
-// Detect a ZIP archive, originally defined by the PKZip archive tool
-// and now used pretty much everywhere. Forms the basis of id Tech 3 and up
-// "pack" formats PK3 and PK4, as well as being the underlying format of
-// many other domain-specific archives such as Java JARs.
-//
-static bool W_isZipFile(FILE *f, long baseoffset)
-{
-   bool result = false;
-   char header[30];
-
-   if(!fseek(f, baseoffset, SEEK_SET) && fread(header, 1, 30, f) == 30)
-   {
-      if(!memcmp(header, "PK\x3\x4", 4))
-         result = true;
-   }
-   fseek(f, baseoffset, SEEK_SET);
-
-   return result;
-}
-
-//
 // W_isFile
 //
 // This one is a dummy which always returns true; if no other format could be
@@ -152,7 +129,6 @@ static bool W_isFile(FILE *f, long baseoffset)
 static FormatFunc formatFuncs[W_FORMAT_MAX] = 
 {
    W_isWadFile, // W_FORMAT_WAD
-   W_isZipFile, // W_FORMAT_ZIP
    W_isFile,    // W_FORMAT_FILE
    nullptr,     // W_FORMAT_DIR: not used here, guarded by W_isFile (ioanch)
 };
