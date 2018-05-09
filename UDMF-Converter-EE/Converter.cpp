@@ -104,3 +104,75 @@ Result Converter::LoadWad(const Wad &wad, const char *mapName)
    
    return Result::OK;
 }
+
+//
+// Called when a set-light-tag special is encountered
+//
+void Converter::SetLightTag(int special, int tag, int index)
+{
+   // TODO
+}
+
+//
+// Called when the set-surface-control is called
+//
+void Converter::SetSurfaceControl(int special, int tag, int index)
+{
+   // TODO
+}
+
+//
+// Called by the attach-to-control specials
+//
+void Converter::AttachToControl(int special, int tag, int index)
+{
+   // TODO
+}
+
+//
+// Handles line type 270
+//
+void Converter::ResolveLineExtraData(int special, int tag, int index)
+{
+   // TODO
+}
+
+//
+// Handles line type 401
+//
+void Converter::ResolveSectorExtraData(int special, int tag, int index)
+{
+   // TODO
+}
+
+//
+// Sets friction on sectors directly
+//
+void Converter::SetFriction(int special, int tag, int index)
+{
+   // TODO
+}
+
+//
+// Sets line ID based on special
+//
+void Converter::SetLineID(int special, int tag, int index)
+{
+
+}
+
+//
+// Define a portal
+//
+void Converter::PortalDefine(int special, int tag, int index)
+{
+
+}
+
+//
+// Define a portal
+//
+void Converter::QuickLinePortal(int special, int tag, int index)
+{
+
+}

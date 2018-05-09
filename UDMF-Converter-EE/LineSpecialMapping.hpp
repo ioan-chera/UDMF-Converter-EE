@@ -18,32 +18,13 @@
 // Additional terms and conditions compatible with the GPLv3 apply. See the
 // file COPYING-EE for details.
 //
-// Purpose: Main conversion class
+// Purpose: Mapping Doom line specials to UDMF
 // Authors: Ioan Chera
 //
 
-#ifndef Converter_hpp
-#define Converter_hpp
+#ifndef LineSpecialMapping_hpp
+#define LineSpecialMapping_hpp
 
-#include <vector>
-#include "Result.hpp"
+#include <stdio.h>
 
-class Wad;
-
-class Converter
-{
-public:
-   Result LoadWad(const Wad &wad, const char *mapName);
-
-   void SetLightTag(int special, int tag, int index);
-   void SetSurfaceControl(int special, int tag, int index);
-   void AttachToControl(int special, int tag, int index);
-   void ResolveLineExtraData(int special, int tag, int index);
-   void ResolveSectorExtraData(int special, int tag, int index);
-   void SetFriction(int special, int tag, int index);
-   void SetLineID(int special, int tag, int index);
-   void PortalDefine(int special, int tag, int index);
-   void QuickLinePortal(int special, int tag, int index);
-};
-
-#endif /* Converter_hpp */
+#endif /* LineSpecialMapping_hpp */

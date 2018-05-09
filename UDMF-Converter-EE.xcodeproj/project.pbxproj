@@ -13,6 +13,7 @@
 		4F8234BE1F5AA25A00761B6E /* Result.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234BC1F5AA25A00761B6E /* Result.cpp */; };
 		4F8234C11F5AB98D00761B6E /* Helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234BF1F5AB98D00761B6E /* Helpers.cpp */; };
 		4F8234C41F5ABA5900761B6E /* Arguments.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234C21F5ABA5900761B6E /* Arguments.cpp */; };
+		4F8234C71F5AD92000761B6E /* LineSpecialMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234C51F5AD92000761B6E /* LineSpecialMapping.cpp */; };
 		4FC0A94F1E2435C8006CEC45 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A94E1E2435C8006CEC45 /* main.cpp */; };
 		4FC0A9571E243625006CEC45 /* m_argv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A9551E243625006CEC45 /* m_argv.cpp */; };
 		4FC0A95F1E2437C3006CEC45 /* w_wad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A95D1E2437C3006CEC45 /* w_wad.cpp */; };
@@ -59,6 +60,8 @@
 		4F8234C01F5AB98D00761B6E /* Helpers.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Helpers.hpp; sourceTree = "<group>"; };
 		4F8234C21F5ABA5900761B6E /* Arguments.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Arguments.cpp; sourceTree = "<group>"; };
 		4F8234C31F5ABA5900761B6E /* Arguments.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Arguments.hpp; sourceTree = "<group>"; };
+		4F8234C51F5AD92000761B6E /* LineSpecialMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LineSpecialMapping.cpp; sourceTree = "<group>"; };
+		4F8234C61F5AD92000761B6E /* LineSpecialMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LineSpecialMapping.hpp; sourceTree = "<group>"; };
 		4FC0A94B1E2435C8006CEC45 /* UDMF-Converter-EE */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "UDMF-Converter-EE"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FC0A94E1E2435C8006CEC45 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		4FC0A9551E243625006CEC45 /* m_argv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = m_argv.cpp; sourceTree = "<group>"; };
@@ -192,6 +195,8 @@
 				4F8234B41F5AA04D00761B6E /* Converter.hpp */,
 				4F8234B11F5A9FA900761B6E /* ee-code */,
 				4FC0A96F1E243A52006CEC45 /* hal */,
+				4F8234C51F5AD92000761B6E /* LineSpecialMapping.cpp */,
+				4F8234C61F5AD92000761B6E /* LineSpecialMapping.hpp */,
 				4F8234B91F5AA17800761B6E /* Lump.cpp */,
 				4F8234BA1F5AA17800761B6E /* Lump.hpp */,
 				4FC0A94E1E2435C8006CEC45 /* main.cpp */,
@@ -251,7 +256,7 @@
 		4FC0A9431E2435C8006CEC45 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Team Eternity";
 				TargetAttributes = {
 					4FC0A94A1E2435C8006CEC45 = {
@@ -299,6 +304,7 @@
 				4FC0A9941E2A9168006CEC45 /* w_hacks.cpp in Sources */,
 				4FC0A9921E2A9146006CEC45 /* w_formats.cpp in Sources */,
 				4FC0A9961E2A924B006CEC45 /* m_qstr.cpp in Sources */,
+				4F8234C71F5AD92000761B6E /* LineSpecialMapping.cpp in Sources */,
 				4F8234C11F5AB98D00761B6E /* Helpers.cpp in Sources */,
 				4FC0A99E1E2A9411006CEC45 /* i_platform.cpp in Sources */,
 				4F8234C41F5ABA5900761B6E /* Arguments.cpp in Sources */,
@@ -320,15 +326,23 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -367,15 +381,23 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
