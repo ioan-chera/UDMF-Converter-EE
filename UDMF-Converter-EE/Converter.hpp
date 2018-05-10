@@ -40,10 +40,10 @@ public:
    void AttachToControl(int special, int tag, int index);
    void ResolveLineExtraData(int special, int tag, int index);
    void ResolveSectorExtraData(int special, int tag, int index);
-   void SetFriction(int special, int tag, int index);
    void SetLineID(int special, int tag, int index);
    void PortalDefine(int special, int tag, int index);
    void QuickLinePortal(int special, int tag, int index);
+   void TranslucentLine(int special, int tag, int index);
 };
 
 #endif /* Converter_hpp */

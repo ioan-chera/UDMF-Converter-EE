@@ -146,14 +146,6 @@ void Converter::ResolveSectorExtraData(int special, int tag, int index)
 }
 
 //
-// Sets friction on sectors directly
-//
-void Converter::SetFriction(int special, int tag, int index)
-{
-   // TODO
-}
-
-//
 // Sets line ID based on special
 //
 void Converter::SetLineID(int special, int tag, int index)
@@ -173,6 +165,14 @@ void Converter::PortalDefine(int special, int tag, int index)
 // Define a portal
 //
 void Converter::QuickLinePortal(int special, int tag, int index)
+{
+
+}
+
+//
+// Converts a translucent line with a special
+//
+void Converter::TranslucentLine(int special, int tag, int index)
 {
 
 }
