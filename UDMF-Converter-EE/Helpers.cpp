@@ -41,3 +41,16 @@ void MakeLowerCase(std::string &string)
    for(char &c : string)
       c = tolower(c);
 }
+
+std::string Escape(const std::string &string)
+{
+   std::string ret;
+   ret.reserve(string.length() * 2);
+   for(char c : string)
+   {
+      if(c == '"' || c == '\\')
+         ret.push_back('\\');
+      ret.push_back(c);
+   }
+   return ret;
+}

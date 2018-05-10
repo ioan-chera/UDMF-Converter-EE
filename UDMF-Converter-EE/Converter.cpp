@@ -127,6 +127,50 @@ Result Converter::LoadWad(const Wad &wad, const char *mapName)
 }
 
 //
+// Performs the conversion
+//
+void Converter::Convert(FILE *f) const
+{
+   fprintf(f, "namespace=\"eternity\";");
+   for(const Thing &thing : mThings)
+   {
+      fprintf(f, "thing{x=%d;y=%d;", thing.x, thing.y);
+      fprintf(f, "type=%d;", thing.type);
+      if(thing.angle)
+         fprintf(f, "angle=%d;", thing.angle);
+      if(thing.flags & TF_EASY)
+         fprintf(f, "skill1=true;skill2=true;");
+      if(thing.flags & TF_NORMAL)
+         fprintf(f, "skill3=true;");
+      if(thing.flags & TF_HARD)
+         fprintf(f, "skill4=true;skill5=true;");
+      if(thing.flags & TF_AMBUSH)
+         fprintf(f, "ambush=true;");
+      if(!(thing.flags & TF_MULTI))
+         fprintf(f, "single=true;");
+      fprintf(f, "dm=true;coop=true;}");
+   }
+   for(const Vertex &vertex : mVertices)
+      fprintf(f, "vertex{x=%d;y=%d;}", vertex.x, vertex.y);
+   for(const Sidedef &side : mSidedefs)
+   {
+      fprintf(f, "sidedef{");
+      if(side.xoffset)
+         fprintf(f, "offsetx=%d;", side.xoffset);
+      if(side.yoffset)
+         fprintf(f, "offsety=%d;", side.yoffset);
+      if(side.upperpic != "-")
+         fprintf(f, "texturetop=\"%s\";", Escape(side.upperpic).c_str());
+      if(side.midpic != "-")
+         fprintf(f, "texturemiddle=\"%s\";", Escape(side.midpic).c_str());
+      if(side.lowerpic != "-")
+         fprintf(f, "texturebottom=\"%s\";", Escape(side.lowerpic).c_str());
+      fprintf(f, "sector=%d;}", side.sector);
+   }
+   // TODO: sectors and linedefs
+}
+
+//
 // Called when a set-light-tag special is encountered
 //
 void Converter::SetLightTag(int special, int tag, int index)

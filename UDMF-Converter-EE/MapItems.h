@@ -35,6 +35,15 @@ struct Vertex
    int x, y;
 };
 
+enum
+{
+   TF_EASY = 1,
+   TF_NORMAL = 2,
+   TF_HARD = 4,
+   TF_AMBUSH = 8,
+   TF_MULTI = 0x10
+};
+
 //
 // Simple thing definition
 //

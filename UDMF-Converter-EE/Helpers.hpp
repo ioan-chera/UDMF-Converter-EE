@@ -32,6 +32,8 @@
 std::string LowerCase(const char *string);
 void MakeLowerCase(std::string &string);
 
+std::string Escape(const std::string &string);
+
 template<typename T>
 inline static bool NullOrEmpty(const T *vector)
 {

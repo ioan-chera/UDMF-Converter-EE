@@ -37,6 +37,8 @@ class Converter
 public:
    Result LoadWad(const Wad &wad, const char *mapName);
 
+   void Convert(FILE *f) const;
+
    void SetLightTag(int special, int tag, int index);
    void SetSurfaceControl(int special, int tag, int index);
    void AttachToControl(int special, int tag, int index);
