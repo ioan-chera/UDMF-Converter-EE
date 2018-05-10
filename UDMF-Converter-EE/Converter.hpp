@@ -26,8 +26,10 @@
 #define Converter_hpp
 
 #include <vector>
+#include "MapItems.h"
 #include "Result.hpp"
 
+class Lump;
 class Wad;
 
 class Converter
@@ -44,6 +46,19 @@ public:
    void PortalDefine(int special, int tag, int index);
    void QuickLinePortal(int special, int tag, int index);
    void TranslucentLine(int special, int tag, int index);
+
+private:
+   Result LoadThings(const Lump &things);
+   Result LoadVertices(const Lump &vertices);
+   Result LoadLinedefs(const Lump &linedefs);
+   Result LoadSidedefs(const Lump &sidedefs);
+   Result LoadSectors(const Lump &sectors);
+
+   std::vector<Thing> mThings;
+   std::vector<Vertex> mVertices;
+   std::vector<Linedef> mLinedefs;
+   std::vector<Sidedef> mSidedefs;
+   std::vector<Sector> mSectors;
 };
 
 #endif /* Converter_hpp */

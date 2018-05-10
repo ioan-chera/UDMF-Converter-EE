@@ -32,6 +32,7 @@ enum class Result
 {
    OK,               // no problem
    BadFile,          // Bad file format
+   BadData,          // bad data format
    CannotOpen,       // cannot open file
    LevelNotFound,    // wad hasn't got the level
 };

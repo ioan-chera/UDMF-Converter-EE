@@ -25,12 +25,66 @@
 #ifndef MapItems_h
 #define MapItems_h
 
+#include <string>
+
 //
 // Simple vertex definition
 //
 struct Vertex
 {
    int x, y;
+};
+
+//
+// Simple thing definition
+//
+struct Thing
+{
+   int x;
+   int y;
+   int angle;
+   int type;
+   unsigned flags;
+};
+
+//
+// Simple line definition
+//
+struct Linedef
+{
+   int v1;
+   int v2;
+   int flags;
+   int special;
+   int tag;
+   int sidenum[2];
+};
+
+//
+// Simple side definition
+//
+struct Sidedef
+{
+   int xoffset;
+   int yoffset;
+   std::string upperpic;
+   std::string lowerpic;
+   std::string midpic;
+   int sector;
+};
+
+//
+// Simple sector definition
+//
+struct Sector
+{
+   int floorheight;
+   int ceilingheight;
+   std::string floorpic;
+   std::string ceilingpic;
+   int lightlevel;
+   int special;
+   int tag;
 };
 
 #endif /* MapItems_h */

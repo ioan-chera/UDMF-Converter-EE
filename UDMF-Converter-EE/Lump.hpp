@@ -56,6 +56,11 @@ public:
    {
       return mName;
    }
+
+   const std::vector<uint8_t> &data() const
+   {
+      return mData;
+   }
 private:
    char mName[LumpNameLength + 1];  // lump name
    std::vector<uint8_t> mData;      // lump content

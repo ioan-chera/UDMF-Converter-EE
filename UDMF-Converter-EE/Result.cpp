@@ -35,6 +35,8 @@ const char *ResultMessage(Result result)
          return "Operation completed successfully.";
       case Result::BadFile:
          return "Invalid or corrupted file.";
+      case Result::BadData:
+         return "File has invalid data.";
       case Result::CannotOpen:
          return "Cannot open or file not found.";
       case Result::LevelNotFound:
