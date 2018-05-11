@@ -140,17 +140,28 @@ void Converter::Convert(FILE *f) const
       fprintf(f, "type=%d;", thing.type);
       if(thing.angle)
          fprintf(f, "angle=%d;", thing.angle);
-      if(thing.flags & TF_EASY)
+      unsigned flags = thing.flags;
+      if(flags & TF_RESERVED)
+         flags &= 0x1f;
+      if(flags & TF_EASY)
          fprintf(f, "skill1=true;skill2=true;");
-      if(thing.flags & TF_NORMAL)
+      if(flags & TF_NORMAL)
          fprintf(f, "skill3=true;");
-      if(thing.flags & TF_HARD)
+      if(flags & TF_HARD)
          fprintf(f, "skill4=true;skill5=true;");
-      if(thing.flags & TF_AMBUSH)
+      if(flags & TF_AMBUSH)
          fprintf(f, "ambush=true;");
-      if(!(thing.flags & TF_MULTI))
+      if(!(flags & TF_NOTSINGLE))
          fprintf(f, "single=true;");
-      fprintf(f, "dm=true;coop=true;}");
+      if(!(flags & TF_NOTDM))
+         fprintf(f, "dm=true;");
+      if(!(flags & TF_NOTCOOP))
+         fprintf(f, "coop=true;");
+      if(flags & TF_FRIEND)
+         fprintf(f, "friend=true;");
+      if(flags & TF_DORMANT)
+         fprintf(f, "dormant=true;");
+      fprintf(f, "}");
    }
    for(const Vertex &vertex : mVertices)
       fprintf(f, "vertex{x=%d;y=%d;}", vertex.x, vertex.y);

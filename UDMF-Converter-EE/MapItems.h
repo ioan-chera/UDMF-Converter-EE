@@ -41,7 +41,12 @@ enum
    TF_NORMAL = 2,
    TF_HARD = 4,
    TF_AMBUSH = 8,
-   TF_MULTI = 0x10
+   TF_NOTSINGLE = 0x10,
+   TF_NOTDM = 0x20,
+   TF_NOTCOOP = 0x40,
+   TF_FRIEND = 0x80,
+   TF_RESERVED = 0x100,
+   TF_DORMANT = 0x200
 };
 
 //
