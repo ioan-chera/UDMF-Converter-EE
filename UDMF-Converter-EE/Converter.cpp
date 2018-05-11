@@ -136,6 +136,10 @@ void Converter::Convert(FILE *f) const
    fprintf(f, "namespace=\"eternity\";");
    for(const Thing &thing : mThings)
    {
+      if(thing.type == ED_CTRL_DOOMEDNUM)
+      {
+         // TODO: ExtraData thing.
+      }
       fprintf(f, "thing{x=%d;y=%d;", thing.x, thing.y);
       fprintf(f, "type=%d;", thing.type);
       if(thing.angle)

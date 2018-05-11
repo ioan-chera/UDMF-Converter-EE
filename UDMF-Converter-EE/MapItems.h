@@ -49,6 +49,8 @@ enum
    TF_DORMANT = 0x200
 };
 
+static const int ED_CTRL_DOOMEDNUM = 5004;
+
 //
 // Simple thing definition
 //
