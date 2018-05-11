@@ -56,6 +56,8 @@ private:
    Result LoadSidedefs(const Lump &sidedefs);
    Result LoadSectors(const Lump &sectors);
 
+   void PruneBSPVertices();
+
    std::vector<Thing> mThings;
    std::vector<Vertex> mVertices;
    std::vector<Linedef> mLinedefs;

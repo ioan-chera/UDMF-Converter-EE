@@ -123,6 +123,8 @@ Result Converter::LoadWad(const Wad &wad, const char *mapName)
    if(result != Result::OK)
       return result;
 
+   PruneBSPVertices();
+
    return Result::OK;
 }
 
@@ -366,4 +368,29 @@ Result Converter::LoadSectors(const Lump &sectors)
    }
 
    return Result::OK;
+}
+
+//
+// Deletes BSP-only vertices
+//
+void Converter::PruneBSPVertices()
+{
+   // check vertex ref count
+   std::vector<int> vrefcount;
+   vrefcount.resize(mVertices.size());
+   for(const Linedef &line : mLinedefs)
+   {
+      if(line.v1 >= 0 && line.v1 < mVertices.size())
+         ++vrefcount[line.v1];
+      if(line.v2 >= 0 && line.v2 < mVertices.size())
+         ++vrefcount[line.v2];
+   }
+   for(size_t i = mVertices.size(); i > 0; --i)
+   {
+      if(!vrefcount.back())
+      {
+         vrefcount.pop_back();
+         mVertices.pop_back();
+      }
+   }
 }
