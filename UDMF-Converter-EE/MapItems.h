@@ -64,6 +64,25 @@ struct Thing
 };
 
 //
+// Linedef flags
+//
+enum
+{
+   LF_BLOCKING = 1,
+   LF_BLOCKMONSTERS = 2,
+   LF_TWOSIDED = 4,
+   LF_DONTPEGTOP = 8,
+   LF_DONTPEGBOTTOM = 0x10,
+   LF_SECRET = 0x20,
+   LF_BLOCKSOUND = 0x40,
+   LF_HIDDEN = 0x80,
+   LF_MAPPED = 0x100,
+   LF_PASSUSE = 0x200,
+   LF_3DMIDTEX = 0x400,
+   LF_RESERVED = 0x800
+};
+
+//
 // Simple line definition
 //
 struct Linedef

@@ -184,7 +184,14 @@ void Converter::Convert(FILE *f) const
          fprintf(f, "texturebottom=\"%s\";", Escape(side.lowerpic).c_str());
       fprintf(f, "sector=%d;}", side.sector);
    }
-   // TODO: sectors and linedefs
+   for(const Linedef &line : mLinedefs)
+   {
+      fprintf(f, "linedef{v1=%d;v2=%d;", line.v1, line.v2);
+      unsigned flags = line.flags;
+      if(flags & LF_RESERVED)
+         flags &= 0x1ff;
+
+   }
 }
 
 //
