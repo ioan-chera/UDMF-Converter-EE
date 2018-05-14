@@ -30,7 +30,7 @@
 // Tokenizer constructor
 //
 XLTokenizer::XLTokenizer(const Lump &lump) :
-mInput(reinterpret_cast<const char *>(lump.Data().data()))
+mInput(reinterpret_cast<const char *>(lump.Data().data()), lump.Data().size())
 {
    mToken.reserve(32);
 }

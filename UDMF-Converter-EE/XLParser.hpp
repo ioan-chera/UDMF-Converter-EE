@@ -82,7 +82,7 @@ public:
 
 private:
    State mState = STATE_SCAN;  // state of the scanner
-   const char *mInput = "";  // input string
+   std::string mInput;
    int mIndex = 0; // input string index
    enum TokenType mTokenType = TOKEN_NONE;   // type of current token
    std::string mToken;
