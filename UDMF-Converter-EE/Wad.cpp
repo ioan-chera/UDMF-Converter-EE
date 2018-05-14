@@ -27,7 +27,7 @@
 //
 // Tries to read a file
 //
-Result Wad::LoadFile(const char *path)
+Result Wad::AddFile(const char *path)
 {
    FILE *f = fopen(path, "rb");
    if(!f)
@@ -44,6 +44,9 @@ Result Wad::LoadFile(const char *path)
    };
    std::vector<LumpDirEntry> directory;
    std::vector<Lump> lumps;
+
+   RangePath rangePath;
+
    if(fread(headtag, 1, 4, f) != 4)
    {
       result = Result::BadFile;
@@ -94,11 +97,30 @@ Result Wad::LoadFile(const char *path)
          goto cleanup;
       lumps.push_back(std::move(lump));
    }
-   // Clear when it's OK to do so
-   mType = type;
-   mLumps = std::move(lumps);
+
+   rangePath = {
+      .range = { static_cast<int>(mLumps.size()), static_cast<int>(lumps.size()) },
+      .path = path
+   };
+
+   mLumps.insert(mLumps.end(), lumps.begin(), lumps.end());
+   mRangePaths.push_back(rangePath);
+
 cleanup:
    if(f)
       fclose(f);
    return result;
+}
+
+//
+// Finds a lump from the wad, searching backwards.
+//
+const Lump *Wad::FindLump(const char *name) const
+{
+   for(auto it = mLumps.rbegin(); it != mLumps.rend(); ++it)
+   {
+      if(!strcasecmp(it->Name(), name))
+         return &*it;
+   }
+   return nullptr;
 }

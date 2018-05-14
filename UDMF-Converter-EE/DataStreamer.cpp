@@ -1,6 +1,6 @@
 //
 // UDMF Converter EE
-// Copyright (C) 2017 Ioan Chera
+// Copyright (C) 2018 Ioan Chera
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,58 +18,34 @@
 // Additional terms and conditions compatible with the GPLv3 apply. See the
 // file COPYING-EE for details.
 //
-// Purpose: Wad container class
+// Purpose: Data streamer
 // Authors: Ioan Chera
 //
 
-#ifndef Wad_hpp
-#define Wad_hpp
-
-#include <string>
-#include "Lump.hpp"
-#include "Range.h"
-#include "Result.hpp"
+#include "DataStreamer.hpp"
 
 //
-// Wad kind
+// Read byte
 //
-enum class WadType
+uint8_t DataStreamer::ReadByte()
 {
-   Iwad, // internal WAD
-   Pwad  // patch WAD
-};
+   if(IsEOF())
+      return 0;
+   return mData[mPos++];
+}
 
-//
-// Gets the path of a range
-//
-struct RangePath
+std::string DataStreamer::ReadString(size_t length)
 {
-   Range range;
-   std::string path;
-};
-
-//
-// Wad class
-//
-class Wad
-{
-public:
-   Wad()
+   std::string res;
+   res.reserve(length);
+   bool stopprint = false;
+   while(length --> 0)
    {
+      uint8_t b = ReadByte();
+      if(!b)
+         stopprint = true;
+      if(!stopprint)
+         res.push_back(static_cast<char>(b));
    }
-
-   Result AddFile(const char *path);
-
-   const std::vector<Lump> &Lumps() const
-   {
-      return mLumps;
-   }
-
-   const Lump *FindLump(const char *name) const;
-   
-private:
-   std::vector<Lump> mLumps;
-   std::vector<RangePath> mRangePaths;
-};
-
-#endif /* Wad_hpp */
+   return res;
+}

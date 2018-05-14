@@ -31,6 +31,10 @@
 		4FC0A99B1E2A939D006CEC45 /* m_hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A99A1E2A939D006CEC45 /* m_hash.cpp */; };
 		4FC0A99E1E2A9411006CEC45 /* i_platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A99C1E2A9411006CEC45 /* i_platform.cpp */; };
 		4FC0A9A11E2A9434006CEC45 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FC0A9A01E2A9434006CEC45 /* libz.tbd */; };
+		4FF7107920A8827A00A150E4 /* XLParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FF7107720A8827A00A150E4 /* XLParser.cpp */; };
+		4FF7107C20A88CD800A150E4 /* XLEMapInfoParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FF7107A20A88CD800A150E4 /* XLEMapInfoParser.cpp */; };
+		4FF7107F20A8C00100A150E4 /* DoomLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FF7107D20A8C00100A150E4 /* DoomLevel.cpp */; };
+		4FF7108220A8C2DA00A150E4 /* DataStreamer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FF7108020A8C2DA00A150E4 /* DataStreamer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -107,6 +111,15 @@
 		4FC0A99C1E2A9411006CEC45 /* i_platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = i_platform.cpp; sourceTree = "<group>"; };
 		4FC0A99D1E2A9411006CEC45 /* i_platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = i_platform.h; sourceTree = "<group>"; };
 		4FC0A9A01E2A9434006CEC45 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		4FF7107320A87D2800A150E4 /* Range.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Range.h; sourceTree = "<group>"; };
+		4FF7107720A8827A00A150E4 /* XLParser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XLParser.cpp; sourceTree = "<group>"; };
+		4FF7107820A8827A00A150E4 /* XLParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XLParser.hpp; sourceTree = "<group>"; };
+		4FF7107A20A88CD800A150E4 /* XLEMapInfoParser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = XLEMapInfoParser.cpp; sourceTree = "<group>"; };
+		4FF7107B20A88CD800A150E4 /* XLEMapInfoParser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = XLEMapInfoParser.hpp; sourceTree = "<group>"; };
+		4FF7107D20A8C00100A150E4 /* DoomLevel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DoomLevel.cpp; sourceTree = "<group>"; };
+		4FF7107E20A8C00100A150E4 /* DoomLevel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DoomLevel.hpp; sourceTree = "<group>"; };
+		4FF7108020A8C2DA00A150E4 /* DataStreamer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DataStreamer.cpp; sourceTree = "<group>"; };
+		4FF7108120A8C2DA00A150E4 /* DataStreamer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DataStreamer.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +206,10 @@
 				4F8234C31F5ABA5900761B6E /* Arguments.hpp */,
 				4F8234B31F5AA04D00761B6E /* Converter.cpp */,
 				4F8234B41F5AA04D00761B6E /* Converter.hpp */,
+				4FF7108020A8C2DA00A150E4 /* DataStreamer.cpp */,
+				4FF7108120A8C2DA00A150E4 /* DataStreamer.hpp */,
+				4FF7107D20A8C00100A150E4 /* DoomLevel.cpp */,
+				4FF7107E20A8C00100A150E4 /* DoomLevel.hpp */,
 				4F8234B11F5A9FA900761B6E /* ee-code */,
 				4FC0A96F1E243A52006CEC45 /* hal */,
 				4F8234C51F5AD92000761B6E /* LineSpecialMapping.cpp */,
@@ -201,12 +218,17 @@
 				4F8234BA1F5AA17800761B6E /* Lump.hpp */,
 				4FC0A94E1E2435C8006CEC45 /* main.cpp */,
 				4F8234B21F5A9FD700761B6E /* MapItems.h */,
+				4FF7107320A87D2800A150E4 /* Range.h */,
 				4F8234BC1F5AA25A00761B6E /* Result.cpp */,
 				4F8234BD1F5AA25A00761B6E /* Result.hpp */,
 				4F8234BF1F5AB98D00761B6E /* Helpers.cpp */,
 				4F8234C01F5AB98D00761B6E /* Helpers.hpp */,
 				4F8234B61F5AA11200761B6E /* Wad.cpp */,
 				4F8234B71F5AA11200761B6E /* Wad.hpp */,
+				4FF7107A20A88CD800A150E4 /* XLEMapInfoParser.cpp */,
+				4FF7107B20A88CD800A150E4 /* XLEMapInfoParser.hpp */,
+				4FF7107720A8827A00A150E4 /* XLParser.cpp */,
+				4FF7107820A8827A00A150E4 /* XLParser.hpp */,
 			);
 			path = "UDMF-Converter-EE";
 			sourceTree = "<group>";
@@ -302,8 +324,12 @@
 				4FC0A97F1E243A52006CEC45 /* z_native.cpp in Sources */,
 				4F8234BB1F5AA17800761B6E /* Lump.cpp in Sources */,
 				4FC0A9941E2A9168006CEC45 /* w_hacks.cpp in Sources */,
+				4FF7108220A8C2DA00A150E4 /* DataStreamer.cpp in Sources */,
 				4FC0A9921E2A9146006CEC45 /* w_formats.cpp in Sources */,
+				4FF7107C20A88CD800A150E4 /* XLEMapInfoParser.cpp in Sources */,
+				4FF7107F20A8C00100A150E4 /* DoomLevel.cpp in Sources */,
 				4FC0A9961E2A924B006CEC45 /* m_qstr.cpp in Sources */,
+				4FF7107920A8827A00A150E4 /* XLParser.cpp in Sources */,
 				4F8234C71F5AD92000761B6E /* LineSpecialMapping.cpp in Sources */,
 				4F8234C11F5AB98D00761B6E /* Helpers.cpp in Sources */,
 				4FC0A99E1E2A9411006CEC45 /* i_platform.cpp in Sources */,

@@ -57,7 +57,7 @@ public:
       return mName;
    }
 
-   const std::vector<uint8_t> &data() const
+   const std::vector<uint8_t> &Data() const
    {
       return mData;
    }

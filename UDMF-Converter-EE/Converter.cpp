@@ -93,11 +93,10 @@ Result Converter::LoadWad(const Wad &wad, const char *mapName)
    bool found = false;
    for(const Lump &lump : lumps)
    {
-      if(!strcasecmp(lump.Name(), mapName) && CheckLumpIsLevel(lumps, lump,
-                                                               mapLumps))
+      if(!found && !strcasecmp(lump.Name(), mapName) &&
+         CheckLumpIsLevel(lumps, lump, mapLumps))
       {
          found = true;
-         break;
       }
    }
    if(!found)
@@ -271,15 +270,15 @@ void Converter::TranslucentLine(int special, int tag, int index)
 //
 Result Converter::LoadThings(const Lump &things)
 {
-   if(things.data().size() % 10)
+   if(things.Data().size() % 10)
       return Result::BadData;
-   size_t numthings = things.data().size() / 10;
+   size_t numthings = things.Data().size() / 10;
    mThings.resize(numthings);
    for(size_t i = 0; i < numthings; ++i)
    {
       Thing &t = mThings[i];
       const int16_t *dat =
-      reinterpret_cast<const int16_t *>(&things.data()[10 * i]);
+      reinterpret_cast<const int16_t *>(&things.Data()[10 * i]);
 
       t.x = SwapShort(dat[0]);
       t.y = SwapShort(dat[1]);
@@ -295,14 +294,14 @@ Result Converter::LoadThings(const Lump &things)
 //
 Result Converter::LoadVertices(const Lump &vertices)
 {
-   if(vertices.data().size() % 4)
+   if(vertices.Data().size() % 4)
       return Result::BadData;
-   size_t numverts = vertices.data().size() / 4;
+   size_t numverts = vertices.Data().size() / 4;
    mVertices.resize(numverts);
    for(size_t i = 0; i < numverts; ++i)
    {
       Vertex &v = mVertices[i];
-      const int16_t *dat = reinterpret_cast<const int16_t *>(&vertices.data()[4 * i]);
+      const int16_t *dat = reinterpret_cast<const int16_t *>(&vertices.Data()[4 * i]);
 
       v.x = SwapShort(dat[0]);
       v.y = SwapShort(dat[1]);
@@ -316,14 +315,14 @@ Result Converter::LoadVertices(const Lump &vertices)
 //
 Result Converter::LoadLinedefs(const Lump &linedefs)
 {
-   if(linedefs.data().size() % 14)
+   if(linedefs.Data().size() % 14)
       return Result::BadData;
-   size_t numlines = linedefs.data().size() / 14;
+   size_t numlines = linedefs.Data().size() / 14;
    mLinedefs.resize(numlines);
    for(size_t i = 0; i < numlines; ++i)
    {
       Linedef &l = mLinedefs[i];
-      const int16_t *dat = reinterpret_cast<const int16_t *>(&linedefs.data()[14 * i]);
+      const int16_t *dat = reinterpret_cast<const int16_t *>(&linedefs.Data()[14 * i]);
 
       l.v1 = SwapShort(dat[0]);
       l.v2 = SwapShort(dat[1]);
@@ -341,15 +340,15 @@ Result Converter::LoadLinedefs(const Lump &linedefs)
 //
 Result Converter::LoadSidedefs(const Lump &sidedefs)
 {
-   if(sidedefs.data().size() % 30)
+   if(sidedefs.Data().size() % 30)
       return Result::BadData;
-   size_t numsides = sidedefs.data().size() / 30;
+   size_t numsides = sidedefs.Data().size() / 30;
    mSidedefs.resize(numsides);
    char lname[9] = { 0 };
    for(size_t i = 0; i < numsides; ++i)
    {
       Sidedef &s = mSidedefs[i];
-      const int16_t *dat = reinterpret_cast<const int16_t *>(&sidedefs.data()[30 * i]);
+      const int16_t *dat = reinterpret_cast<const int16_t *>(&sidedefs.Data()[30 * i]);
 
       s.xoffset = SwapShort(dat[0]);
       s.yoffset = SwapShort(dat[1]);
@@ -369,15 +368,15 @@ Result Converter::LoadSidedefs(const Lump &sidedefs)
 //
 Result Converter::LoadSectors(const Lump &sectors)
 {
-   if(sectors.data().size() % 26)
+   if(sectors.Data().size() % 26)
       return Result::BadData;
-   size_t numsectors = sectors.data().size() / 26;
+   size_t numsectors = sectors.Data().size() / 26;
    mSectors.resize(numsectors);
    char lname[9] = { 0 };
    for(size_t i = 0; i < numsectors; ++i)
    {
       Sector &s = mSectors[i];
-      const uint8_t *dat = &sectors.data()[26 * i];
+      const uint8_t *dat = &sectors.Data()[26 * i];
       s.floorheight = SwapShort(*(const int16_t*)dat);
       s.ceilingheight = SwapShort(*(const int16_t*)(dat + 2));
       strncpy(lname, (const char *)(dat + 4), 8);

@@ -122,4 +122,35 @@ struct Sector
    int tag;
 };
 
+//
+// Segment
+//
+struct Seg
+{
+   int startVertex;
+   int endVertex;
+   int angle;
+   int linedef;
+   int dir;
+   int offset;
+};
+
+struct Subsector
+{
+   int segcount;
+   int startseg;
+};
+
+struct Node
+{
+   int partx;
+   int party;
+   int dx;
+   int dy;
+   int rightbox[4];
+   int leftbox[4];
+   int rightchild;
+   int leftchild;
+};
+
 #endif /* MapItems_h */
