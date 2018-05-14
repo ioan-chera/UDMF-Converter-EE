@@ -46,6 +46,12 @@ public:
       mLocalLevel = lumpname;
    }
 
+   const LevelInfo *Get(const char *levelName) const
+   {
+      auto it = mAllInfo.find(levelName);
+      return it != mAllInfo.end() ? &it->second : nullptr;
+   }
+
 private:
    // State table declaration
    static bool (XLEMapInfoParser::*States[])(XLTokenizer &);
