@@ -51,7 +51,10 @@ bool XLEMapInfoParser::DoStateExpectHeader(XLTokenizer &tokenizer)
          // in level header mode, all [level info] blocks accumulate into a
          // single definition
          if(!mCurInfo)
+         {
+            MakeUpperCase(mLocalLevel);
             mCurInfo = &mAllInfo[mLocalLevel];  // don't clear here
+         }
          mNextState = STATE_EXPECTKEYWORD;
       }
       else
@@ -65,7 +68,7 @@ bool XLEMapInfoParser::DoStateExpectHeader(XLTokenizer &tokenizer)
       // MetaTable object, and the newest definition for a given map is the
       // one which entirely wins (any data from a previous section with the
       // same name will be obliterated by a later definition).
-      (mCurInfo = &mAllInfo[tokenizer.Token()])->clear();   // also clear
+      (mCurInfo = &mAllInfo[UpperCase(tokenizer.Token())])->clear();   // also clear
       mNextState = STATE_EXPECTKEYWORD;
       mState = STATE_EXPECTEOL;
    }
