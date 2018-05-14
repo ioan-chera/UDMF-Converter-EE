@@ -42,6 +42,24 @@ void MakeLowerCase(std::string &string)
       c = tolower(c);
 }
 
+std::string UpperCase(const char *string)
+{
+   if(!string)
+      return "";
+   std::string result;
+   size_t length = strlen(string);
+   result.resize(length);
+   for(size_t i = 0; i < length; ++i)
+      result[i] = toupper(string[i]);
+   return result;
+}
+
+void MakeUpperCase(std::string &string)
+{
+   for(char &c : string)
+      c = toupper(c);
+}
+
 std::string Escape(const std::string &string)
 {
    std::string ret;

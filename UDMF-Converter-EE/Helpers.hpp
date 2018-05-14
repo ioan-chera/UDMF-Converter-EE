@@ -31,6 +31,8 @@
 
 std::string LowerCase(const char *string);
 void MakeLowerCase(std::string &string);
+std::string UpperCase(const char *string);
+void MakeUpperCase(std::string &string);
 
 std::string Escape(const std::string &string);
 
