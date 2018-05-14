@@ -31,7 +31,7 @@
 Arguments::Arguments(int argc, const char *argv[])
 {
    std::string key;
-   for(int i = 1; i <= argc; ++i)
+   for(int i = 1; i < argc; ++i)
    {
       if(argv[i][0] == '-')
       {

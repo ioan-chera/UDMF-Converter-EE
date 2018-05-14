@@ -39,7 +39,7 @@ std::string Escape(const std::string &string);
 template<typename T>
 inline static bool NullOrEmpty(const T *vector)
 {
-   return !vector || !vector->empty();
+   return !vector || vector->empty();
 }
 
 #endif /* Helpers_hpp */
