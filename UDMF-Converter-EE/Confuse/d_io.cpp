@@ -232,7 +232,7 @@ size_t DWFILE::read(void *dest, size_t p_size, size_t p_num)
 //
 // Gets the length of a file given its handle.
 //
-long M_FileLength(FILE *f)
+static long M_FileLength(FILE *f)
 {
    long curpos, len;
 
