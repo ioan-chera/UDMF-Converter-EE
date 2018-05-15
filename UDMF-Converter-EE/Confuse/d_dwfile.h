@@ -38,7 +38,6 @@
 
 #include <stdarg.h>
 #include <stdlib.h>
-#include "doomtype.h"
 
 class Wad;
 
@@ -53,8 +52,8 @@ class DWFILE
 {
 protected:
    int type;
-   const byte *inp, *lump;
-   const byte *data; // Pointer to lump, FILE, or data
+   const uint8_t *inp, *lump;
+   const uint8_t *data; // Pointer to lump, FILE, or data
    int size;
    int origsize;            // for ungetc
    int lumpnum;             // haleyjd 03/08/06: need to save this

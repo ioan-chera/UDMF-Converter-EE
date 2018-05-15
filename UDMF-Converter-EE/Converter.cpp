@@ -24,7 +24,6 @@
 
 #include "Converter.hpp"
 #include "Helpers.hpp"
-#include "m_swap.h"
 #include "Wad.hpp"
 
 //
@@ -276,15 +275,15 @@ Result Converter::LoadThings(const Lump &things)
    mThings.resize(numthings);
    for(size_t i = 0; i < numthings; ++i)
    {
-      Thing &t = mThings[i];
-      const int16_t *dat =
-      reinterpret_cast<const int16_t *>(&things.Data()[10 * i]);
+//      Thing &t = mThings[i];
+//      const int16_t *dat =
+//      reinterpret_cast<const int16_t *>(&things.Data()[10 * i]);
 
-      t.x = SwapShort(dat[0]);
-      t.y = SwapShort(dat[1]);
-      t.angle = SwapShort(dat[2]);
-      t.type = SwapShort(dat[3]);
-      t.flags = SwapShort(dat[4]);
+//      t.x = SwapShort(dat[0]);
+//      t.y = SwapShort(dat[1]);
+//      t.angle = SwapShort(dat[2]);
+//      t.type = SwapShort(dat[3]);
+//      t.flags = SwapShort(dat[4]);
    }
    return Result::OK;
 }
@@ -300,11 +299,11 @@ Result Converter::LoadVertices(const Lump &vertices)
    mVertices.resize(numverts);
    for(size_t i = 0; i < numverts; ++i)
    {
-      Vertex &v = mVertices[i];
-      const int16_t *dat = reinterpret_cast<const int16_t *>(&vertices.Data()[4 * i]);
+//      Vertex &v = mVertices[i];
+//      const int16_t *dat = reinterpret_cast<const int16_t *>(&vertices.Data()[4 * i]);
 
-      v.x = SwapShort(dat[0]);
-      v.y = SwapShort(dat[1]);
+//      v.x = SwapShort(dat[0]);
+//      v.y = SwapShort(dat[1]);
    }
 
    return Result::OK;
@@ -321,16 +320,16 @@ Result Converter::LoadLinedefs(const Lump &linedefs)
    mLinedefs.resize(numlines);
    for(size_t i = 0; i < numlines; ++i)
    {
-      Linedef &l = mLinedefs[i];
-      const int16_t *dat = reinterpret_cast<const int16_t *>(&linedefs.Data()[14 * i]);
+//      Linedef &l = mLinedefs[i];
+//      const int16_t *dat = reinterpret_cast<const int16_t *>(&linedefs.Data()[14 * i]);
 
-      l.v1 = SwapShort(dat[0]);
-      l.v2 = SwapShort(dat[1]);
-      l.flags = SwapShort(dat[2]);
-      l.special = SwapShort(dat[3]);
-      l.tag = SwapShort(dat[4]);
-      l.sidenum[0] = SwapShort(dat[5]);
-      l.sidenum[1] = SwapShort(dat[6]);
+//      l.v1 = SwapShort(dat[0]);
+//      l.v2 = SwapShort(dat[1]);
+//      l.flags = SwapShort(dat[2]);
+//      l.special = SwapShort(dat[3]);
+//      l.tag = SwapShort(dat[4]);
+//      l.sidenum[0] = SwapShort(dat[5]);
+//      l.sidenum[1] = SwapShort(dat[6]);
    }
    return Result::OK;
 }
@@ -344,21 +343,21 @@ Result Converter::LoadSidedefs(const Lump &sidedefs)
       return Result::BadData;
    size_t numsides = sidedefs.Data().size() / 30;
    mSidedefs.resize(numsides);
-   char lname[9] = { 0 };
+//   char lname[9] = { 0 };
    for(size_t i = 0; i < numsides; ++i)
    {
-      Sidedef &s = mSidedefs[i];
-      const int16_t *dat = reinterpret_cast<const int16_t *>(&sidedefs.Data()[30 * i]);
+//      Sidedef &s = mSidedefs[i];
+//      const int16_t *dat = reinterpret_cast<const int16_t *>(&sidedefs.Data()[30 * i]);
 
-      s.xoffset = SwapShort(dat[0]);
-      s.yoffset = SwapShort(dat[1]);
-      strncpy(lname, (const char *)(dat + 2), 8);
-      s.upperpic = lname;
-      strncpy(lname, (const char *)(dat + 6), 8);
-      s.lowerpic = lname;
-      strncpy(lname, (const char *)(dat + 10), 8);
-      s.midpic = lname;
-      s.sector = SwapShort(dat[14]);
+//      s.xoffset = SwapShort(dat[0]);
+//      s.yoffset = SwapShort(dat[1]);
+//      strncpy(lname, (const char *)(dat + 2), 8);
+//      s.upperpic = lname;
+//      strncpy(lname, (const char *)(dat + 6), 8);
+//      s.lowerpic = lname;
+//      strncpy(lname, (const char *)(dat + 10), 8);
+//      s.midpic = lname;
+//      s.sector = SwapShort(dat[14]);
    }
    return Result::OK;
 }
@@ -372,20 +371,20 @@ Result Converter::LoadSectors(const Lump &sectors)
       return Result::BadData;
    size_t numsectors = sectors.Data().size() / 26;
    mSectors.resize(numsectors);
-   char lname[9] = { 0 };
+//   char lname[9] = { 0 };
    for(size_t i = 0; i < numsectors; ++i)
    {
-      Sector &s = mSectors[i];
-      const uint8_t *dat = &sectors.Data()[26 * i];
-      s.floorheight = SwapShort(*(const int16_t*)dat);
-      s.ceilingheight = SwapShort(*(const int16_t*)(dat + 2));
-      strncpy(lname, (const char *)(dat + 4), 8);
-      s.floorpic = lname;
-      strncpy(lname, (const char *)(dat + 12), 8);
-      s.ceilingpic = lname;
-      s.lightlevel = SwapShort(*(const int16_t*)(dat + 20));
-      s.special = SwapShort(*(const int16_t*)(dat + 22));
-      s.tag = SwapShort(*(const int16_t*)(dat + 24));
+//      Sector &s = mSectors[i];
+//      const uint8_t *dat = &sectors.Data()[26 * i];
+//      s.floorheight = SwapShort(*(const int16_t*)dat);
+//      s.ceilingheight = SwapShort(*(const int16_t*)(dat + 2));
+//      strncpy(lname, (const char *)(dat + 4), 8);
+//      s.floorpic = lname;
+//      strncpy(lname, (const char *)(dat + 12), 8);
+//      s.ceilingpic = lname;
+//      s.lightlevel = SwapShort(*(const int16_t*)(dat + 20));
+//      s.special = SwapShort(*(const int16_t*)(dat + 22));
+//      s.tag = SwapShort(*(const int16_t*)(dat + 24));
    }
 
    return Result::OK;

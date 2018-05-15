@@ -132,7 +132,7 @@ void DWFILE::openFile(const char *filename, const char *mode)
    if(isOpen())
       close();
 
-   inp     = (byte *)fopen(filename, mode);
+   inp     = (uint8_t *)fopen(filename, mode);
    lumpnum = -1;
    type    = DWF_FILE;
 
@@ -216,7 +216,7 @@ size_t DWFILE::read(void *dest, size_t p_size, size_t p_num)
    {
       size_t numbytes = p_size * p_num;
       size_t numbytesread = 0;
-      byte *d = (byte *)dest;
+      uint8_t *d = (uint8_t *)dest;
 
       while(numbytesread < numbytes && size)
       {

@@ -15,12 +15,6 @@
 		4F8234C41F5ABA5900761B6E /* Arguments.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234C21F5ABA5900761B6E /* Arguments.cpp */; };
 		4F8234C71F5AD92000761B6E /* LineSpecialMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234C51F5AD92000761B6E /* LineSpecialMapping.cpp */; };
 		4FC0A94F1E2435C8006CEC45 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A94E1E2435C8006CEC45 /* main.cpp */; };
-		4FC0A9571E243625006CEC45 /* m_argv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A9551E243625006CEC45 /* m_argv.cpp */; };
-		4FC0A97F1E243A52006CEC45 /* z_native.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A97E1E243A52006CEC45 /* z_native.cpp */; };
-		4FC0A9831E243AB7006CEC45 /* i_system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A9821E243AB7006CEC45 /* i_system.cpp */; };
-		4FC0A9891E2A868E006CEC45 /* m_buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A9871E2A868E006CEC45 /* m_buffer.cpp */; };
-		4FC0A98C1E2A88A3006CEC45 /* d_dehtbl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A98B1E2A88A3006CEC45 /* d_dehtbl.cpp */; };
-		4FC0A99B1E2A939D006CEC45 /* m_hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A99A1E2A939D006CEC45 /* m_hash.cpp */; };
 		4FC0A99E1E2A9411006CEC45 /* i_platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC0A99C1E2A9411006CEC45 /* i_platform.cpp */; };
 		4FC0A9A11E2A9434006CEC45 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FC0A9A01E2A9434006CEC45 /* libz.tbd */; };
 		4FF7107920A8827A00A150E4 /* XLParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FF7107720A8827A00A150E4 /* XLParser.cpp */; };
@@ -45,7 +39,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4F4DBB581EB5C8C5001F1CE9 /* m_binary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = m_binary.h; sourceTree = "<group>"; };
 		4F8234B21F5A9FD700761B6E /* MapItems.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapItems.h; sourceTree = "<group>"; };
 		4F8234B31F5AA04D00761B6E /* Converter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Converter.cpp; sourceTree = "<group>"; };
 		4F8234B41F5AA04D00761B6E /* Converter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Converter.hpp; sourceTree = "<group>"; };
@@ -63,30 +56,6 @@
 		4F8234C61F5AD92000761B6E /* LineSpecialMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LineSpecialMapping.hpp; sourceTree = "<group>"; };
 		4FC0A94B1E2435C8006CEC45 /* UDMF-Converter-EE */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "UDMF-Converter-EE"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FC0A94E1E2435C8006CEC45 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		4FC0A9551E243625006CEC45 /* m_argv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = m_argv.cpp; sourceTree = "<group>"; };
-		4FC0A9561E243625006CEC45 /* m_argv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_argv.h; sourceTree = "<group>"; };
-		4FC0A9581E24365E006CEC45 /* z_zone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = z_zone.h; sourceTree = "<group>"; };
-		4FC0A9591E24369C006CEC45 /* d_io.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = d_io.h; sourceTree = "<group>"; };
-		4FC0A95A1E24369C006CEC45 /* d_keywds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = d_keywds.h; sourceTree = "<group>"; };
-		4FC0A95B1E24369C006CEC45 /* m_ctype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_ctype.h; sourceTree = "<group>"; };
-		4FC0A9601E2437E3006CEC45 /* i_system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = i_system.h; sourceTree = "<group>"; };
-		4FC0A9661E243954006CEC45 /* m_dllist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_dllist.h; sourceTree = "<group>"; };
-		4FC0A9681E243982006CEC45 /* m_fixed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_fixed.h; sourceTree = "<group>"; };
-		4FC0A96A1E243A52006CEC45 /* d_dehtbl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = d_dehtbl.h; sourceTree = "<group>"; };
-		4FC0A96D1E243A52006CEC45 /* doomtype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = doomtype.h; sourceTree = "<group>"; };
-		4FC0A9711E243A52006CEC45 /* m_collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_collection.h; sourceTree = "<group>"; };
-		4FC0A9721E243A52006CEC45 /* m_hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_hash.h; sourceTree = "<group>"; };
-		4FC0A9741E243A52006CEC45 /* m_random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_random.h; sourceTree = "<group>"; };
-		4FC0A9751E243A52006CEC45 /* m_swap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_swap.h; sourceTree = "<group>"; };
-		4FC0A97D1E243A52006CEC45 /* z_auto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = z_auto.h; sourceTree = "<group>"; };
-		4FC0A97E1E243A52006CEC45 /* z_native.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = z_native.cpp; sourceTree = "<group>"; };
-		4FC0A9821E243AB7006CEC45 /* i_system.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = i_system.cpp; sourceTree = "<group>"; };
-		4FC0A9861E2A864A006CEC45 /* m_structio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_structio.h; sourceTree = "<group>"; };
-		4FC0A9871E2A868E006CEC45 /* m_buffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = m_buffer.cpp; sourceTree = "<group>"; };
-		4FC0A9881E2A868E006CEC45 /* m_buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_buffer.h; sourceTree = "<group>"; };
-		4FC0A98A1E2A86C0006CEC45 /* m_compare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m_compare.h; sourceTree = "<group>"; };
-		4FC0A98B1E2A88A3006CEC45 /* d_dehtbl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = d_dehtbl.cpp; sourceTree = "<group>"; };
-		4FC0A99A1E2A939D006CEC45 /* m_hash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = m_hash.cpp; sourceTree = "<group>"; };
 		4FC0A99C1E2A9411006CEC45 /* i_platform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = i_platform.cpp; sourceTree = "<group>"; };
 		4FC0A99D1E2A9411006CEC45 /* i_platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = i_platform.h; sourceTree = "<group>"; };
 		4FC0A9A01E2A9434006CEC45 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -122,31 +91,6 @@
 		4F8234B11F5A9FA900761B6E /* ee-code */ = {
 			isa = PBXGroup;
 			children = (
-				4FC0A98B1E2A88A3006CEC45 /* d_dehtbl.cpp */,
-				4FC0A96A1E243A52006CEC45 /* d_dehtbl.h */,
-				4FC0A9591E24369C006CEC45 /* d_io.h */,
-				4FC0A95A1E24369C006CEC45 /* d_keywds.h */,
-				4FC0A96D1E243A52006CEC45 /* doomtype.h */,
-				4FC0A9821E243AB7006CEC45 /* i_system.cpp */,
-				4FC0A9601E2437E3006CEC45 /* i_system.h */,
-				4FC0A9551E243625006CEC45 /* m_argv.cpp */,
-				4FC0A9561E243625006CEC45 /* m_argv.h */,
-				4F4DBB581EB5C8C5001F1CE9 /* m_binary.h */,
-				4FC0A9871E2A868E006CEC45 /* m_buffer.cpp */,
-				4FC0A9881E2A868E006CEC45 /* m_buffer.h */,
-				4FC0A9711E243A52006CEC45 /* m_collection.h */,
-				4FC0A98A1E2A86C0006CEC45 /* m_compare.h */,
-				4FC0A95B1E24369C006CEC45 /* m_ctype.h */,
-				4FC0A9661E243954006CEC45 /* m_dllist.h */,
-				4FC0A9681E243982006CEC45 /* m_fixed.h */,
-				4FC0A99A1E2A939D006CEC45 /* m_hash.cpp */,
-				4FC0A9721E243A52006CEC45 /* m_hash.h */,
-				4FC0A9741E243A52006CEC45 /* m_random.h */,
-				4FC0A9861E2A864A006CEC45 /* m_structio.h */,
-				4FC0A9751E243A52006CEC45 /* m_swap.h */,
-				4FC0A97D1E243A52006CEC45 /* z_auto.h */,
-				4FC0A97E1E243A52006CEC45 /* z_native.cpp */,
-				4FC0A9581E24365E006CEC45 /* z_zone.h */,
 			);
 			name = "ee-code";
 			sourceTree = "<group>";
@@ -295,15 +239,11 @@
 			files = (
 				4F8234BE1F5AA25A00761B6E /* Result.cpp in Sources */,
 				4F8234B51F5AA04D00761B6E /* Converter.cpp in Sources */,
-				4FC0A98C1E2A88A3006CEC45 /* d_dehtbl.cpp in Sources */,
-				4FC0A9831E243AB7006CEC45 /* i_system.cpp in Sources */,
 				4FF7108820AA1AFA00A150E4 /* lexer.cpp in Sources */,
 				4FF7108C20AA1DFF00A150E4 /* d_io.cpp in Sources */,
 				4F8234B81F5AA11200761B6E /* Wad.cpp in Sources */,
-				4FC0A9891E2A868E006CEC45 /* m_buffer.cpp in Sources */,
 				4FC0A94F1E2435C8006CEC45 /* main.cpp in Sources */,
 				4FF7108920AA1AFA00A150E4 /* confuse.cpp in Sources */,
-				4FC0A97F1E243A52006CEC45 /* z_native.cpp in Sources */,
 				4F8234BB1F5AA17800761B6E /* Lump.cpp in Sources */,
 				4FF7108220A8C2DA00A150E4 /* DataStreamer.cpp in Sources */,
 				4FF7107C20A88CD800A150E4 /* XLEMapInfoParser.cpp in Sources */,
@@ -313,8 +253,6 @@
 				4F8234C11F5AB98D00761B6E /* Helpers.cpp in Sources */,
 				4FC0A99E1E2A9411006CEC45 /* i_platform.cpp in Sources */,
 				4F8234C41F5ABA5900761B6E /* Arguments.cpp in Sources */,
-				4FC0A9571E243625006CEC45 /* m_argv.cpp in Sources */,
-				4FC0A99B1E2A939D006CEC45 /* m_hash.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
