@@ -1,7 +1,6 @@
-// Emacs style mode select   -*- C++ -*- 
 //-----------------------------------------------------------------------------
 //
-// Copyright(C) 2013 David Hill et al.
+// Copyright (C) 2013 James Haley et al.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,17 +17,27 @@
 //
 //--------------------------------------------------------------------------
 //
-// DESCRIPTION:
-//    Directory Manipulation
+// DESCRIPTION:  
+//    Lexer header for custom libConfuse lexer.
 //
 //-----------------------------------------------------------------------------
 
-#ifndef I_DIRECTORY_H__
-#define I_DIRECTORY_H__
+#ifndef LEXER_H__
+#define LEXER_H__
 
-class qstring;
+extern const char *mytext; // haleyjd
+class DWFILE;
+class Wad;
 
-void I_GetRealPath(const char *path, qstring &real);
+int   mylex(cfg_t *cfg);
+int   lexer_init(cfg_t *cfg, DWFILE *);
+void  lexer_reset(void);
+void  lexer_set_unquoted_spaces(bool);
+char *cfg_lexer_open(const char *filename, const Wad *wad, int lumpnum, size_t *len);
+char *cfg_lexer_mustopen(cfg_t *cfg, const char *filename, const Wad *wad, int lumpnum, size_t *len);
+int   cfg_lexer_include(cfg_t *cfg, char *buffer, const char *fname, int lumpnum);
+int   cfg_lexer_source_type(cfg_t *cfg);
+void  cfg_lexer_set_dialect(cfg_dialect_t dialect);
 
 #endif
 
