@@ -26,6 +26,7 @@
 #define UDMFItems_hpp
 
 #include <string>
+#include "MapItems.h"
 
 enum UDMFThingFlags
 {
@@ -115,6 +116,10 @@ enum UDMFSectorFlags
 struct UDMFVertex
 {
    double x, y;
+
+   UDMFVertex(const Vertex &v) : x(v.x), y(v.y)
+   {
+   }
 };
 
 //
@@ -133,6 +138,8 @@ struct UDMFThing
 
    // EE extra
    double health;
+
+   UDMFThing(const Thing &thing);
 };
 
 //
