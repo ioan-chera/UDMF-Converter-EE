@@ -25,6 +25,6 @@
 #ifndef LineSpecialMapping_hpp
 #define LineSpecialMapping_hpp
 
-#include <stdio.h>
+void InitLineMapping();
 
 #endif /* LineSpecialMapping_hpp */

@@ -26,6 +26,7 @@
 #include "Converter.hpp"
 #include "LineSpecialMapping.hpp"
 
+// FIXME: load EDF for this
 #define EV_LOCKDEF_NULL        0
 #define EV_LOCKDEF_REDCARD     1
 #define EV_LOCKDEF_BLUECARD    2
@@ -581,7 +582,7 @@ static std::unordered_map<int, UdmfSpecialTarget> gMapping;
 //
 // Initializes line mapping
 //
-static void InitLineMapping()
+void InitLineMapping()
 {
    gMapping[D1DoorBlazeOpen] = {Door_Open, {0, 64, 0, 0, 0}, PlayerUses | NoTag, &Converter::SetLightTag};
    gMapping[D1OpenDoorBlue] = {Door_LockedRaise, {0, 16, 0, EV_LOCKDEF_BLUE, 0}, PlayerUses | NoTag, &Converter::SetLightTag};

@@ -26,6 +26,7 @@
 #include "Converter.hpp"
 #include "DoomLevel.hpp"
 #include "Helpers.hpp"
+#include "LineSpecialMapping.hpp"
 #include "Wad.hpp"
 #include "XLEMapInfoParser.hpp"
 
@@ -60,6 +61,9 @@ int main(int argc, const char * argv[])
          return EXIT_FAILURE;
       }
    }
+
+   // Initialize line mapping
+   InitLineMapping();
 
    // Look for EMAPINFO.
    XLEMapInfoParser emapinfo;
