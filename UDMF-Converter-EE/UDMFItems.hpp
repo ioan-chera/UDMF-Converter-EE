@@ -112,7 +112,7 @@ enum UDMFSectorFlags
 //
 // UDMF vertex
 //
-struct Vertex
+struct UDMFVertex
 {
    double x, y;
 };
