@@ -322,6 +322,7 @@ enum UdmfSpecial
    Floor_RaiseByValueTimes8 = 35,
    Floor_LowerByValueTimes8 = 36,
    Floor_MoveToValue = 37,
+   Ceiling_Waggle = 38,
    Ceiling_LowerByValue = 40,
    Ceiling_RaiseByValue = 41,
    Ceiling_CrushAndRaise = 42,
@@ -330,6 +331,7 @@ enum UdmfSpecial
    Ceiling_CrushRaiseAndStay = 45,
    Floor_CrushStop = 46,
    Ceiling_MoveToValue = 47,
+   Polyobj_OR_MoveToSpot = 59,
    Plat_PerpetualRaise = 60,
    Plat_Stop = 61,
    Plat_DownWaitUpStay = 62,
@@ -352,7 +354,10 @@ enum UdmfSpecial
    ACS_LockedExecute = 83,
    ACS_ExecuteWithResult = 84,
    ACS_LockedExecuteDoor = 85,
+   Polyobj_MoveToSpot = 86,
    Polyobj_Stop = 87,
+   Polyobj_MoveTo = 88,
+   Polyobj_OR_MoveTo = 89,
    Polyobj_OR_RotateLeft = 90,
    Polyobj_OR_RotateRight = 91,
    Polyobj_OR_Move = 92,
@@ -431,7 +436,23 @@ enum UdmfSpecial
    Ceiling_LowerToFloor = 254,
    Ceiling_CrushRaiseAndStaySilA = 255,
    Floor_LowerToHighestEE = 256,
-   Ceiling_RaiseToHighest = 262
+   Floor_RaiseToLowest = 257,
+   Floor_LowerToLowestCeiling = 258,
+   Floor_RaiseToCeiling = 259,
+   Floor_ToCeilingInstant = 260,
+   Floor_LowerByTexture = 261,
+   Ceiling_RaiseToHighest = 262,
+   Ceiling_ToHighestInstant = 263,
+   Ceiling_LowerToNearest = 264,
+   Ceiling_RaiseToLowest = 265,
+   Ceiling_RaiseToHighestFloor = 266,
+   Ceiling_ToFloorInstant = 267,
+   Ceiling_RaiseByTexture = 268,
+   Ceiling_LowerByTexture = 269,
+   Stairs_BuildDownDoom = 270,
+   Stairs_BuildUpDoomSync = 271,
+   Stairs_BuildDownDoomSync = 272,
+   Stairs_BuildUpDoomCrush = 273
 };
 
 enum Spac
@@ -578,6 +599,7 @@ struct UdmfSpecialTarget
 };
 
 static std::unordered_map<int, UdmfSpecialTarget> gMapping;
+static std::unordered_map<std::string, UdmfSpecial> gEDMapping;
 
 //
 // Initializes line mapping
@@ -916,4 +938,155 @@ void InitLineMapping()
    gMapping[EV_STATIC_TRANSFER_HEIGHTS] = {EV_STATIC_TRANSFER_HEIGHTS};
    gMapping[EV_STATIC_TRANSLUCENT] = {0, {0, 0, 0, 0, 0}, 0, &Converter::TranslucentLine};
    gMapping[EV_STATIC_WIND_CONTROL] = {EV_STATIC_WIND_CONTROL_PARAM, {0, 0, 0, 1, 0}};
+}
+
+void InitExtraDataMappings()
+{
+   gEDMapping["door_raise"] = Door_Raise;
+   gEDMapping["door_open"] = Door_Open;
+   gEDMapping["door_close"] = Door_Close;
+   gEDMapping["door_closewaitopen"] = Door_CloseWaitOpen;
+   gEDMapping["door_waitraise"] = Door_WaitRaise;
+   gEDMapping["door_waitclose"] = Door_WaitClose;
+   gEDMapping["floor_raisetohighest"] = Floor_RaiseToHighest;
+   gEDMapping["floor_lowertohighestee"] = Floor_LowerToHighestEE;
+   gEDMapping["floor_raisetolowest"] = Floor_RaiseToLowest;
+   gEDMapping["floor_lowertolowest"] = Floor_LowerToLowest;
+   gEDMapping["floor_raisetonearest"] = Floor_RaiseToNearest;
+   gEDMapping["floor_lowertonearest"] = Floor_LowerToNearest;
+   gEDMapping["floor_raisetolowestceiling"] = Floor_RaiseToLowestCeiling;
+   gEDMapping["floor_lowertolowestceiling"] = Floor_LowerToLowestCeiling;
+   gEDMapping["floor_raisetoceiling"] = Floor_RaiseToCeiling;
+   gEDMapping["floor_raisebytexture"] = Floor_RaiseByTexture;
+   gEDMapping["floor_lowerbytexture"] = Floor_LowerByTexture;
+   gEDMapping["floor_raisebyvalue"] = Floor_RaiseByValue;
+   gEDMapping["floor_lowerbyvalue"] = Floor_LowerByValue;
+   gEDMapping["floor_movetovalue"] = Floor_MoveToValue;
+   gEDMapping["floor_raiseinstant"] = Floor_RaiseInstant;
+   gEDMapping["floor_lowerinstant"] = Floor_LowerInstant;
+   gEDMapping["floor_toceilinginstant"] = Floor_ToCeilingInstant;
+   gEDMapping["ceiling_raisetohighest"] = Ceiling_RaiseToHighest;
+   gEDMapping["ceiling_tohighestinstant"] = Ceiling_ToHighestInstant;
+   gEDMapping["ceiling_raisetonearest"] = Ceiling_RaiseToNearest;
+   gEDMapping["ceiling_lowertonearest"] = Ceiling_LowerToNearest;
+   gEDMapping["ceiling_raisetolowest"] = Ceiling_RaiseToLowest;
+   gEDMapping["ceiling_lowertolowest"] = Ceiling_LowerToLowest;
+   gEDMapping["ceiling_raisetohighestfloor"] = Ceiling_RaiseToHighestFloor;
+   gEDMapping["ceiling_lowertohighestfloor"] = Ceiling_LowerToHighestFloor;
+   gEDMapping["ceiling_tofloorinstant"] = Ceiling_ToFloorInstant;
+   gEDMapping["ceiling_lowertofloor"] = Ceiling_LowerToFloor;
+   gEDMapping["ceiling_raisebytexture"] = Ceiling_RaiseByTexture;
+   gEDMapping["ceiling_lowerbytexture"] = Ceiling_LowerByTexture;
+   gEDMapping["ceiling_raisebyvalue"] = Ceiling_RaiseByValue;
+   gEDMapping["ceiling_lowerbyvalue"] = Ceiling_LowerByValue;
+   gEDMapping["ceiling_movetovalue"] = Ceiling_MoveToValue;
+   gEDMapping["ceiling_raiseinstant"] = Ceiling_RaiseInstant;
+   gEDMapping["ceiling_lowerinstant"] = Ceiling_LowerInstant;
+   gEDMapping["stairs_buildupdoom"] = Stairs_BuildUpDoom;
+   gEDMapping["stairs_builddowndoom"] = Stairs_BuildDownDoom;
+   gEDMapping["stairs_buildupdoomsync"] = Stairs_BuildUpDoomSync;
+   gEDMapping["stairs_builddowndoomsync"] = Stairs_BuildDownDoomSync;
+   gEDMapping["polyobj_doorslide"] = Polyobj_DoorSlide;
+   gEDMapping["polyobj_doorswing"] = Polyobj_DoorSwing;
+   gEDMapping["polyobj_move"] = Polyobj_Move;
+   gEDMapping["polyobj_or_move"] = Polyobj_OR_Move;
+   gEDMapping["polyobj_rotateright"] = Polyobj_RotateRight;
+   gEDMapping["polyobj_or_rotateright"] = Polyobj_OR_RotateRight;
+   gEDMapping["polyobj_rotateleft"] = Polyobj_RotateLeft;
+   gEDMapping["polyobj_or_rotateleft"] = Polyobj_OR_RotateLeft;
+   gEDMapping["pillar_build"] = Pillar_Build;
+   gEDMapping["pillar_buildandcrush"] = Pillar_BuildAndCrush;
+   gEDMapping["pillar_open"] = Pillar_Open;
+   gEDMapping["acs_execute"] = ACS_Execute;
+   gEDMapping["acs_suspend"] = ACS_Suspend;
+   gEDMapping["acs_terminate"] = ACS_Terminate;
+   gEDMapping["light_raisebyvalue"] = Light_RaiseByValue;
+   gEDMapping["light_lowerbyvalue"] = Light_LowerByValue;
+   gEDMapping["light_changetovalue"] = Light_ChangeToValue;
+   gEDMapping["light_fade"] = Light_Fade;
+   gEDMapping["light_glow"] = Light_Glow;
+   gEDMapping["light_flicker"] = Light_Flicker;
+   gEDMapping["light_strobe"] = Light_Strobe;
+   gEDMapping["radius_quake"] = Radius_Quake;
+   gEDMapping["floor_waggle"] = Floor_Waggle;
+   gEDMapping["thing_spawn"] = Thing_Spawn;
+   gEDMapping["thing_spawnnofog"] = Thing_SpawnNoFog;
+   gEDMapping["teleport_endgame"] = Teleport_EndGame;
+   gEDMapping["thing_projectile"] = Thing_Projectile;
+   gEDMapping["thing_projectilegravity"] = Thing_ProjectileGravity;
+   gEDMapping["thing_activate"] = Thing_Activate;
+   gEDMapping["thing_deactivate"] = Thing_Deactivate;
+   gEDMapping["plat_perpetualraise"] = Plat_PerpetualRaise;
+   gEDMapping["plat_stop"] = Plat_Stop;
+   gEDMapping["plat_downwaitupstay"] = Plat_DownWaitUpStay;
+   gEDMapping["plat_downbyvalue"] = Plat_DownByValue;
+   gEDMapping["plat_upwaitdownstay"] = Plat_UpWaitDownStay;
+   gEDMapping["plat_upbyvalue"] = Plat_UpByValue;
+   gEDMapping["floor_lowertohighest"] = Floor_LowerToHighest;
+   gEDMapping["acs_executewithresult"] = ACS_ExecuteWithResult;
+   gEDMapping["thing_changetid"] = Thing_ChangeTID;
+   gEDMapping["thing_raise"] = Thing_Raise;
+   gEDMapping["thing_stop"] = Thing_Stop;
+   gEDMapping["thrustthing"] = ThrustThing;
+   gEDMapping["thrustthingz"] = ThrustThingZ;
+   gEDMapping["damagething"] = DamageThing;
+   gEDMapping["thing_damage"] = Thing_Damage;
+   gEDMapping["thing_destroy"] = Thing_Destroy;
+   gEDMapping["door_lockedraise"] = Door_LockedRaise;
+   gEDMapping["acs_lockedexecute"] = ACS_LockedExecute;
+   gEDMapping["floor_donut"] = Floor_Donut;
+   gEDMapping["ceiling_crushandraise"] = Ceiling_CrushAndRaise;
+   gEDMapping["ceiling_crushstop"] = Ceiling_CrushStop;
+   gEDMapping["ceiling_crushraiseandstay"] = Ceiling_CrushRaiseAndStay;
+   gEDMapping["ceiling_lowerandcrush"] = Ceiling_LowerAndCrush;
+   gEDMapping["ceiling_lowerandcrushdist"] = Ceiling_LowerAndCrushDist;
+   gEDMapping["ceiling_crushandraisedist"] = Ceiling_CrushAndRaiseDist;
+   gEDMapping["ceiling_crushraiseandstaya"] = Ceiling_CrushRaiseAndStayA;
+   gEDMapping["ceiling_crushandraisea"] = Ceiling_CrushAndRaiseA;
+   gEDMapping["ceiling_crushandraisesilenta"] = Ceiling_CrushAndRaiseSilentA;
+   gEDMapping["ceiling_crushandraisesilentdist"] = Ceiling_CrushAndRaiseSilentDist;
+   gEDMapping["ceiling_crushraiseandstaysila"] = Ceiling_CrushRaiseAndStaySilA;
+   gEDMapping["generic_crusher"] = Generic_Crusher;
+   gEDMapping["teleport"] = Teleport;
+   gEDMapping["teleport_nofog"] = Teleport_NoFog;
+   gEDMapping["teleport_line"] = Teleport_Line;
+   gEDMapping["exit_normal"] = Exit_Normal;
+   gEDMapping["exit_secret"] = Exit_Secret;
+   gEDMapping["teleport_newmap"] = Teleport_NewMap;
+   gEDMapping["floor_raiseandcrush"] = Floor_RaiseAndCrush;
+   gEDMapping["floor_crushstop"] = Floor_CrushStop;
+   gEDMapping["floorandceiling_lowerbyvalue"] = FloorAndCeiling_LowerByValue;
+   gEDMapping["floorandceiling_raisebyvalue"] = FloorAndCeiling_RaiseByValue;
+   gEDMapping["elevator_raisetonearest"] = Elevator_RaiseToNearest;
+   gEDMapping["elevator_lowertonearest"] = Elevator_LowerToNearest;
+   gEDMapping["elevator_movetofloor"] = Elevator_MoveToFloor;
+   gEDMapping["light_maxneighbor"] = Light_MaxNeighbor;
+   gEDMapping["changeskill"] = ChangeSkill;
+   gEDMapping["light_strobedoom"] = Light_StrobeDoom;
+   gEDMapping["generic_floor"] = Generic_Floor;
+   gEDMapping["generic_ceiling"] = Generic_Ceiling;
+   gEDMapping["floor_transfertrigger"] = Floor_TransferTrigger;
+   gEDMapping["floor_transfernumeric"] = Floor_TransferNumeric;
+   gEDMapping["floorandceiling_lowerraise"] = FloorAndCeiling_LowerRaise;
+   gEDMapping["healthing"] = HealThing;
+   gEDMapping["sector_setrotation"] = Sector_SetRotation;
+   gEDMapping["sector_setfloorpanning"] = Sector_SetFloorPanning;
+   gEDMapping["sector_setceilingpanning"] = Sector_SetCeilingPanning;
+   gEDMapping["light_minneighbor"] = Light_MinNeighbor;
+   gEDMapping["polyobj_stop"] = Polyobj_Stop;
+   gEDMapping["plat_raiseandstaytx0"] = Plat_RaiseAndStayTx0;
+   gEDMapping["plat_upbyvaluestaytx"] = Plat_UpByValueStayTx;
+   gEDMapping["acs_executealways"] = ACS_ExecuteAlways;
+   gEDMapping["thing_remove"] = Thing_Remove;
+   gEDMapping["plat_toggleceiling"] = Plat_ToggleCeiling;
+   gEDMapping["plat_downwaitupstaylip"] = Plat_DownWaitUpStayLip;
+   gEDMapping["plat_perpetualraiselip"] = Plat_PerpetualRaiseLip;
+   gEDMapping["acs_lockedexecutedoor"] = ACS_LockedExecuteDoor;
+   gEDMapping["stairs_buildupdoomcrush"] = Stairs_BuildUpDoomCrush;
+   gEDMapping["sector_changesound"] = Sector_ChangeSound;
+   gEDMapping["polyobj_movetospot"] = Polyobj_MoveToSpot;
+   gEDMapping["polyobj_moveto"] = Polyobj_MoveTo;
+   gEDMapping["polyobj_or_moveto"] = Polyobj_OR_MoveTo;
+   gEDMapping["polyobj_or_movetospot"] = Polyobj_OR_MoveToSpot;
+   gEDMapping["ceiling_waggle"] = Ceiling_Waggle;
 }
