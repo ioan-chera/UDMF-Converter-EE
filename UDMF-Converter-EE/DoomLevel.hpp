@@ -32,13 +32,22 @@ class Lump;
 class Wad;
 
 //
+// Holds a pointer to a lump and associated data
+//
+struct LumpInfo
+{
+   const Lump *lump;
+   int index;
+};
+
+//
 // Doom level
 //
 class DoomLevel
 {
 public:
    bool LoadWad(const Wad &wad, size_t lumpIndex);
-   static std::vector<const Lump *> FindLevelLumps(const Wad &wad);
+   static std::vector<LumpInfo> FindLevelLumps(const Wad &wad);
 private:
    void LoadThings(const Lump &lump);
    void LoadLinedefs(const Lump &lump);

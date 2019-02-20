@@ -51,7 +51,7 @@ bool DoomLevel::LoadWad(const Wad &wad, size_t lumpIndex)
 //
 // Locates levels in a wad's lump list
 //
-std::vector<const Lump *> DoomLevel::FindLevelLumps(const Wad &wad)
+std::vector<LumpInfo> DoomLevel::FindLevelLumps(const Wad &wad)
 {
    static const char *const doomLumpNames[] =
    {
@@ -67,7 +67,7 @@ std::vector<const Lump *> DoomLevel::FindLevelLumps(const Wad &wad)
       "BLOCKMAP"
    };
 
-   std::vector<const Lump *> ret;
+   std::vector<LumpInfo> ret;
 
    const auto &lumps = wad.Lumps();
    for(auto it = lumps.begin(); it != lumps.end(); ++it)
@@ -85,10 +85,14 @@ std::vector<const Lump *> DoomLevel::FindLevelLumps(const Wad &wad)
       if(!isLevel || jt < it + 11 || (jt == it + 11 &&
                                       !strcasecmp(jt->Name(), "BEHAVIOR")))
       {
-         continue;   // also avoid Hexen maps for now
+         continue;   // TODO: add support for Hexen maps
       }
       DoomLevel level;
-      ret.push_back(&*it);
+
+      LumpInfo info = {};
+      info.lump = &*it;
+      info.index = static_cast<int>(it - lumps.begin());
+      ret.push_back(info);
       it += 10;
    }
    return ret;
