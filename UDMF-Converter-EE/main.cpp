@@ -79,5 +79,17 @@ int main(int argc, const char * argv[])
 
    // TODO: parse ExtraData and EDF. Load the maps. Then run the converter.
 
+   // Convert the maps
+   for(const LumpInfo &info : levelLumps)
+   {
+      DoomLevel level;
+      if(!level.LoadWad(wad, info.index))
+      {
+         fprintf(stderr, "Failed loading level %s\n", info.lump->Name());
+         continue;
+      }
+      printf("Loaded level %s\n", info.lump->Name());
+   }
+
    return 0;
 }
