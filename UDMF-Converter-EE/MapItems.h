@@ -27,6 +27,49 @@
 
 #include <string>
 
+#define GenFloorBase          0x6000
+#define GenCeilingBase        0x4000
+#define GenDoorBase           0x3c00
+#define GenLockedBase         0x3800
+#define GenLiftBase           0x3400
+#define GenStairsBase         0x3000
+#define GenCrusherBase        0x2F80
+
+#define FloorCrushShift           12
+#define FloorChangeShift          10
+#define FloorTargetShift           7
+#define FloorDirectionShift        6
+#define FloorModelShift            5
+#define FloorSpeedShift            3
+
+#define DoorDelayShift             8
+#define DoorMonsterShift           7
+#define DoorKindShift              5
+#define DoorSpeedShift             3
+
+#define LockedNKeysShift           9
+#define LockedKeyShift             6
+#define LockedKindShift            5
+#define LockedSpeedShift           3
+
+#define LiftTargetShift            8
+#define LiftDelayShift             6
+#define LiftMonsterShift           5
+#define LiftSpeedShift             3
+
+#define StairIgnoreShift           9
+#define StairDirectionShift        8
+#define StairStepShift             6
+#define StairMonsterShift          5
+#define StairSpeedShift            3
+
+#define CrusherSilentShift         6
+#define CrusherMonsterShift        5
+#define CrusherSpeedShift          3
+
+#define TriggerType           0x0007
+#define TriggerTypeShift      0
+
 //
 // Simple vertex definition
 //

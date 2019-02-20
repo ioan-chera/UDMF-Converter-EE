@@ -41,7 +41,7 @@ public:
    {
    }
 
-   void LocalLevel(const char *lumpname)
+   void SetLocalLevel(const char *lumpname)
    {
       mLocalLevel = lumpname;
    }

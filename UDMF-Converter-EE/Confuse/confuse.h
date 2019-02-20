@@ -39,6 +39,9 @@
 #ifndef CONFUSE_H__
 #define CONFUSE_H__
 
+#include <errno.h>
+#include <stdarg.h>
+
 class Wad;
 
 /** Fundamental option types */

@@ -73,15 +73,26 @@ int main(int argc, const char * argv[])
    std::vector<LumpInfo> levelLumps = DoomLevel::FindLevelLumps(wad);
    for(const LumpInfo &info : levelLumps)
    {
-      emapinfo.LocalLevel(info.lump->Name());
+      emapinfo.SetLocalLevel(info.lump->Name());
       emapinfo.ParseLump(*info.lump);
    }
 
    // TODO: parse ExtraData and EDF. Load the maps. Then run the converter.
+   
 
    // Convert the maps
    for(const LumpInfo &info : levelLumps)
    {
+      const LevelInfo *levelInfo = emapinfo.Get(info.lump->Name());
+      if(levelInfo)
+      {
+         auto it = levelInfo->find("extradata");
+         if(it != levelInfo->end())
+         {
+            // TODO: load extradata
+         }
+      }
+
       DoomLevel level;
       if(!level.LoadWad(wad, info.index))
       {

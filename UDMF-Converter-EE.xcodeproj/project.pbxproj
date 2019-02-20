@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4F32C285221DD69400FAA243 /* UDMFItems.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F32C283221DD69400FAA243 /* UDMFItems.cpp */; };
+		4F32C288221DE2F000FAA243 /* ExtraData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F32C286221DE2F000FAA243 /* ExtraData.cpp */; };
 		4F8234B51F5AA04D00761B6E /* Converter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234B31F5AA04D00761B6E /* Converter.cpp */; };
 		4F8234B81F5AA11200761B6E /* Wad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234B61F5AA11200761B6E /* Wad.cpp */; };
 		4F8234BB1F5AA17800761B6E /* Lump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234B91F5AA17800761B6E /* Lump.cpp */; };
@@ -42,6 +43,8 @@
 /* Begin PBXFileReference section */
 		4F32C283221DD69400FAA243 /* UDMFItems.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UDMFItems.cpp; sourceTree = "<group>"; };
 		4F32C284221DD69400FAA243 /* UDMFItems.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UDMFItems.hpp; sourceTree = "<group>"; };
+		4F32C286221DE2F000FAA243 /* ExtraData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtraData.cpp; sourceTree = "<group>"; };
+		4F32C287221DE2F000FAA243 /* ExtraData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ExtraData.hpp; sourceTree = "<group>"; };
 		4F8234B21F5A9FD700761B6E /* MapItems.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapItems.h; sourceTree = "<group>"; };
 		4F8234B31F5AA04D00761B6E /* Converter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Converter.cpp; sourceTree = "<group>"; };
 		4F8234B41F5AA04D00761B6E /* Converter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Converter.hpp; sourceTree = "<group>"; };
@@ -91,13 +94,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4F8234B11F5A9FA900761B6E /* ee-code */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "ee-code";
-			sourceTree = "<group>";
-		};
 		4FC0A9421E2435C8006CEC45 = {
 			isa = PBXGroup;
 			children = (
@@ -129,7 +125,8 @@
 				4FF7108120A8C2DA00A150E4 /* DataStreamer.hpp */,
 				4FF7107D20A8C00100A150E4 /* DoomLevel.cpp */,
 				4FF7107E20A8C00100A150E4 /* DoomLevel.hpp */,
-				4F8234B11F5A9FA900761B6E /* ee-code */,
+				4F32C286221DE2F000FAA243 /* ExtraData.cpp */,
+				4F32C287221DE2F000FAA243 /* ExtraData.hpp */,
 				4FC0A96F1E243A52006CEC45 /* hal */,
 				4F8234C51F5AD92000761B6E /* LineSpecialMapping.cpp */,
 				4F8234C61F5AD92000761B6E /* LineSpecialMapping.hpp */,
@@ -256,6 +253,7 @@
 				4FF7107F20A8C00100A150E4 /* DoomLevel.cpp in Sources */,
 				4FF7107920A8827A00A150E4 /* XLParser.cpp in Sources */,
 				4F8234C71F5AD92000761B6E /* LineSpecialMapping.cpp in Sources */,
+				4F32C288221DE2F000FAA243 /* ExtraData.cpp in Sources */,
 				4F8234C11F5AB98D00761B6E /* Helpers.cpp in Sources */,
 				4FC0A99E1E2A9411006CEC45 /* i_platform.cpp in Sources */,
 				4F8234C41F5ABA5900761B6E /* Arguments.cpp in Sources */,
