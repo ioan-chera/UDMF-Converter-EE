@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F32C285221DD69400FAA243 /* UDMFItems.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F32C283221DD69400FAA243 /* UDMFItems.cpp */; };
 		4F8234B51F5AA04D00761B6E /* Converter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234B31F5AA04D00761B6E /* Converter.cpp */; };
 		4F8234B81F5AA11200761B6E /* Wad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234B61F5AA11200761B6E /* Wad.cpp */; };
 		4F8234BB1F5AA17800761B6E /* Lump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234B91F5AA17800761B6E /* Lump.cpp */; };
@@ -39,6 +40,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4F32C283221DD69400FAA243 /* UDMFItems.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UDMFItems.cpp; sourceTree = "<group>"; };
+		4F32C284221DD69400FAA243 /* UDMFItems.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UDMFItems.hpp; sourceTree = "<group>"; };
 		4F8234B21F5A9FD700761B6E /* MapItems.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapItems.h; sourceTree = "<group>"; };
 		4F8234B31F5AA04D00761B6E /* Converter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Converter.cpp; sourceTree = "<group>"; };
 		4F8234B41F5AA04D00761B6E /* Converter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Converter.hpp; sourceTree = "<group>"; };
@@ -145,6 +148,8 @@
 				4FF7107B20A88CD800A150E4 /* XLEMapInfoParser.hpp */,
 				4FF7107720A8827A00A150E4 /* XLParser.cpp */,
 				4FF7107820A8827A00A150E4 /* XLParser.hpp */,
+				4F32C283221DD69400FAA243 /* UDMFItems.cpp */,
+				4F32C284221DD69400FAA243 /* UDMFItems.hpp */,
 			);
 			path = "UDMF-Converter-EE";
 			sourceTree = "<group>";
@@ -245,6 +250,7 @@
 				4FC0A94F1E2435C8006CEC45 /* main.cpp in Sources */,
 				4FF7108920AA1AFA00A150E4 /* confuse.cpp in Sources */,
 				4F8234BB1F5AA17800761B6E /* Lump.cpp in Sources */,
+				4F32C285221DD69400FAA243 /* UDMFItems.cpp in Sources */,
 				4FF7108220A8C2DA00A150E4 /* DataStreamer.cpp in Sources */,
 				4FF7107C20A88CD800A150E4 /* XLEMapInfoParser.cpp in Sources */,
 				4FF7107F20A8C00100A150E4 /* DoomLevel.cpp in Sources */,
