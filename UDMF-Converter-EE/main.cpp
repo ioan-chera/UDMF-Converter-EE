@@ -25,6 +25,7 @@
 #include "Arguments.hpp"
 #include "Converter.hpp"
 #include "DoomLevel.hpp"
+#include "ExtraData.hpp"
 #include "Helpers.hpp"
 #include "LineSpecialMapping.hpp"
 #include "Wad.hpp"
@@ -85,12 +86,19 @@ int main(int argc, const char * argv[])
    for(const LumpInfo &info : levelLumps)
    {
       const LevelInfo *levelInfo = emapinfo.Get(info.lump->Name());
+      ExtraData extraData;
       if(levelInfo)
       {
          auto it = levelInfo->find("extradata");
          if(it != levelInfo->end())
          {
-            // TODO: load extradata
+            if(!extraData.LoadLump(wad, it->second.c_str()))
+            {
+               fprintf(stderr, "Warning: failed loading ExtraData %s for %s\n", it->second.c_str(),
+                       info.lump->Name());
+            }
+            // Delete the ExtraData reference: it will be undesired in UDMF
+            emapinfo.Erase(info.lump->Name(), "extradata");
          }
       }
 

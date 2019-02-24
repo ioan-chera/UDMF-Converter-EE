@@ -114,6 +114,8 @@ private:
    bool ProcessLines(cfg_t *cfg);
    bool ProcessSectors(cfg_t *cfg);
 
+   void Clear();
+
    std::unordered_map<int, EDThing> mThings;
    std::unordered_map<int, EDLine> mLines;
    std::unordered_map<int, EDSector> mSectors;

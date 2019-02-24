@@ -52,6 +52,16 @@ public:
       return it != mAllInfo.end() ? &it->second : nullptr;
    }
 
+   //
+   // Erases a given key from EMAPINFO. Useful when rewriting
+   //
+   void Erase(const char *levelName, const char *key)
+   {
+      auto it = mAllInfo.find(levelName);
+      if(it != mAllInfo.end())
+         it->second.erase(key);
+   }
+
 private:
    // State table declaration
    static bool (XLEMapInfoParser::*States[])(XLTokenizer &);

@@ -584,6 +584,7 @@ bool ExtraData::LoadLump(const Wad &wad, const char *name)
       if(!lump)
       {
          fprintf(stderr, "Couldn't find ExtraData lump %s\n", name);
+         Clear();
          return false;
       }
 
@@ -595,6 +596,7 @@ bool ExtraData::LoadLump(const Wad &wad, const char *name)
       {
          fprintf(stderr, "Couldn't parse ExtraData lump %s: error %d\n", name, result);
          cfg_free(cfg);
+         Clear();
          return false;
       }
 
@@ -602,6 +604,7 @@ bool ExtraData::LoadLump(const Wad &wad, const char *name)
       {
          fprintf(stderr, "Couldn't process things from ExtraData %s\n", name);
          cfg_free(cfg);
+         Clear();
          return false;
       }
 
@@ -609,6 +612,7 @@ bool ExtraData::LoadLump(const Wad &wad, const char *name)
       {
          fprintf(stderr, "Couldn't process linedefs from ExtraData %s\n", name);
          cfg_free(cfg);
+         Clear();
          return false;
       }
 
@@ -616,15 +620,18 @@ bool ExtraData::LoadLump(const Wad &wad, const char *name)
       {
          fprintf(stderr, "Couldn't process sectors from ExtraData %s\n", name);
          cfg_free(cfg);
+         Clear();
          return false;
       }
 
+      cfg_free(cfg);
       return true;
    }
    catch(int result)
    {
       fprintf(stderr, "An error occurred, quitting ExtraData processing for %s\n", name);
       cfg_free(cfg);
+      Clear();
       return false;
    }
 }
@@ -978,4 +985,11 @@ bool ExtraData::ProcessSectors(cfg_t *cfg)
       sector.c_portalid = cfg_getint(section, FIELD_SECTOR_PORTALID_C);
    }
    return true;
+}
+
+void ExtraData::Clear()
+{
+   mThings.clear();
+   mLines.clear();
+   mSectors.clear();
 }
