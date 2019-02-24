@@ -83,7 +83,7 @@ const char *confuse_author    = "Martin Hedenfalk <mhe@home.se>";
 static void my_assert(const char *msg, const char *file, int line)
 {
    fprintf(stderr, "Assertion failed at %s line %d: %s\n", file, line, msg);
-   exit(EXIT_FAILURE);
+   throw EXIT_FAILURE;
 }
 #endif
 
