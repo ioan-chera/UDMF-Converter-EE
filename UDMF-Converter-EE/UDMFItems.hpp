@@ -180,6 +180,16 @@ struct UDMFSide
    std::string texturebottom;
    std::string texturemiddle;
    int sector;
+
+   UDMFSide(const Sidedef &side) :
+   offsetx(side.xoffset),
+   offsety(side.yoffset),
+   texturetop(side.upperpic),
+   texturebottom(side.lowerpic),
+   texturemiddle(side.midpic),
+   sector(side.sector)
+   {
+   }
 };
 
 //
@@ -251,6 +261,7 @@ private:
    std::vector<UDMFThing> mThings;
    std::vector<UDMFVertex> mVertices;
    std::vector<UDMFSector> mSectors;
+   std::vector<UDMFSide> mSides;
 };
 
 #endif /* UDMFItems_hpp */

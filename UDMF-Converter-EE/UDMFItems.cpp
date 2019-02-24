@@ -162,4 +162,8 @@ UDMFLevel::UDMFLevel(const DoomLevel &level, const ExtraData &extraData)
    mSectors.reserve(level.GetVertices().size());
    for(const Sector &sector : level.GetSectors())
       mSectors.emplace_back(sector);
+
+   mSides.reserve(level.GetSidedefs().size());
+   for(const Sidedef &sidedef : level.GetSidedefs())
+      mSides.emplace_back(sidedef);
 }

@@ -61,6 +61,10 @@ public:
    {
       return mSectors;
    }
+   const std::vector<Sidedef> &GetSidedefs() const
+   {
+      return mSidedefs;
+   }
 
 private:
    void LoadThings(const Lump &lump);
