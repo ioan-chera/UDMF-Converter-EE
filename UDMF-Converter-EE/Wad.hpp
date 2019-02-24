@@ -65,7 +65,7 @@ public:
       return mLumps;
    }
 
-   const Lump *FindLump(const char *name) const;
+   const Lump *FindLump(const char *name, int *index = nullptr) const;
    
 private:
    std::vector<Lump> mLumps;

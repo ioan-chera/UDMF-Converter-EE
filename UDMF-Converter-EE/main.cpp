@@ -64,6 +64,7 @@ int main(int argc, const char * argv[])
 
    // Initialize line mapping
    InitLineMapping();
+   InitExtraDataMappings();
 
    // Look for EMAPINFO.
    XLEMapInfoParser emapinfo;

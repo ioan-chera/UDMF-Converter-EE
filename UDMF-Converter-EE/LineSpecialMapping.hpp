@@ -212,5 +212,7 @@ enum UdmfSpecial
 };
 
 void InitLineMapping();
+void InitExtraDataMappings();
+UdmfSpecial GetSpecialByName(const char *name);
 
 #endif /* LineSpecialMapping_hpp */

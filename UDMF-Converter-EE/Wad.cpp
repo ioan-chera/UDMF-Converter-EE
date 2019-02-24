@@ -115,12 +115,17 @@ cleanup:
 //
 // Finds a lump from the wad, searching backwards.
 //
-const Lump *Wad::FindLump(const char *name) const
+const Lump *Wad::FindLump(const char *name, int *index) const
 {
-   for(auto it = mLumps.rbegin(); it != mLumps.rend(); ++it)
+   int lumpIndex = static_cast<int>(mLumps.size() - 1);
+   for(auto it = mLumps.rbegin(); it != mLumps.rend(); ++it, --lumpIndex)
    {
       if(!strcasecmp(it->Name(), name))
+      {
+         if(index)
+            *index = lumpIndex;
          return &*it;
+      }
    }
    return nullptr;
 }

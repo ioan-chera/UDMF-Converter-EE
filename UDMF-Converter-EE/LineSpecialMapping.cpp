@@ -25,6 +25,7 @@
 #include <unordered_map>
 #include "Converter.hpp"
 #include "LineSpecialMapping.hpp"
+#include "Helpers.hpp"
 
 // FIXME: load EDF for this
 #define EV_LOCKDEF_NULL        0
@@ -957,4 +958,13 @@ void InitExtraDataMappings()
    gEDMapping["transfer_ceilinglight"] = Transfer_CeilingLight;
    gEDMapping["transfer_floorlight"] = Transfer_FloorLight;
    gEDMapping["transfer_heights"] = Transfer_Heights;
+}
+
+//
+// Gets the special number from a name
+//
+UdmfSpecial GetSpecialByName(const char *name)
+{
+   std::string lowerName = LowerCase(name);
+   return gEDMapping[lowerName];
 }

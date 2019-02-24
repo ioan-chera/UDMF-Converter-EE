@@ -25,7 +25,28 @@
 #ifndef ExtraData_hpp
 #define ExtraData_hpp
 
+#include <unordered_map>
+
 class Wad;
+struct cfg_t;
+
+enum
+{
+   kExtraDataDoomednum = 5004
+};
+
+//
+// ExtraData thing
+//
+struct EDThing
+{
+   int type;
+   unsigned options;
+   int tid;
+   int args[5];
+   int height;
+   int special;
+};
 
 //
 // Holds ExtraData stuff
@@ -34,6 +55,11 @@ class ExtraData
 {
 public:
    bool LoadLump(const Wad &wad, const char *name);
+
+private:
+   bool ProcessThings(cfg_t *cfg);
+
+   std::unordered_map<int, EDThing> mThings;
 };
 
 #endif /* ExtraData_hpp */

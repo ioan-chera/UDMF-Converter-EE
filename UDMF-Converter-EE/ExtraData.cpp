@@ -25,6 +25,8 @@
 
 #include "Confuse/confuse.h"
 #include "ExtraData.hpp"
+#include "Helpers.hpp"
+#include "LineSpecialMapping.hpp"
 #include "MapItems.h"
 #include "Wad.hpp"
 
@@ -86,6 +88,59 @@
 #define FIELD_SECTOR_PORTALID_F     "portalid.floor"
 #define FIELD_SECTOR_PORTALID_C     "portalid.ceiling"
 
+#define MAXFLAGFIELDS 4
+
+enum
+{
+   FLAG_DOOM_SPECIAL = 0x80000000,  // if this is set, the extradata line has the old special set
+};
+
+enum
+{
+   DEHFLAGS_MODE1,
+   DEHFLAGS_MODE2,
+   DEHFLAGS_MODE3,
+   DEHFLAGS_MODE4,
+   DEHFLAGS_MODE_ALL
+};
+
+// haleyjd: flag field parsing stuff is now global for EDF and
+// ExtraData usage
+struct dehflags_t
+{
+   const char *name;
+   unsigned int value;
+   int index;
+};
+struct dehflagset_t
+{
+   dehflags_t *flaglist;
+   int mode;
+   unsigned int results[MAXFLAGFIELDS];
+};
+
+// mapthing flag values and mnemonics
+
+static dehflags_t mapthingflags[] =
+{
+   { "EASY",      TF_EASY },
+   { "NORMAL",    TF_NORMAL },
+   { "HARD",      TF_HARD },
+   { "AMBUSH",    TF_AMBUSH },
+   { "NOTSINGLE", TF_NOTSINGLE },
+   { "NOTDM",     TF_NOTDM },
+   { "NOTCOOP",   TF_NOTCOOP },
+   { "FRIEND",    TF_FRIEND },
+   { "DORMANT",   TF_DORMANT },
+   { NULL,        0 }
+};
+
+static dehflagset_t mt_flagset =
+{
+   mapthingflags, // flaglist
+   0,             // mode
+};
+
 // mapthing options and related data structures
 
 static cfg_opt_t mapthing_opts[] =
@@ -102,61 +157,6 @@ static cfg_opt_t mapthing_opts[] =
 
 
 // linedef options and related data structures
-
-//
-// EV_SpecialForStaticInitName
-//
-// Some static init specials have symbolic names. This will
-// return the bound special for such a name if one exists.
-//
-static int EV_SpecialForStaticInitName(const char *name)
-{
-   struct staticname_t
-   {
-      int staticFn;
-      const char *name;
-   };
-   // TODO
-//   static staticname_t namedStatics[] =
-//   {
-//      { EV_STATIC_3DMIDTEX_ATTACH_PARAM,   "Sector_Attach3dMidtex"  },
-//      { EV_STATIC_INIT_PARAM,              "Static_Init"            },
-//      { EV_STATIC_PORTAL_LINE_PARAM_QUICK, "Line_QuickPortal"       },
-//      { EV_STATIC_PORTAL_LINE_PARAM_COMPAT, "Line_SetPortal"        },
-//      { EV_STATIC_SLOPE_PARAM,             "Plane_Align"            },
-//      { EV_STATIC_SLOPE_PARAM_TAG,         "Plane_Copy"             },
-//      { EV_STATIC_POLYOBJ_START_LINE,      "Polyobj_StartLine"      },
-//      { EV_STATIC_POLYOBJ_EXPLICIT_LINE,   "Polyobj_ExplicitLine"   },
-//      { EV_STATIC_PUSHPULL_CONTROL_PARAM,  "PointPush_SetForce"     },
-//      { EV_STATIC_PORTAL_DEFINE,           "Portal_Define"          },
-//      { EV_STATIC_SCROLL_BY_OFFSETS,       "Scroll_Texture_Offsets" },
-//      { EV_STATIC_SCROLL_CEILING_PARAM,    "Scroll_Ceiling"         },
-//      { EV_STATIC_SCROLL_FLOOR_PARAM,      "Scroll_Floor"           },
-//      { EV_STATIC_SCROLL_LEFT_PARAM,       "Scroll_Texture_Left"    },
-//      { EV_STATIC_SCROLL_WALL_PARAM,       "Scroll_Texture_Model"   },
-//      { EV_STATIC_SCROLL_RIGHT_PARAM,      "Scroll_Texture_Right"   },
-//      { EV_STATIC_SCROLL_UP_PARAM,         "Scroll_Texture_Up"      },
-//      { EV_STATIC_SCROLL_DOWN_PARAM,       "Scroll_Texture_Down"    },
-//      { EV_STATIC_CURRENT_CONTROL_PARAM,   "Sector_SetCurrent"      },
-//      { EV_STATIC_FRICTION_TRANSFER,       "Sector_SetFriction"     },
-//      { EV_STATIC_PORTAL_SECTOR_PARAM_COMPAT, "Sector_SetPortal"    },
-//      { EV_STATIC_WIND_CONTROL_PARAM,      "Sector_SetWind"         },
-//      { EV_STATIC_PORTAL_HORIZON_LINE,     "Line_Horizon"           },
-//      { EV_STATIC_LINE_SET_IDENTIFICATION, "Line_SetIdentification" },
-//      { EV_STATIC_LIGHT_TRANSFER_FLOOR,    "Transfer_FloorLight"    },
-//      { EV_STATIC_LIGHT_TRANSFER_CEILING,  "Transfer_CeilingLight"  },
-//      { EV_STATIC_TRANSFER_HEIGHTS,        "Transfer_Heights"       },
-//   };
-
-   // There aren't enough of these to warrant a hash table. Yet.
-//   for(size_t i = 0; i < earrlen(namedStatics); i++)
-//   {
-//      if(!strcasecmp(namedStatics[i].name, name))
-//         return EV_SpecialForStaticInit(namedStatics[i].staticFn);
-//   }
-
-   return 0;
-}
 
 //
 // E_LineSpecForName
@@ -211,7 +211,7 @@ static int E_LineSpecCB(cfg_t *cfg, cfg_opt_t *opt, const char *value,
       // value is a special name
 
       // NOTE: don't support generalized stuff
-      *(int *)result = (int)(E_LineSpecForName(value));
+      *static_cast<int *>(result) = static_cast<int>(GetSpecialByName(value));
    }
    else
    {
@@ -227,7 +227,7 @@ static int E_LineSpecCB(cfg_t *cfg, cfg_opt_t *opt, const char *value,
          return -1;
       }
 
-      *(int *)result = num;
+      *(int *)result = num | FLAG_DOOM_SPECIAL;
    }
 
    return 0;
@@ -370,18 +370,241 @@ static cfg_opt_t ed_opts[] =
 };
 
 //
+// Called when an EDF error arises. Should throw something.
+//
+static void OnError(cfg_t *cfg, const char *fmt, va_list ap)
+{
+   vfprintf(stderr, fmt, ap);
+   throw EXIT_FAILURE;
+}
+
+//
 // Load a lump for ExtraData
 //
 bool ExtraData::LoadLump(const Wad &wad, const char *name)
 {
-   const Lump *lump = wad.FindLump(name);
-   if(!lump)
+   cfg_t *cfg = nullptr;
+   try
    {
-      fprintf(stderr, "Couldn't find ExtraData lump %s\n", name);
+      int index = 0;
+      const Lump *lump = wad.FindLump(name, &index);
+      if(!lump)
+      {
+         fprintf(stderr, "Couldn't find ExtraData lump %s\n", name);
+         return false;
+      }
+
+      cfg = cfg_init(ed_opts, CFGF_NOCASE);
+      cfg_set_error_function(cfg, OnError);
+
+      int result = cfg_parselump(cfg, wad, name, index);
+      if(result != CFG_SUCCESS)
+      {
+         fprintf(stderr, "Couldn't parse ExtraData lump %s: error %d\n", name, result);
+         cfg_free(cfg);
+         return false;
+      }
+
+      if(!ProcessThings(cfg))
+      {
+         fprintf(stderr, "Couldn't process things from ExtraData %s\n", name);
+         cfg_free(cfg);
+         return false;
+      }
+
+      // TODO: process lines
+
+      return true;
+   }
+   catch(int result)
+   {
+      fprintf(stderr, "An error occurred, quitting ExtraData processing for %s\n", name);
+      cfg_free(cfg);
       return false;
    }
+}
 
-   cfg_t *cfg;
+//
+// From Eternity:
+// Returns the result of strchr called on the string in value.
+// If the return is non-NULL, you can expect to find the extracted
+// prefix written into prefixbuf. If the return value is NULL,
+// prefixbuf is unmodified.
+//
+static const char *ExtractPrefix(const char *value, char *prefixbuf, int buflen)
+{
+   const char *colonloc = strchr(value, ':');
+   if(!colonloc)
+      return nullptr;
+   const char *strval = colonloc + 1;
+   const char *rover = value;
+   memset(prefixbuf, 0, buflen);
+   int i = 0;
+   while(rover != colonloc && i < buflen - 1)
+   {
+      prefixbuf[i] = *rover++;
+      ++i;
+   }
+   // check validity of the string value location (could be end)
+   if(!(*strval))
+   {
+      fprintf(stderr, "ExtractPrefix: invalid prefix:value %s\n", value);
+      throw EXIT_FAILURE;  // dunno what else to do, just kill it off
+   }
+   return colonloc;
+}
 
+//
+// From Eternity:
+// Parses thing type fields in ExtraData. Allows resolving of
+// EDF thingtype mnemonics to their corresponding doomednums.
+//
+static int ParseTypeField(const char *value)
+{
+   char *numpos = nullptr;
+   long num = strtol(value, &numpos, 0);
+
+   char prefix[16] = {};
+   const char *colonloc = ExtractPrefix(value, prefix, sizeof(prefix));
+   if(colonloc || (numpos && *numpos))
+   {
+      const char *strval;
+      if(colonloc)
+         strval = colonloc + 1;
+      else
+         strval = value;
+
+      // TODO: find doomednum
+      fprintf(stderr, "Unknown thing type %s\n", strval);
+      return 0;
+   }
+   if(num < 0)
+      num = 0;
+   return static_cast<int>(num);
+}
+
+// ============================================================
+
+//
+// davidph 01/14/14: split from deh_ParseFlags
+//
+static dehflags_t *deh_ParseFlag(dehflagset_t &flagset, const char *name)
+{
+   int mode = flagset.mode;
+
+   for(dehflags_t *flag = flagset.flaglist; flag->name; ++flag)
+   {
+      if(!strcasecmp(name, flag->name) &&
+         (flag->index == mode || mode == DEHFLAGS_MODE_ALL))
+      {
+         return flag;
+      }
+   }
+
+   return NULL;
+}
+
+// deh_ParseFlags
+// Purpose: Handle thing flag fields in a general manner
+// Args:    flagset -- pointer to a dehflagset_t object
+//          strval  -- ptr-to-ptr to string containing flags
+//                     Note: MUST be a mutable string pointer!
+// Returns: Nothing. Results for each parsing mode are written
+//          into the corresponding index of the results array
+//          within the flagset object.
+//
+// haleyjd 11/03/02: generalized from code that was previously below
+// haleyjd 04/10/03: made global for use in EDF and ExtraData
+// haleyjd 02/19/04: rewrote for combined flags support
+//
+static void deh_ParseFlags(dehflagset_t &flagset, char **strval)
+{
+   unsigned int *results  = flagset.results;  // pointer to results array
+
+   // haleyjd: init all results to zero
+   memset(results, 0, MAXFLAGFIELDS * sizeof(*results));
+
+   // killough 10/98: replace '+' kludge with strtok() loop
+   // Fix error-handling case ('found' var wasn't being reset)
+   //
+   // Use OR logic instead of addition, to allow repetition
+
+   for(;(*strval = strtok(*strval, ",+| \t\f\r")); *strval = NULL)
+   {
+      dehflags_t *flag = deh_ParseFlag(flagset, *strval);
+
+      if(flag)
+         results[flag->index] |= flag->value;
+      else
+         fprintf(stderr, "Could not find flag %s\n", *strval);
+   }
+}
+
+//
+// Parses EDF syntax flags
+// From Eternity
+//
+static unsigned ParseFlags(const char *str, dehflagset_t &flagset)
+{
+   char *buffer, *bufptr;
+   bufptr = buffer = strdup(str);
+   deh_ParseFlags(flagset, &bufptr);
+   free(buffer);
+   return flagset.results[0];
+}
+
+//
+// Parse ExtraData thing args
+//
+static void ParseThingArgs(EDThing &thing, cfg_t *sec)
+{
+   unsigned numargs = cfg_size(sec, FIELD_ARGS);
+   memset(thing.args, 0, sizeof(thing.args));
+   for(unsigned i = 0; i < numargs && i < lengthof(thing.args); ++i)
+      thing.args[i] = cfg_getnint(sec, FIELD_ARGS, i);
+}
+
+//
+// Load things
+//
+bool ExtraData::ProcessThings(cfg_t *cfg)
+{
+   unsigned size = cfg_size(cfg, SEC_MAPTHING);
+   mThings.reserve(size);
+   for(unsigned i = 0; i < size; ++i)
+   {
+      cfg_t *thingsec = cfg_getnsec(cfg, SEC_MAPTHING, i);
+      int recordnum = cfg_getint(thingsec, FIELD_NUM);
+      if(mThings.find(recordnum) != mThings.end())
+      {
+         fprintf(stderr, "Error: duplicate mapthing recordnum %d\n", recordnum);
+         return false;
+      }
+
+      EDThing &thing = mThings[recordnum];
+      const char *name = cfg_getstr(thingsec, FIELD_TYPE);
+      thing.type = ParseTypeField(name);
+      if(thing.type == kExtraDataDoomednum)
+         thing.type = 0;   // just remove it
+      if(!thing.type)   // don't waste time processing zero-type things
+      {
+         mThings.erase(recordnum);
+         continue;
+      }
+      const char *opts = cfg_getstr(thingsec, FIELD_OPTIONS);
+      if(!*opts)
+         thing.options = 0;
+      else
+         thing.options = ParseFlags(opts, mt_flagset);
+
+      thing.tid = cfg_getint(thingsec, FIELD_TID);
+      if(thing.tid < 0)
+         thing.tid = 0;
+
+      ParseThingArgs(thing, thingsec);
+      thing.height = cfg_getint(thingsec, FIELD_HEIGHT);
+      thing.special = cfg_getint(thingsec, FIELD_SPECIAL);
+
+   }
    return true;
 }
