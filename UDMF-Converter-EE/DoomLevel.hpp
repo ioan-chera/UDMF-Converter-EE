@@ -48,6 +48,20 @@ class DoomLevel
 public:
    bool LoadWad(const Wad &wad, size_t lumpIndex);
    static std::vector<LumpInfo> FindLevelLumps(const Wad &wad);
+
+   const std::vector<Thing> &GetThings() const
+   {
+      return mThings;
+   }
+   const std::vector<Vertex> &GetVertices() const
+   {
+      return mVertices;
+   }
+   const std::vector<Sector> &GetSectors() const
+   {
+      return mSectors;
+   }
+
 private:
    void LoadThings(const Lump &lump);
    void LoadLinedefs(const Lump &lump);

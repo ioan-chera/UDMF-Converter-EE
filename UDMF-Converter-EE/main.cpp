@@ -109,6 +109,10 @@ int main(int argc, const char * argv[])
          continue;
       }
       printf("Loaded level %s\n", info.lump->Name());
+
+      // Now we have both the level and its ExtraData loaded. Let's see how we convert it now
+
+      
    }
 
    return 0;

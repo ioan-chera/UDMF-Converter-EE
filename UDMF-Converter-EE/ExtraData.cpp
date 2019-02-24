@@ -799,6 +799,7 @@ bool ExtraData::ProcessThings(cfg_t *cfg)
          thing.type = 0;   // just remove it
       if(!thing.type)   // don't waste time processing zero-type things
       {
+         fprintf(stderr, "Warning: mapthing recordnum %d has invalid type\n", recordnum);
          mThings.erase(recordnum);
          continue;
       }

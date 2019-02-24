@@ -108,6 +108,10 @@ class ExtraData
 {
 public:
    bool LoadLump(const Wad &wad, const char *name);
+   const EDThing *GetThing(int recordnum) const
+   {
+      return Get(mThings, recordnum);
+   }
 
 private:
    bool ProcessThings(cfg_t *cfg);
@@ -115,6 +119,15 @@ private:
    bool ProcessSectors(cfg_t *cfg);
 
    void Clear();
+
+   template<typename T>
+   const T *Get(const std::unordered_map<int, T> &map, int recordnum) const
+   {
+      auto it = map.find(recordnum);
+      if(it != map.end())
+         return &it->second;
+      return nullptr;
+   }
 
    std::unordered_map<int, EDThing> mThings;
    std::unordered_map<int, EDLine> mLines;

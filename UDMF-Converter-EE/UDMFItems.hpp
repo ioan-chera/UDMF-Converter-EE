@@ -26,7 +26,11 @@
 #define UDMFItems_hpp
 
 #include <string>
+#include <vector>
 #include "MapItems.h"
+
+class DoomLevel;
+class ExtraData;
 
 enum UDMFThingFlags
 {
@@ -139,7 +143,10 @@ struct UDMFThing
    // EE extra
    double health;
 
-   UDMFThing(const Thing &thing);
+   UDMFThing(const Thing &thing, const ExtraData &extraData);
+
+private:
+   void SetUDMFFlagsFromDoomFlags(unsigned thflags);
 };
 
 //
@@ -180,6 +187,8 @@ struct UDMFSide
 //
 struct UDMFSector
 {
+   UDMFSector(const Sector &sector);
+
    double heightfloor;
    double heightceiling;
    std::string texturefloor;
@@ -229,6 +238,19 @@ struct UDMFSector
    double alphafloor;
    std::string portal_ceil_overlaytype;
    double alphaceiling;
+};
+
+//
+// The entire UDMF level
+//
+class UDMFLevel
+{
+public:
+   UDMFLevel(const DoomLevel &level, const ExtraData &extraData);
+private:
+   std::vector<UDMFThing> mThings;
+   std::vector<UDMFVertex> mVertices;
+   std::vector<UDMFSector> mSectors;
 };
 
 #endif /* UDMFItems_hpp */
