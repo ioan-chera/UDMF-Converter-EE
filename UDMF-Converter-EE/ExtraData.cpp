@@ -104,6 +104,32 @@ enum
    DEHFLAGS_MODE_ALL
 };
 
+// Extended line special flags
+// Because these go into a new field used only by parameterized
+// line specials, I don't face the issue of running out of line
+// flags anytime soon. This provides another full word for
+// future expansion.
+enum extmlflags_e : unsigned int
+{
+   EX_ML_CROSS        = 0x00000001, // crossable
+   EX_ML_USE          = 0x00000002, // usable
+   EX_ML_IMPACT       = 0x00000004, // shootable
+   EX_ML_PUSH         = 0x00000008, // reserved for future use
+   EX_ML_PLAYER       = 0x00000010, // enabled for players
+   EX_ML_MONSTER      = 0x00000020, // enabled for monsters
+   EX_ML_MISSILE      = 0x00000040, // enabled for missiles
+   EX_ML_REPEAT       = 0x00000080, // can be used multiple times
+   EX_ML_1SONLY       = 0x00000100, // only activated from first side
+   EX_ML_ADDITIVE     = 0x00000200, // uses additive blending
+   EX_ML_BLOCKALL     = 0x00000400, // line blocks everything
+   EX_ML_ZONEBOUNDARY = 0x00000800, // line marks a sound zone boundary
+   EX_ML_CLIPMIDTEX   = 0x00001000, // line clips midtextures to floor and ceiling height
+   EX_ML_3DMTPASSPROJ = 0x00002000, // with ML_3DMIDTEX, makes it pass projectiles
+   EX_ML_LOWERPORTAL  = 0x00004000, // extends the floor portal of the back sector
+   EX_ML_UPPERPORTAL  = 0x00008000, // extends the ceiling portal of the back sector
+   EX_ML_POLYOBJECT   = 0x00010000, // enabled for polyobjects
+};
+
 // haleyjd: flag field parsing stuff is now global for EDF and
 // ExtraData usage
 struct dehflags_t
@@ -139,6 +165,35 @@ static dehflagset_t mt_flagset =
 {
    mapthingflags, // flaglist
    0,             // mode
+};
+
+// linedef extended flag values and mnemonics
+
+static dehflags_t extlineflags[] =
+{
+   { "CROSS",        EX_ML_CROSS        },
+   { "USE",          EX_ML_USE          },
+   { "IMPACT",       EX_ML_IMPACT       },
+   { "PUSH",         EX_ML_PUSH         },
+   { "PLAYER",       EX_ML_PLAYER       },
+   { "MONSTER",      EX_ML_MONSTER      },
+   { "MISSILE",      EX_ML_MISSILE      },
+   { "REPEAT",       EX_ML_REPEAT       },
+   { "1SONLY",       EX_ML_1SONLY       },
+   { "ADDITIVE",     EX_ML_ADDITIVE     },
+   { "BLOCKALL",     EX_ML_BLOCKALL     },
+   { "ZONEBOUNDARY", EX_ML_ZONEBOUNDARY },
+   { "CLIPMIDTEX",   EX_ML_CLIPMIDTEX   },
+   { "LOWERPORTAL",  EX_ML_LOWERPORTAL  },
+   { "UPPERPORTAL",  EX_ML_UPPERPORTAL  },
+   { "POLYOBJECT",   EX_ML_POLYOBJECT   },
+   { NULL,           0                  }
+};
+
+static dehflagset_t ld_flagset =
+{
+   extlineflags, // flaglist
+   0,            // mode
 };
 
 // mapthing options and related data structures
@@ -412,7 +467,12 @@ bool ExtraData::LoadLump(const Wad &wad, const char *name)
          return false;
       }
 
-      // TODO: process lines
+      if(!ProcessLines(cfg))
+      {
+         fprintf(stderr, "Couldn't process linedefs from ExtraData %s\n", name);
+         cfg_free(cfg);
+         return false;
+      }
 
       return true;
    }
@@ -556,12 +616,12 @@ static unsigned ParseFlags(const char *str, dehflagset_t &flagset)
 //
 // Parse ExtraData thing args
 //
-static void ParseThingArgs(EDThing &thing, cfg_t *sec)
+static void ParseArgs(int *args, int numArgs, cfg_t *sec, const char *fieldName)
 {
-   unsigned numargs = cfg_size(sec, FIELD_ARGS);
-   memset(thing.args, 0, sizeof(thing.args));
-   for(unsigned i = 0; i < numargs && i < lengthof(thing.args); ++i)
-      thing.args[i] = cfg_getnint(sec, FIELD_ARGS, i);
+   unsigned numargs = cfg_size(sec, fieldName);
+   memset(args, 0, sizeof(int) * numArgs);
+   for(unsigned i = 0; i < numargs && i < numArgs; ++i)
+      args[i] = cfg_getnint(sec, fieldName, i);
 }
 
 //
@@ -570,7 +630,6 @@ static void ParseThingArgs(EDThing &thing, cfg_t *sec)
 bool ExtraData::ProcessThings(cfg_t *cfg)
 {
    unsigned size = cfg_size(cfg, SEC_MAPTHING);
-   mThings.reserve(size);
    for(unsigned i = 0; i < size; ++i)
    {
       cfg_t *thingsec = cfg_getnsec(cfg, SEC_MAPTHING, i);
@@ -601,10 +660,54 @@ bool ExtraData::ProcessThings(cfg_t *cfg)
       if(thing.tid < 0)
          thing.tid = 0;
 
-      ParseThingArgs(thing, thingsec);
+      ParseArgs(thing.args, lengthof(thing.args), thingsec, FIELD_ARGS);
       thing.height = cfg_getint(thingsec, FIELD_HEIGHT);
       thing.special = cfg_getint(thingsec, FIELD_SPECIAL);
 
    }
+   return true;
+}
+
+//
+// Processes ExtraData linedefs
+//
+bool ExtraData::ProcessLines(cfg_t *cfg)
+{
+   unsigned size = cfg_size(cfg, SEC_LINEDEF);
+   for(unsigned i = 0; i < size; ++i)
+   {
+      cfg_t *linesec = cfg_getnsec(cfg, SEC_LINEDEF, i);
+      int recordnum = cfg_getint(linesec, FIELD_LINE_NUM);
+      if(mLines.find(recordnum) != mLines.end())
+      {
+         fprintf(stderr, "Error: duplicate linedef recordnum %d\n", recordnum);
+         return false;
+      }
+
+      EDLine &line = mLines[recordnum];
+      line.special = cfg_getint(linesec, FIELD_LINE_SPECIAL);
+      line.tag = cfg_getint(linesec, FIELD_LINE_TAG);
+      bool tagset = cfg_size(linesec, FIELD_LINE_TAG) > 0;
+
+      const char *flags = cfg_getstr(linesec, FIELD_LINE_EXTFLAGS);
+      if(!*flags)
+         line.extflags = 0;
+      else
+         line.extflags = ParseFlags(flags, ld_flagset);
+
+      ParseArgs(line.args, lengthof(line.args), linesec, FIELD_LINE_ARGS);
+
+      if(!tagset)
+         line.tag = cfg_getint(linesec, FIELD_LINE_ID);
+
+      line.alpha = cfg_getfloat(linesec, FIELD_LINE_ALPHA);
+      if(line.alpha < 0)
+         line.alpha = 0;
+      else if(line.alpha > 1)
+         line.alpha = 1;
+
+      line.portalid = cfg_getint(linesec, FIELD_LINE_PORTALID);
+   }
+
    return true;
 }

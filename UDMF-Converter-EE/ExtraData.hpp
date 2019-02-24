@@ -49,6 +49,19 @@ struct EDThing
 };
 
 //
+// Line
+//
+struct EDLine
+{
+   int special;
+   int tag;
+   unsigned extflags;
+   int args[5];
+   double alpha;
+   int portalid;
+};
+
+//
 // Holds ExtraData stuff
 //
 class ExtraData
@@ -58,8 +71,10 @@ public:
 
 private:
    bool ProcessThings(cfg_t *cfg);
+   bool ProcessLines(cfg_t *cfg);
 
    std::unordered_map<int, EDThing> mThings;
+   std::unordered_map<int, EDLine> mLines;
 };
 
 #endif /* ExtraData_hpp */
