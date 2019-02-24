@@ -130,6 +130,91 @@ enum extmlflags_e : unsigned int
    EX_ML_POLYOBJECT   = 0x00010000, // enabled for polyobjects
 };
 
+// haleyjd 12/28/08: sector flags
+enum
+{
+   // BOOM generalized sector properties
+   SECF_SECRET             = 0x00000001,  // bit 7 of generalized special
+   SECF_FRICTION           = 0x00000002,  // bit 8 of generalized special
+   SECF_PUSH               = 0x00000004,  // bit 9 of generalized special
+   SECF_KILLSOUND          = 0x00000008,  // bit A of generalized special
+   SECF_KILLMOVESOUND      = 0x00000010,  // bit B of generalized special
+
+   // Hexen phased lighting
+   SECF_PHASEDLIGHT        = 0x00000020,  // spawned with sequence start special
+   SECF_LIGHTSEQUENCE      = 0x00000040,  // spawned with sequence special
+   SECF_LIGHTSEQALT        = 0x00000080,  // spawned with sequence alt special
+
+   // UDMF given
+   SECF_FLOORLIGHTABSOLUTE = 0x00000100,  // lightfloor is set absolutely
+   SECF_CEILLIGHTABSOLUTE  = 0x00000200,  // lightceiling is set absolutely
+};
+
+// haleyjd 12/31/08: sector damage flags
+enum
+{
+   SDMG_LEAKYSUIT  = 0x00000001, // rad suit leaks at random
+   SDMG_IGNORESUIT = 0x00000002, // rad suit is ignored entirely
+   SDMG_ENDGODMODE = 0x00000004, // turns off god mode if on
+   SDMG_EXITLEVEL  = 0x00000008, // exits when player health <= 10
+   SDMG_TERRAINHIT = 0x00000010, // damage causes a terrain hit
+};
+
+// These are flags used to represent configurable options for portals
+typedef enum
+{
+   // -- Portal behavior flags --
+   // Portal is completely disabled
+   PF_DISABLED           = 0x001,
+   // Portal does not render
+   PF_NORENDER           = 0x002,
+   // Portal does not allow passage
+   PF_NOPASS             = 0x004,
+   // Portal does not allow recursive sound to pass through
+   PF_BLOCKSOUND         = 0x008,
+
+   // -- Overlay flags --
+   // Only used per-surface and indicate various overlay options for the portal
+   // Portal has a blended texture overlay (alpha is default)
+   PS_OVERLAY            = 0x010,
+   // Overlay uses additive blending (must be used with PS_OVERLAY)
+   PS_ADDITIVE           = 0x020,
+   // Mask for overlay blending flags
+   PS_OBLENDFLAGS        = PS_OVERLAY | PS_ADDITIVE,
+   // Surface uses the global texture in the portal struct
+   PS_USEGLOBALTEX       = 0x040,
+   // Mask for all overlay flags
+   PS_OVERLAYFLAGS       = PS_OBLENDFLAGS | PS_USEGLOBALTEX,
+
+   // -- State flags --
+   // These are only used per-surface and indicate the current state of the portal
+
+   // Portal can be rendered
+   PS_VISIBLE            = 0x080,
+   // Portal can be passed through
+   PS_PASSABLE           = 0x100,
+   // Portal allows recursive sound
+   PS_PASSSOUND          = 0x200,
+   // Mask for state flags
+   PS_STATEMASK          = PS_VISIBLE | PS_PASSABLE | PS_PASSSOUND,
+
+   // More flags added along...
+   PF_ATTACHEDPORTAL     = 0x400,
+
+   // Mask for the flags portion
+   PF_FLAGMASK           = PF_DISABLED | PF_NORENDER | PF_NOPASS | PF_BLOCKSOUND
+   | PF_ATTACHEDPORTAL,
+
+
+   // -- Opactiy --
+   // The left-most 8 bits are reserved for the opacity value of the portal overlay
+   PO_OPACITYSHIFT       = 24,
+   PO_OPACITYMASK        = 0xFF000000,
+
+   // All overlay and blending flags
+   PS_BLENDFLAGS         = PS_OVERLAYFLAGS | PO_OPACITYMASK,
+} portalflag_e;
+
 // haleyjd: flag field parsing stuff is now global for EDF and
 // ExtraData usage
 struct dehflags_t
@@ -210,6 +295,59 @@ static cfg_opt_t mapthing_opts[] =
    CFG_END()
 };
 
+static dehflags_t sectorflags[] =
+{
+   { "SECRET",        SECF_SECRET        },
+   { "FRICTION",      SECF_FRICTION      },
+   { "PUSH",          SECF_PUSH          },
+   { "KILLSOUND",     SECF_KILLSOUND     },
+   { "KILLMOVESOUND", SECF_KILLMOVESOUND },
+   { "PHASEDLIGHT",   SECF_PHASEDLIGHT   },
+   { "LIGHTSEQUENCE", SECF_LIGHTSEQUENCE },
+   { "LIGHTSEQALT",   SECF_LIGHTSEQALT   },
+   { NULL,            0                  }
+};
+
+static dehflagset_t sector_flagset =
+{
+   sectorflags, // flaglist
+   0,           // mode
+};
+
+static dehflags_t sectordamageflags[] =
+{
+   { "LEAKYSUIT",  SDMG_LEAKYSUIT  },
+   { "IGNORESUIT", SDMG_IGNORESUIT },
+   { "ENDGODMODE", SDMG_ENDGODMODE },
+   { "EXITLEVEL",  SDMG_EXITLEVEL  },
+   { "TERRAINHIT", SDMG_TERRAINHIT },
+   { NULL,         0               }
+};
+
+static dehflagset_t sectordamage_flagset =
+{
+   sectordamageflags, // flaglist
+   0                  // mode
+};
+
+static dehflags_t sectorportalflags[] =
+{
+   { "DISABLED",     PF_DISABLED     },
+   { "NORENDER",     PF_NORENDER     },
+   { "NOPASS",       PF_NOPASS       },
+   { "BLOCKSOUND",   PF_BLOCKSOUND   },
+   { "OVERLAY",      PS_OVERLAY      },
+   { "ADDITIVE",     PS_ADDITIVE     },
+   { "USEGLOBALTEX", PS_USEGLOBALTEX },
+   { "ATTACHEDPORTAL", PF_ATTACHEDPORTAL },
+   { NULL,           0               }
+};
+
+static dehflagset_t sectorportal_flagset =
+{
+   sectorportalflags, // flaglist
+   0                  // mode
+};
 
 // linedef options and related data structures
 
@@ -474,6 +612,13 @@ bool ExtraData::LoadLump(const Wad &wad, const char *name)
          return false;
       }
 
+      if(!ProcessSectors(cfg))
+      {
+         fprintf(stderr, "Couldn't process sectors from ExtraData %s\n", name);
+         cfg_free(cfg);
+         return false;
+      }
+
       return true;
    }
    catch(int result)
@@ -709,5 +854,128 @@ bool ExtraData::ProcessLines(cfg_t *cfg)
       line.portalid = cfg_getint(linesec, FIELD_LINE_PORTALID);
    }
 
+   return true;
+}
+
+//
+// From Eternity:
+// ZDoom decided for us that floors and ceilings should rotate backward with
+// respect to DOOM's normal angular coordinate system, so don't blame me for
+// the reversal.
+// MaxW: 2016/07/11: This is no longer static as the function is needed for UDMF
+//
+static double NormalizeFlatAngle(double input)
+{
+   // first account for negative angles
+   while(input < 0.0)
+      input += 360.0;
+
+   // now account for super angles
+   while(input >= 360.0)
+      input -= 360.0;
+
+   // now that we're between 0 and 359, reverse the angle...
+   input = 360.0 - input;
+
+   // don't return 360 for 0
+   if(input == 360.0)
+      input = 0.0;
+
+   return input;
+}
+
+//
+// Process ExtraData sectors
+//
+bool ExtraData::ProcessSectors(cfg_t *cfg)
+{
+   unsigned size = cfg_size(cfg, SEC_SECTOR);
+   for(unsigned i = 0; i < size; ++i)
+   {
+      cfg_t *section = cfg_getnsec(cfg, SEC_SECTOR, i);
+      int recordnum = cfg_getint(section, FIELD_SECTOR_NUM);
+      if(mSectors.find(recordnum) != mSectors.end())
+      {
+         fprintf(stderr, "Error: duplicate sector recordnum %d\n", recordnum);
+         return false;
+      }
+
+      EDSector &sector = mSectors[recordnum];
+      const char *flags = cfg_getstr(section, FIELD_SECTOR_FLAGS);
+      if(*flags)
+      {
+         sector.hasflags = true;
+         sector.flags = ParseFlags(flags, sector_flagset);
+      }
+
+      flags = cfg_getstr(section, FIELD_SECTOR_FLAGSADD);
+      if(*flags)
+         sector.flagsadd = ParseFlags(flags, sector_flagset);
+
+      flags = cfg_getstr(section, FIELD_SECTOR_FLAGSREM);
+      if(*flags)
+         sector.flagsrem = ParseFlags(flags, sector_flagset);
+
+      sector.damage = cfg_getint(section, FIELD_SECTOR_DAMAGE);
+      sector.damagemask = cfg_getint(section, FIELD_SECTOR_DAMAGEMASK);
+
+      sector.damagetype = cfg_getstr(section, FIELD_SECTOR_DAMAGEMOD);
+
+      flags = cfg_getstr(section, FIELD_SECTOR_DAMAGEFLAGS);
+      if(*flags)
+      {
+         sector.hasdamageflags = true;
+         sector.damageflags = ParseFlags(flags, sectordamage_flagset);
+      }
+
+      flags = cfg_getstr(section, FIELD_SECTOR_DMGFLAGSADD);
+      if(*flags)
+         sector.damageflagsadd = ParseFlags(flags, sectordamage_flagset);
+      flags = cfg_getstr(section, FIELD_SECTOR_DMGFLAGSREM);
+      if(*flags)
+         sector.damageflagsrem = ParseFlags(flags, sectordamage_flagset);
+
+      sector.floor_xoffs = cfg_getfloat(section, FIELD_SECTOR_FLOOROFFSETX);
+      sector.floor_yoffs = cfg_getfloat(section, FIELD_SECTOR_FLOOROFFSETY);
+      sector.ceiling_xoffs = cfg_getfloat(section, FIELD_SECTOR_CEILINGOFFSETX);
+      sector.ceiling_yoffs = cfg_getfloat(section, FIELD_SECTOR_CEILINGOFFSETY);
+
+      sector.floor_xscale = cfg_getfloat(section, FIELD_SECTOR_FLOORSCALEX);
+      sector.floor_yscale = cfg_getfloat(section, FIELD_SECTOR_FLOORSCALEY);
+      sector.ceiling_xscale = cfg_getfloat(section, FIELD_SECTOR_CEILINGSCALEX);
+      sector.ceiling_yscale = cfg_getfloat(section, FIELD_SECTOR_CEILINGSCALEY);
+
+      sector.floorangle = NormalizeFlatAngle(cfg_getfloat(section, FIELD_SECTOR_FLOORANGLE));
+      sector.ceilingangle = NormalizeFlatAngle(cfg_getfloat(section, FIELD_SECTOR_CEILINGANGLE));
+
+      sector.topmap = cfg_getstr(section, FIELD_SECTOR_TOPMAP);
+      sector.midmap = cfg_getstr(section, FIELD_SECTOR_MIDMAP);
+      sector.bottommap = cfg_getstr(section, FIELD_SECTOR_BOTTOMMAP);
+
+      sector.floorterrain = cfg_getstr(section, FIELD_SECTOR_FLOORTERRAIN);
+      sector.ceilingterrain = cfg_getstr(section, FIELD_SECTOR_CEILINGTERRAIN);
+
+      flags = cfg_getstr(section, FIELD_SECTOR_PORTALFLAGS_F);
+      if(*flags)
+         sector.f_pflags = ParseFlags(flags, sectorportal_flagset);
+      flags = cfg_getstr(section, FIELD_SECTOR_PORTALFLAGS_C);
+      if(*flags)
+         sector.c_pflags = ParseFlags(flags, sectorportal_flagset);
+
+      sector.f_alpha = cfg_getint(section, FIELD_SECTOR_OVERLAYALPHA_F);
+      if(sector.f_alpha < 0)
+         sector.f_alpha = 0;
+      else if(sector.f_alpha > 255)
+         sector.f_alpha = 255;
+
+      sector.c_alpha = cfg_getint(section, FIELD_SECTOR_OVERLAYALPHA_C);
+      if(sector.c_alpha < 0)
+         sector.c_alpha = 0;
+      else if(sector.c_alpha > 255)
+         sector.c_alpha = 255;
+
+      sector.f_portalid = cfg_getint(section, FIELD_SECTOR_PORTALID_F);
+      sector.c_portalid = cfg_getint(section, FIELD_SECTOR_PORTALID_C);
+   }
    return true;
 }

@@ -25,6 +25,7 @@
 #ifndef ExtraData_hpp
 #define ExtraData_hpp
 
+#include <string>
 #include <unordered_map>
 
 class Wad;
@@ -62,6 +63,45 @@ struct EDLine
 };
 
 //
+// Sector
+//
+struct EDSector
+{
+   bool hasflags;
+   unsigned flags;
+   unsigned flagsadd;
+   unsigned flagsrem;
+   int damage;
+   int damagemask;
+   std::string damagetype;
+   bool hasdamageflags;
+   unsigned damageflags;
+   unsigned damageflagsadd;
+   unsigned damageflagsrem;
+   double floor_xoffs;
+   double floor_yoffs;
+   double ceiling_xoffs;
+   double ceiling_yoffs;
+   double floor_xscale;
+   double floor_yscale;
+   double ceiling_xscale;
+   double ceiling_yscale;
+   double floorangle;
+   double ceilingangle;
+   std::string topmap;
+   std::string midmap;
+   std::string bottommap;
+   std::string floorterrain;
+   std::string ceilingterrain;
+   unsigned f_pflags;
+   unsigned c_pflags;
+   int f_alpha;
+   int c_alpha;
+   int f_portalid;
+   int c_portalid;
+};
+
+//
 // Holds ExtraData stuff
 //
 class ExtraData
@@ -72,9 +112,11 @@ public:
 private:
    bool ProcessThings(cfg_t *cfg);
    bool ProcessLines(cfg_t *cfg);
+   bool ProcessSectors(cfg_t *cfg);
 
    std::unordered_map<int, EDThing> mThings;
    std::unordered_map<int, EDLine> mLines;
+   std::unordered_map<int, EDSector> mSectors;
 };
 
 #endif /* ExtraData_hpp */
