@@ -31,6 +31,7 @@
 
 class DoomLevel;
 class ExtraData;
+class LinedefConversion;
 
 enum UDMFThingFlags
 {
@@ -74,21 +75,22 @@ enum UDMFLineFlags
    ULF_MONSTERCROSS = 0x8000,
    ULF_MONSTERUSE = 0x10000,
    ULF_IMPACT = 0x20000,
-   ULF_PLAYERPUSH = 0x40000,
-   ULF_MONSTERPUSH = 0x80000,
-   ULF_MISSILECROSS = 0x100000,
-   ULF_REPEATSPECIAL = 0x200000,
+   ULF_MONSTERSHOOT = 0x40000,
+   ULF_PLAYERPUSH = 0x80000,
+   ULF_MONSTERPUSH = 0x100000,
+   ULF_MISSILECROSS = 0x200000,
+   ULF_REPEATSPECIAL = 0x400000,
 
    // EE extra
-   ULF_POLYCROSS = 0x400000,
-   ULF_MIDTEX3D = 0x800000,
-   ULF_FIRSTSIDEONLY = 0x1000000,
-   ULF_BLOCKEVERYTHING = 0x2000000,
-   ULF_ZONEBOUNDARY = 0x4000000,
-   ULF_CLIPMIDTEX = 0x8000000,
-   ULF_MIDTEX3DIMPASSIBLE = 0x10000000,
-   ULF_LOWERPORTAL = 0x20000000,
-   ULF_UPPERPORTAL = 0x40000000
+   ULF_POLYCROSS = 0x800000,
+   ULF_MIDTEX3D = 0x1000000,
+   ULF_FIRSTSIDEONLY = 0x2000000,
+   ULF_BLOCKEVERYTHING = 0x4000000,
+   ULF_ZONEBOUNDARY = 0x8000000,
+   ULF_CLIPMIDTEX = 0x10000000,
+   ULF_MIDTEX3DIMPASSIBLE = 0x20000000,
+   ULF_LOWERPORTAL = 0x40000000,
+   ULF_UPPERPORTAL = 0x80000000
 };
 
 enum UDMFSectorFlags
@@ -111,7 +113,10 @@ enum UDMFSectorFlags
    USF_PORTAL_CEIL_NOPASS = 0x4000,
    USF_PORTAL_CEIL_BLOCKSOUND = 0x8000,
    USF_PORTAL_CEIL_USEGLOBALTEX = 0x10000,
-   USF_PORTAL_CEIL_ATTACHED = 0x20000
+   USF_PORTAL_CEIL_ATTACHED = 0x20000,
+   USF_PHASEDLIGHT = 0x40000,
+   USF_LIGHTSEQUENCE = 0x80000,
+   USF_LIGHTSEQALT = 0x100000
 };
 
 //
@@ -154,6 +159,10 @@ private:
 //
 struct UDMFLine
 {
+   UDMFLine(const Linedef &linedef, LinedefConversion &conversion);
+
+   void HandleDoomSpecial(int special, int tag, LinedefConversion &conversion);
+
    int id;
    int v[2];
    unsigned flags;
@@ -251,17 +260,50 @@ struct UDMFSector
 };
 
 //
+// Interface for linedef conversion
+//
+class LinedefConversion
+{
+public:
+   virtual void SetLightTag(int special, int tag, UDMFLine &line) = 0;
+   virtual void SetSurfaceControl(int special, int tag, UDMFLine &line) = 0;
+   virtual void AttachToControl(int special, int tag, UDMFLine &line) = 0;
+   virtual void ResolveLineExtraData(int special, int tag, UDMFLine &line) = 0;
+   virtual void ResolveSectorExtraData(int special, int tag, UDMFLine &line) = 0;
+   virtual void SetLineID(int special, int tag, UDMFLine &line) = 0;
+   virtual void PortalDefine(int special, int tag, UDMFLine &line) = 0;
+   virtual void QuickLinePortal(int special, int tag, UDMFLine &line) = 0;
+   virtual void TranslucentLine(int special, int tag, UDMFLine &line) = 0;
+};
+
+//
 // The entire UDMF level
 //
-class UDMFLevel
+class UDMFLevel : public LinedefConversion
 {
 public:
    UDMFLevel(const DoomLevel &level, const ExtraData &extraData);
+
+   virtual void SetLightTag(int special, int tag, UDMFLine &line) override;
+   virtual void SetSurfaceControl(int special, int tag, UDMFLine &line) override;
+   virtual void AttachToControl(int special, int tag, UDMFLine &line) override;
+   virtual void ResolveLineExtraData(int special, int tag, UDMFLine &line) override;
+   virtual void ResolveSectorExtraData(int special, int tag, UDMFLine &line) override;
+   virtual void SetLineID(int special, int tag, UDMFLine &line) override;
+   virtual void PortalDefine(int special, int tag, UDMFLine &line) override;
+   virtual void QuickLinePortal(int special, int tag, UDMFLine &line) override;
+   virtual void TranslucentLine(int special, int tag, UDMFLine &line) override;
+
 private:
+   UDMFSector *GetFrontSector(const UDMFLine &line);
+
+   const ExtraData &mExtraData;
+
    std::vector<UDMFThing> mThings;
    std::vector<UDMFVertex> mVertices;
    std::vector<UDMFSector> mSectors;
    std::vector<UDMFSide> mSides;
+   std::vector<UDMFLine> mLines;
 };
 
 #endif /* UDMFItems_hpp */

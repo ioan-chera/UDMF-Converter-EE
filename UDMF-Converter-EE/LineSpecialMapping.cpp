@@ -23,7 +23,6 @@
 //
 
 #include <unordered_map>
-#include "Converter.hpp"
 #include "LineSpecialMapping.hpp"
 #include "Helpers.hpp"
 
@@ -297,107 +296,6 @@ enum ClassicSpecial
    WRStartLineScript = 280,
 };
 
-enum Spac
-{
-   PlayerCrosses = 1,
-   MonsterCrosses = 2,
-   PlayerUses = 4,
-   MonsterUses = 8,
-   PlayerShoots = 16,
-   MonsterShoots = 32,
-   Repeatable = 64,
-   NoTag = 128,  // don't set first arg as tag.
-   TagSecond = 256,  // tag the second arg instead of first
-   TagThird = 512,
-   FirstSide = 1024,
-   TagFirstSecond = 2048
-};
-
-enum ClassicStaticSpecial
-{
-   EV_STATIC_SCROLL_LINE_LEFT =  48,
-   EV_STATIC_SCROLL_LINE_RIGHT =  85,
-   EV_STATIC_LIGHT_TRANSFER_FLOOR = 213,
-   EV_STATIC_SCROLL_ACCEL_CEILING = 214,
-   EV_STATIC_SCROLL_ACCEL_FLOOR = 215,
-   EV_STATIC_CARRY_ACCEL_FLOOR = 216,
-   EV_STATIC_SCROLL_CARRY_ACCEL_FLOOR = 217,
-   EV_STATIC_SCROLL_ACCEL_WALL = 218,
-   EV_STATIC_FRICTION_TRANSFER = 223,
-   EV_STATIC_WIND_CONTROL = 224,
-   EV_STATIC_CURRENT_CONTROL = 225,
-   EV_STATIC_PUSHPULL_CONTROL = 226,
-   EV_STATIC_TRANSFER_HEIGHTS = 242,
-   EV_STATIC_SCROLL_DISPLACE_CEILING = 245,
-   EV_STATIC_SCROLL_DISPLACE_FLOOR = 246,
-   EV_STATIC_CARRY_DISPLACE_FLOOR = 247,
-   EV_STATIC_SCROLL_CARRY_DISPLACE_FLOOR = 248,
-   EV_STATIC_SCROLL_DISPLACE_WALL = 249,
-   EV_STATIC_SCROLL_CEILING = 250,
-   EV_STATIC_SCROLL_FLOOR = 251,
-   EV_STATIC_CARRY_FLOOR = 252,
-   EV_STATIC_SCROLL_CARRY_FLOOR = 253,
-   EV_STATIC_SCROLL_WALL_WITH = 254,
-   EV_STATIC_SCROLL_BY_OFFSETS = 255,
-   EV_STATIC_TRANSLUCENT = 260,
-   EV_STATIC_LIGHT_TRANSFER_CEILING = 261,
-   EV_STATIC_EXTRADATA_LINEDEF = 270,
-   EV_STATIC_SKY_TRANSFER = 271,
-   EV_STATIC_SKY_TRANSFER_FLIPPED = 272,
-   EV_STATIC_3DMIDTEX_ATTACH_FLOOR = 281,
-   EV_STATIC_3DMIDTEX_ATTACH_CEILING = 282,
-   EV_STATIC_PORTAL_PLANE_CEILING = 283,
-   EV_STATIC_PORTAL_PLANE_FLOOR = 284,
-   EV_STATIC_PORTAL_PLANE_CEILING_FLOOR = 285,
-   EV_STATIC_PORTAL_HORIZON_CEILING = 286,
-   EV_STATIC_PORTAL_HORIZON_FLOOR = 287,
-   EV_STATIC_PORTAL_HORIZON_CEILING_FLOOR = 288,
-   EV_STATIC_PORTAL_LINE = 289,
-   EV_STATIC_PORTAL_SKYBOX_CEILING = 290,
-   EV_STATIC_PORTAL_SKYBOX_FLOOR = 291,
-   EV_STATIC_PORTAL_SKYBOX_CEILING_FLOOR = 292,
-   EV_STATIC_HERETIC_WIND = 293,
-   EV_STATIC_HERETIC_CURRENT = 294,
-   EV_STATIC_PORTAL_ANCHORED_CEILING = 295,
-   EV_STATIC_PORTAL_ANCHORED_FLOOR = 296,
-   EV_STATIC_PORTAL_ANCHORED_CEILING_FLOOR = 297,
-   EV_STATIC_PORTAL_ANCHOR = 298,
-   EV_STATIC_PORTAL_ANCHOR_FLOOR = 299,
-   EV_STATIC_PORTAL_TWOWAY_CEILING = 344,
-   EV_STATIC_PORTAL_TWOWAY_FLOOR = 345,
-   EV_STATIC_PORTAL_TWOWAY_ANCHOR = 346,
-   EV_STATIC_PORTAL_TWOWAY_ANCHOR_FLOOR = 347,
-   EV_STATIC_PORTAL_LINKED_CEILING = 358,
-   EV_STATIC_PORTAL_LINKED_FLOOR = 359,
-   EV_STATIC_PORTAL_LINKED_ANCHOR = 360,
-   EV_STATIC_PORTAL_LINKED_ANCHOR_FLOOR = 361,
-   EV_STATIC_PORTAL_LINKED_LINE2LINE = 376,
-   EV_STATIC_PORTAL_LINKED_L2L_ANCHOR = 377,
-   EV_STATIC_ATTACH_SET_CEILING_CONTROL = 379,
-   EV_STATIC_ATTACH_SET_FLOOR_CONTROL = 380,
-   EV_STATIC_ATTACH_FLOOR_TO_CONTROL = 381,
-   EV_STATIC_ATTACH_CEILING_TO_CONTROL = 382,
-   EV_STATIC_ATTACH_MIRROR_FLOOR = 383,
-   EV_STATIC_ATTACH_MIRROR_CEILING = 384,
-   EV_STATIC_PORTAL_APPLY_FRONTSECTOR = 385,
-   EV_STATIC_SLOPE_FSEC_FLOOR = 386,
-   EV_STATIC_SLOPE_FSEC_CEILING = 387,
-   EV_STATIC_SLOPE_FSEC_FLOOR_CEILING = 388,
-   EV_STATIC_SLOPE_BSEC_FLOOR = 389,
-   EV_STATIC_SLOPE_BSEC_CEILING = 390,
-   EV_STATIC_SLOPE_BSEC_FLOOR_CEILING = 391,
-   EV_STATIC_SLOPE_BACKFLOOR_FRONTCEILING = 392,
-   EV_STATIC_SLOPE_FRONTFLOOR_BACKCEILING = 393,
-   EV_STATIC_SLOPE_FRONTFLOOR_TAG = 394,
-   EV_STATIC_SLOPE_FRONTCEILING_TAG = 395,
-   EV_STATIC_SLOPE_FRONTFLOORCEILING_TAG = 396,
-   EV_STATIC_EXTRADATA_SECTOR = 401,
-   EV_STATIC_SCROLL_LINE_UP = 417,
-   EV_STATIC_SCROLL_LINE_DOWN = 418,
-   EV_STATIC_SCROLL_LINE_DOWN_FAST = 419,
-   EV_STATIC_PORTAL_HORIZON_LINE = 450
-};
-
 enum UdmfStaticSpecial
 {
    EV_STATIC_POLYOBJ_START_LINE =   1,
@@ -429,17 +327,6 @@ enum UdmfStaticSpecial
    EV_STATIC_PORTAL_LINE_PARAM_QUICK = 301
 };
 
-//
-// UDMF target special
-//
-struct UdmfSpecialTarget
-{
-   int special;
-   int args[5];
-   unsigned flags;   // spac flags and related
-   void (Converter::*additional)(int special, int tag, int index);
-};
-
 static std::unordered_map<int, UdmfSpecialTarget> gMapping;
 static std::unordered_map<std::string, UdmfSpecial> gEDMapping;
 
@@ -448,16 +335,16 @@ static std::unordered_map<std::string, UdmfSpecial> gEDMapping;
 //
 void InitLineMapping()
 {
-   gMapping[D1DoorBlazeOpen] = {Door_Open, {0, 64, 0, 0, 0}, PlayerUses | NoTag, &Converter::SetLightTag};
-   gMapping[D1OpenDoorBlue] = {Door_LockedRaise, {0, 16, 0, EV_LOCKDEF_BLUE, 0}, PlayerUses | NoTag, &Converter::SetLightTag};
-   gMapping[D1OpenDoorRed] = {Door_LockedRaise, {0, 16, 0, EV_LOCKDEF_REDGREEN, 0}, PlayerUses | NoTag, &Converter::SetLightTag};
-   gMapping[D1OpenDoorYellow] = {Door_LockedRaise, {0, 16, 0, EV_LOCKDEF_YELLOW, 0}, PlayerUses | NoTag, &Converter::SetLightTag};
-   gMapping[D1OpenDoor] = {Door_Open, {0, 16, 0, 0, 0}, PlayerUses | NoTag, &Converter::SetLightTag};
-   gMapping[DRDoorBlazeRaise] = {Door_Raise, {0, 64, 150, 0, 0}, PlayerUses | Repeatable | NoTag, &Converter::SetLightTag};
-   gMapping[DRRaiseDoorBlue] = {Door_LockedRaise, {0, 16, 150, EV_LOCKDEF_BLUE, 0}, PlayerUses | Repeatable | NoTag, &Converter::SetLightTag};
-   gMapping[DRRaiseDoorRed] = {Door_LockedRaise, {0, 16, 150, EV_LOCKDEF_REDGREEN, 0}, PlayerUses | Repeatable | NoTag, &Converter::SetLightTag};
-   gMapping[DRRaiseDoorYellow] = {Door_LockedRaise, {0, 16, 150, EV_LOCKDEF_YELLOW, 0}, PlayerUses | Repeatable | NoTag, &Converter::SetLightTag};
-   gMapping[DRRaiseDoor] = {Door_Raise, {0, 16, 150, 0, 0}, PlayerUses | MonsterUses | Repeatable | NoTag, &Converter::SetLightTag};
+   gMapping[D1DoorBlazeOpen] = {Door_Open, {0, 64, 0, 0, 0}, PlayerUses | NoTag, &LinedefConversion::SetLightTag};
+   gMapping[D1OpenDoorBlue] = {Door_LockedRaise, {0, 16, 0, EV_LOCKDEF_BLUE, 0}, PlayerUses | NoTag, &LinedefConversion::SetLightTag};
+   gMapping[D1OpenDoorRed] = {Door_LockedRaise, {0, 16, 0, EV_LOCKDEF_REDGREEN, 0}, PlayerUses | NoTag, &LinedefConversion::SetLightTag};
+   gMapping[D1OpenDoorYellow] = {Door_LockedRaise, {0, 16, 0, EV_LOCKDEF_YELLOW, 0}, PlayerUses | NoTag, &LinedefConversion::SetLightTag};
+   gMapping[D1OpenDoor] = {Door_Open, {0, 16, 0, 0, 0}, PlayerUses | NoTag, &LinedefConversion::SetLightTag};
+   gMapping[DRDoorBlazeRaise] = {Door_Raise, {0, 64, 150, 0, 0}, PlayerUses | Repeatable | NoTag, &LinedefConversion::SetLightTag};
+   gMapping[DRRaiseDoorBlue] = {Door_LockedRaise, {0, 16, 150, EV_LOCKDEF_BLUE, 0}, PlayerUses | Repeatable | NoTag, &LinedefConversion::SetLightTag};
+   gMapping[DRRaiseDoorRed] = {Door_LockedRaise, {0, 16, 150, EV_LOCKDEF_REDGREEN, 0}, PlayerUses | Repeatable | NoTag, &LinedefConversion::SetLightTag};
+   gMapping[DRRaiseDoorYellow] = {Door_LockedRaise, {0, 16, 150, EV_LOCKDEF_YELLOW, 0}, PlayerUses | Repeatable | NoTag, &LinedefConversion::SetLightTag};
+   gMapping[DRRaiseDoor] = {Door_Raise, {0, 16, 150, 0, 0}, PlayerUses | MonsterUses | Repeatable | NoTag, &LinedefConversion::SetLightTag};
    gMapping[G1ExitLevel] = {Exit_Normal, {0, 0, 0, 0, 0}, PlayerShoots | NoTag};
    gMapping[G1PlatRaiseNearestChange] = {Plat_RaiseAndStayTx0, {0, 4, 0, 0, 0}, PlayerShoots};
    gMapping[G1RaiseFloor] = {Floor_RaiseToLowestCeiling, {0, 8, 0, 0, 0}, PlayerShoots};
@@ -702,49 +589,49 @@ void InitLineMapping()
 
    gMapping[EV_STATIC_3DMIDTEX_ATTACH_CEILING] = {EV_STATIC_3DMIDTEX_ATTACH_PARAM, {0, 0, 1, 0, 0}};
    gMapping[EV_STATIC_3DMIDTEX_ATTACH_FLOOR] = {EV_STATIC_3DMIDTEX_ATTACH_PARAM, {0, 0, 0, 0, 0}};
-   gMapping[EV_STATIC_ATTACH_CEILING_TO_CONTROL] = {0, {0, 0, 0, 0, 0}, 0, &Converter::AttachToControl};
-   gMapping[EV_STATIC_ATTACH_FLOOR_TO_CONTROL] = {0, {0, 0, 0, 0, 0}, 0, &Converter::AttachToControl};
-   gMapping[EV_STATIC_ATTACH_MIRROR_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &Converter::AttachToControl};
-   gMapping[EV_STATIC_ATTACH_MIRROR_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &Converter::AttachToControl};
-   gMapping[EV_STATIC_ATTACH_SET_CEILING_CONTROL] = {0, {0, 0, 0, 0, 0}, 0, &Converter::SetSurfaceControl};
-   gMapping[EV_STATIC_ATTACH_SET_FLOOR_CONTROL] = {0, {0, 0, 0, 0, 0}, 0, &Converter::SetSurfaceControl};
+   gMapping[EV_STATIC_ATTACH_CEILING_TO_CONTROL] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::AttachToControl};
+   gMapping[EV_STATIC_ATTACH_FLOOR_TO_CONTROL] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::AttachToControl};
+   gMapping[EV_STATIC_ATTACH_MIRROR_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::AttachToControl};
+   gMapping[EV_STATIC_ATTACH_MIRROR_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::AttachToControl};
+   gMapping[EV_STATIC_ATTACH_SET_CEILING_CONTROL] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::SetSurfaceControl};
+   gMapping[EV_STATIC_ATTACH_SET_FLOOR_CONTROL] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::SetSurfaceControl};
    gMapping[EV_STATIC_CARRY_ACCEL_FLOOR] = {EV_STATIC_SCROLL_FLOOR_PARAM, {0, 5, 1, 0, 0}};
    gMapping[EV_STATIC_CARRY_DISPLACE_FLOOR] = {EV_STATIC_SCROLL_FLOOR_PARAM, {0, 6, 1, 0, 0}};
    gMapping[EV_STATIC_CARRY_FLOOR] = {EV_STATIC_SCROLL_FLOOR_PARAM, {0, 4, 1, 0, 0}};
    gMapping[EV_STATIC_CURRENT_CONTROL] = {EV_STATIC_CURRENT_CONTROL_PARAM, {0, 0, 0, 1, 0}};
-   gMapping[EV_STATIC_EXTRADATA_LINEDEF] = {0, {0, 0, 0, 0, 0}, 0, &Converter::ResolveLineExtraData};
-   gMapping[EV_STATIC_EXTRADATA_SECTOR] = {0, {0, 0, 0, 0, 0}, 0, &Converter::ResolveSectorExtraData};
+   gMapping[EV_STATIC_EXTRADATA_LINEDEF] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::ResolveLineExtraData};
+   gMapping[EV_STATIC_EXTRADATA_SECTOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::ResolveSectorExtraData};
    gMapping[EV_STATIC_FRICTION_TRANSFER] = {EV_STATIC_FRICTION_TRANSFER_param};
    gMapping[EV_STATIC_HERETIC_CURRENT] = {EV_STATIC_CURRENT_CONTROL_PARAM, {0, 0, 0, 3, 0}};
    gMapping[EV_STATIC_HERETIC_WIND] = {EV_STATIC_WIND_CONTROL_PARAM, {0, 0, 0, 3, 0}};
    gMapping[EV_STATIC_LIGHT_TRANSFER_CEILING] = {EV_STATIC_LIGHT_TRANSFER_CEILING_param};
    gMapping[EV_STATIC_LIGHT_TRANSFER_FLOOR] = {EV_STATIC_LIGHT_TRANSFER_FLOOR_param};
-   gMapping[EV_STATIC_LINE_SET_IDENTIFICATION] = {0, {0, 0, 0, 0, 0}, 0, &Converter::SetLineID};
-   gMapping[EV_STATIC_PORTAL_ANCHORED_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
-   gMapping[EV_STATIC_PORTAL_ANCHORED_CEILING_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
-   gMapping[EV_STATIC_PORTAL_ANCHORED_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
+   gMapping[EV_STATIC_LINE_SET_IDENTIFICATION] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::SetLineID};
+   gMapping[EV_STATIC_PORTAL_ANCHORED_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_ANCHORED_CEILING_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_ANCHORED_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
    gMapping[EV_STATIC_PORTAL_ANCHOR] = {};
    gMapping[EV_STATIC_PORTAL_ANCHOR_FLOOR] = {};
    gMapping[EV_STATIC_PORTAL_APPLY_FRONTSECTOR] = {};
-   gMapping[EV_STATIC_PORTAL_HORIZON_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
-   gMapping[EV_STATIC_PORTAL_HORIZON_CEILING_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
-   gMapping[EV_STATIC_PORTAL_HORIZON_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_HORIZON_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_HORIZON_CEILING_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_HORIZON_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
    gMapping[EV_STATIC_PORTAL_HORIZON_LINE] = {EV_STATIC_PORTAL_HORIZON_LINE_param};
    gMapping[EV_STATIC_PORTAL_LINE] = {};
    gMapping[EV_STATIC_PORTAL_LINKED_ANCHOR] = {};
    gMapping[EV_STATIC_PORTAL_LINKED_ANCHOR_FLOOR] = {};
-   gMapping[EV_STATIC_PORTAL_LINKED_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
-   gMapping[EV_STATIC_PORTAL_LINKED_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_LINKED_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_LINKED_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
    gMapping[EV_STATIC_PORTAL_LINKED_L2L_ANCHOR] = {};
-   gMapping[EV_STATIC_PORTAL_LINKED_LINE2LINE] = {0, {0, 0, 0, 0, 0}, 0, &Converter::QuickLinePortal};
-   gMapping[EV_STATIC_PORTAL_PLANE_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
-   gMapping[EV_STATIC_PORTAL_PLANE_CEILING_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
-   gMapping[EV_STATIC_PORTAL_PLANE_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
-   gMapping[EV_STATIC_PORTAL_SKYBOX_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
-   gMapping[EV_STATIC_PORTAL_SKYBOX_CEILING_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
-   gMapping[EV_STATIC_PORTAL_SKYBOX_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
-   gMapping[EV_STATIC_PORTAL_TWOWAY_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
-   gMapping[EV_STATIC_PORTAL_TWOWAY_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &Converter::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_LINKED_LINE2LINE] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::QuickLinePortal};
+   gMapping[EV_STATIC_PORTAL_PLANE_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_PLANE_CEILING_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_PLANE_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_SKYBOX_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_SKYBOX_CEILING_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_SKYBOX_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_TWOWAY_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
+   gMapping[EV_STATIC_PORTAL_TWOWAY_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
    gMapping[EV_STATIC_PUSHPULL_CONTROL] = {EV_STATIC_PUSHPULL_CONTROL_PARAM, {0, 0, 0, 1, 0}};   // TODO
    gMapping[EV_STATIC_SCROLL_ACCEL_CEILING] = {EV_STATIC_SCROLL_CEILING_PARAM, {0, 5, 0, 0, 0}};
    gMapping[EV_STATIC_SCROLL_ACCEL_FLOOR] = {EV_STATIC_SCROLL_FLOOR_PARAM, {0, 5, 0, 0, 0}};
@@ -778,7 +665,7 @@ void InitLineMapping()
    gMapping[EV_STATIC_SLOPE_FSEC_FLOOR] = {EV_STATIC_SLOPE_PARAM, {1, 0, 0, 0, 0}, NoTag};
    gMapping[EV_STATIC_SLOPE_FSEC_FLOOR_CEILING] = {EV_STATIC_SLOPE_PARAM, {1, 1, 0, 0, 0}, NoTag};
    gMapping[EV_STATIC_TRANSFER_HEIGHTS] = {EV_STATIC_TRANSFER_HEIGHTS};
-   gMapping[EV_STATIC_TRANSLUCENT] = {0, {0, 0, 0, 0, 0}, 0, &Converter::TranslucentLine};
+   gMapping[EV_STATIC_TRANSLUCENT] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::TranslucentLine};
    gMapping[EV_STATIC_WIND_CONTROL] = {EV_STATIC_WIND_CONTROL_PARAM, {0, 0, 0, 1, 0}};
 }
 
@@ -967,4 +854,15 @@ UdmfSpecial GetSpecialByName(const char *name)
 {
    std::string lowerName = LowerCase(name);
    return gEDMapping[lowerName];
+}
+
+//
+// Returns the UDMF special info if available
+//
+const UdmfSpecialTarget *GetUDMFSpecial(int special)
+{
+   auto it = gMapping.find(special);
+   if(it == gMapping.end())
+      return nullptr;
+   return &it->second;
 }
