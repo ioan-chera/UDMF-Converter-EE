@@ -638,7 +638,7 @@ void UDMFLevel::ResolveSectorExtraData(int special, int tag, UDMFLine &line)
 }
 void UDMFLevel::SetLineID(int special, int tag, UDMFLine &line)
 {
-   // TODO
+   line.id = tag;
 }
 void UDMFLevel::PortalDefine(int special, int tag, UDMFLine &line)
 {
