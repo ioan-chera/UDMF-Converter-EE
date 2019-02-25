@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4F32C285221DD69400FAA243 /* UDMFItems.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F32C283221DD69400FAA243 /* UDMFItems.cpp */; };
 		4F32C288221DE2F000FAA243 /* ExtraData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F32C286221DE2F000FAA243 /* ExtraData.cpp */; };
-		4F8234B51F5AA04D00761B6E /* Converter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234B31F5AA04D00761B6E /* Converter.cpp */; };
 		4F8234B81F5AA11200761B6E /* Wad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234B61F5AA11200761B6E /* Wad.cpp */; };
 		4F8234BB1F5AA17800761B6E /* Lump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234B91F5AA17800761B6E /* Lump.cpp */; };
 		4F8234BE1F5AA25A00761B6E /* Result.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F8234BC1F5AA25A00761B6E /* Result.cpp */; };
@@ -46,8 +45,6 @@
 		4F32C286221DE2F000FAA243 /* ExtraData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtraData.cpp; sourceTree = "<group>"; };
 		4F32C287221DE2F000FAA243 /* ExtraData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ExtraData.hpp; sourceTree = "<group>"; };
 		4F8234B21F5A9FD700761B6E /* MapItems.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapItems.h; sourceTree = "<group>"; };
-		4F8234B31F5AA04D00761B6E /* Converter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Converter.cpp; sourceTree = "<group>"; };
-		4F8234B41F5AA04D00761B6E /* Converter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Converter.hpp; sourceTree = "<group>"; };
 		4F8234B61F5AA11200761B6E /* Wad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Wad.cpp; sourceTree = "<group>"; };
 		4F8234B71F5AA11200761B6E /* Wad.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Wad.hpp; sourceTree = "<group>"; };
 		4F8234B91F5AA17800761B6E /* Lump.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lump.cpp; sourceTree = "<group>"; };
@@ -119,8 +116,6 @@
 				4F8234C21F5ABA5900761B6E /* Arguments.cpp */,
 				4F8234C31F5ABA5900761B6E /* Arguments.hpp */,
 				4FF7108320AA1AFA00A150E4 /* Confuse */,
-				4F8234B31F5AA04D00761B6E /* Converter.cpp */,
-				4F8234B41F5AA04D00761B6E /* Converter.hpp */,
 				4FF7108020A8C2DA00A150E4 /* DataStreamer.cpp */,
 				4FF7108120A8C2DA00A150E4 /* DataStreamer.hpp */,
 				4FF7107D20A8C00100A150E4 /* DoomLevel.cpp */,
@@ -240,7 +235,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F8234BE1F5AA25A00761B6E /* Result.cpp in Sources */,
-				4F8234B51F5AA04D00761B6E /* Converter.cpp in Sources */,
 				4FF7108820AA1AFA00A150E4 /* lexer.cpp in Sources */,
 				4FF7108C20AA1DFF00A150E4 /* d_io.cpp in Sources */,
 				4F8234B81F5AA11200761B6E /* Wad.cpp in Sources */,

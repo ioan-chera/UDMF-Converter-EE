@@ -23,7 +23,6 @@
 //
 
 #include "Arguments.hpp"
-#include "Converter.hpp"
 #include "DoomLevel.hpp"
 #include "ExtraData.hpp"
 #include "Helpers.hpp"
