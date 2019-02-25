@@ -587,8 +587,8 @@ void InitLineMapping()
    gMapping[WRTeleport] = {Teleport, {0, 0, 0, 0, 0}, PlayerCrosses | MonsterCrosses | Repeatable | TagSecond};
    gMapping[WRTurnTagLightsOff] = {Light_MinNeighbor, {0, 0, 0, 0, 0}, PlayerCrosses | Repeatable};
 
-   gMapping[EV_STATIC_3DMIDTEX_ATTACH_CEILING] = {EV_STATIC_3DMIDTEX_ATTACH_PARAM, {0, 0, 1, 0, 0}};
-   gMapping[EV_STATIC_3DMIDTEX_ATTACH_FLOOR] = {EV_STATIC_3DMIDTEX_ATTACH_PARAM, {0, 0, 0, 0, 0}};
+   gMapping[EV_STATIC_3DMIDTEX_ATTACH_CEILING] = {Sector_Attach3dMidtex, {0, 0, 1, 0, 0}};
+   gMapping[EV_STATIC_3DMIDTEX_ATTACH_FLOOR] = {Sector_Attach3dMidtex, {0, 0, 0, 0, 0}};
    gMapping[EV_STATIC_ATTACH_CEILING_TO_CONTROL] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::AttachToControl};
    gMapping[EV_STATIC_ATTACH_FLOOR_TO_CONTROL] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::AttachToControl};
    gMapping[EV_STATIC_ATTACH_MIRROR_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::AttachToControl};
