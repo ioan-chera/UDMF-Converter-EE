@@ -622,7 +622,7 @@ void InitLineMapping()
    gMapping[EV_STATIC_PORTAL_LINKED_ANCHOR_FLOOR] = {};
    gMapping[EV_STATIC_PORTAL_LINKED_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
    gMapping[EV_STATIC_PORTAL_LINKED_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
-   gMapping[EV_STATIC_PORTAL_LINKED_L2L_ANCHOR] = {};
+   gMapping[EV_STATIC_PORTAL_LINKED_L2L_ANCHOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::QuickLinePortal};
    gMapping[EV_STATIC_PORTAL_LINKED_LINE2LINE] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::QuickLinePortal};
    gMapping[EV_STATIC_PORTAL_PLANE_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
    gMapping[EV_STATIC_PORTAL_PLANE_CEILING_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};

@@ -646,7 +646,10 @@ void UDMFLevel::PortalDefine(int special, int tag, UDMFLine &line)
 }
 void UDMFLevel::QuickLinePortal(int special, int tag, UDMFLine &line)
 {
-
+   // Classic mode: same tag, different specials
+   // UDMF mode: same special, same tag
+   line.special = Line_QuickPortal;
+   line.id = tag;
 }
 void UDMFLevel::TranslucentLine(int special, int tag, UDMFLine &line)
 {
