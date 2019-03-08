@@ -656,7 +656,19 @@ void UDMFLevel::QuickLinePortal(int special, int tag, UDMFLine &line)
 }
 void UDMFLevel::TranslucentLine(int special, int tag, UDMFLine &line)
 {
-
+   if(line.sidefront < 0 || line.sidefront >= mSides.size())
+      return;
+   const UDMFSide &side = mSides[line.sidefront];
+   const char *midtex = side.texturemiddle.c_str();
+   if(!strcasecmp(midtex, "tranmap"))
+      line.tranmap = "TRANMAP";
+   else if(mWad)
+   {
+      // check lump
+      const Lump *lump = mWad->FindLump(midtex);
+      if(lump && lump->Data().size() == 65536)
+         line.tranmap = midtex;
+   }
 }
 
 //
