@@ -70,6 +70,11 @@ public:
       return mLinedefs;
    }
 
+   const Wad *GetWad() const
+   {
+      return mWad;
+   }
+
 private:
    void LoadThings(const Lump &lump);
    void LoadLinedefs(const Lump &lump);
@@ -93,6 +98,8 @@ private:
    std::vector<Sector> mSectors;
    std::vector<uint8_t> mReject;
    std::vector<int16_t> mBlockmap;
+
+   const Wad *mWad = nullptr;
 };
 
 #endif /* DoomLevel_hpp */

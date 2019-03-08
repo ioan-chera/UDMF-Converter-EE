@@ -45,6 +45,7 @@ bool DoomLevel::LoadWad(const Wad &wad, size_t lumpIndex)
    LoadSectors(wad.Lumps()[lumpIndex + 8]);
    mReject = wad.Lumps()[lumpIndex + 9].Data();
    LoadBlockmap(wad.Lumps()[lumpIndex + 10]);
+   mWad = &wad;
    return true;
 }
 
