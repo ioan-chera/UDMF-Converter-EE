@@ -43,7 +43,6 @@ special(),
 arg{},
 health()
 {
-   // TODO: id, height, type from extraData
    SetUDMFFlagsFromDoomFlags(thing.flags);
 
    if(type == kExtraDataDoomednum)

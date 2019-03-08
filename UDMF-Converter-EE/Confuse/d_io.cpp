@@ -164,18 +164,6 @@ void DWFILE::openLump(const Wad &wad, int p_lumpnum)
    data = NULL;
 }
 
-/*
-// TODO: support this properly
-void D_OpenData(DWFILE *infile, byte *data, int size)
-{
-   memset(infile, 0, sizeof(*infile));
-   infile->size = infile->origsize = size;
-   infile->inp = infile->data = data;
-   infile->lumpnum = -1;
-   infile->type = DWF_DATA;
-}
-*/
-
 //
 // DWFILE::close
 //
