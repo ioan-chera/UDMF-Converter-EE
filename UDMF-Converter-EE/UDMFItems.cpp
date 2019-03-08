@@ -26,6 +26,7 @@
 #include "DoomLevel.hpp"
 #include "ExtraData.hpp"
 #include "LineSpecialMapping.hpp"
+#include "Wad.hpp"
 
 //
 // Gets a UDMF thing from a basic thing
@@ -325,7 +326,9 @@ alphaceiling(1)
 //
 // UDMF level maker, resulted from input Doom level and extra Data
 //
-UDMFLevel::UDMFLevel(const DoomLevel &level, const ExtraData &extraData) : mExtraData(extraData)
+UDMFLevel::UDMFLevel(const DoomLevel &level, const ExtraData &extraData) :
+mExtraData(extraData),
+mWad(level.GetWad())
 {
    mThings.reserve(level.GetThings().size());
    for(const Thing &thing : level.GetThings())

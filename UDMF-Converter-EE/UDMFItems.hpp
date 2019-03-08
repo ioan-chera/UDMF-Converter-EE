@@ -32,6 +32,7 @@
 class DoomLevel;
 class ExtraData;
 class LinedefConversion;
+class Wad;
 
 enum UDMFThingFlags
 {
@@ -304,6 +305,8 @@ private:
    std::vector<UDMFSector> mSectors;
    std::vector<UDMFSide> mSides;
    std::vector<UDMFLine> mLines;
+
+   const Wad *const mWad;
 };
 
 #endif /* UDMFItems_hpp */
