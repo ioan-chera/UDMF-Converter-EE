@@ -27,6 +27,7 @@
 #include "ExtraData.hpp"
 #include "Helpers.hpp"
 #include "LineSpecialMapping.hpp"
+#include "ThingMapping.hpp"
 #include "Wad.hpp"
 #include "XLEMapInfoParser.hpp"
 
@@ -61,6 +62,11 @@ int main(int argc, const char * argv[])
          return EXIT_FAILURE;
       }
    }
+
+   const std::vector<const char *> *thinglists = args.Get("things");
+   if (thinglists)
+      for (const char *list : *thinglists)
+         AddThingMapping(list);
 
    // Initialize line mapping
    InitLineMapping();

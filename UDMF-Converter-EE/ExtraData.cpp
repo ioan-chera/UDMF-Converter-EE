@@ -28,6 +28,7 @@
 #include "Helpers.hpp"
 #include "LineSpecialMapping.hpp"
 #include "MapItems.h"
+#include "ThingMapping.hpp"
 #include "Wad.hpp"
 
 // ExtraData section names
@@ -570,9 +571,13 @@ static int ParseTypeField(const char *value)
       else
          strval = value;
 
-      // TODO: find doomednum
-      fprintf(stderr, "Unknown thing type %s\n", strval);
-      return 0;
+      int type = GetThingType(strval);
+      if(type <= 0)
+      {
+         fprintf(stderr, "Unknown thing type %s\n", strval);
+         return 0;
+      }
+      return type;
    }
    if(num < 0)
       num = 0;
