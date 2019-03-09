@@ -601,7 +601,7 @@ void InitLineMapping()
    gMapping[EV_STATIC_PORTAL_SKYBOX_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
    gMapping[EV_STATIC_PORTAL_TWOWAY_CEILING] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
    gMapping[EV_STATIC_PORTAL_TWOWAY_FLOOR] = {0, {0, 0, 0, 0, 0}, 0, &LinedefConversion::PortalDefine};
-   gMapping[EV_STATIC_PUSHPULL_CONTROL] = {PointPush_SetForce, {0, 0, 0, 1, 0}};   // TODO
+   gMapping[EV_STATIC_PUSHPULL_CONTROL] = {PointPush_SetForce, {0, 0, 0, 1, 0}};
    gMapping[EV_STATIC_SCROLL_ACCEL_CEILING] = {Scroll_Ceiling, {0, 5, 0, 0, 0}};
    gMapping[EV_STATIC_SCROLL_ACCEL_FLOOR] = {Scroll_Floor, {0, 5, 0, 0, 0}};
    gMapping[EV_STATIC_SCROLL_ACCEL_WALL] = {Scroll_Texture_Model, {0, 1, 0, 0, 0}};
