@@ -327,7 +327,7 @@ alphaceiling(1)
 //
 UDMFLevel::UDMFLevel(const DoomLevel &level, const ExtraData &extraData) :
 mExtraData(extraData),
-mWad(level.GetWad())
+mDoomLevel(level)
 {
    mThings.reserve(level.GetThings().size());
    for(const Thing &thing : level.GetThings())
@@ -348,6 +348,18 @@ mWad(level.GetWad())
    mLines.reserve(level.GetLinedefs().size());
    for(const Linedef &linedef : level.GetLinedefs())
       mLines.emplace_back(linedef, *this);
+
+   for (const DeferredLineSetup &setup : mDeferredLines)
+   {
+      mLines[setup.index].id = setup.tag;
+      mLines[setup.index].special = setup.special;
+      memcpy(mLines[setup.index].arg, setup.arg, sizeof(setup.arg));
+      mLines[setup.index].portal = setup.portal;
+
+      printf("Set line %d tag %d special %d args %d %d %d %d %d portal %d\n",
+             setup.index, setup.tag, setup.special, setup.arg[0], setup.arg[1], setup.arg[2],
+             setup.arg[3], setup.arg[4], setup.portal);
+   }
 }
 
 //
@@ -376,13 +388,17 @@ void UDMFLevel::SetSurfaceControl(int special, int tag, UDMFLine &line)
    if(!sector)
       return;
 
+   int secnum = IndexOf(*sector);
+
    switch (special)
    {
       case EV_STATIC_ATTACH_SET_CEILING_CONTROL:
          sector->ceilingid = tag;
+         printf("Sector %d gets ceilingid %d\n", secnum, tag);
          break;
       case EV_STATIC_ATTACH_SET_FLOOR_CONTROL:
          sector->floorid = tag;
+         printf("Sector %d gets floorid %d\n", secnum, tag);
          break;
       default:
          break;
@@ -394,19 +410,25 @@ void UDMFLevel::AttachToControl(int special, int tag, UDMFLine &line)
    if(!sector)
       return;
 
+   int secnum = IndexOf(*sector);
+
    switch (special)
    {
       case EV_STATIC_ATTACH_CEILING_TO_CONTROL:
          sector->attachceiling = tag;
+         printf("Sector %d gets attachceiling %d\n", secnum, tag);
          break;
       case EV_STATIC_ATTACH_FLOOR_TO_CONTROL:
          sector->attachfloor = tag;
+         printf("Sector %d gets attachfloor %d\n", secnum, tag);
          break;
       case EV_STATIC_ATTACH_MIRROR_CEILING:
          sector->attachceiling = -tag;
+         printf("Sector %d gets attachceiling %d\n", secnum, -tag);
          break;
       case EV_STATIC_ATTACH_MIRROR_FLOOR:
          sector->attachfloor = -tag;
+         printf("Sector %d gets attachfloor %d\n", secnum, -tag);
          break;
       default:
          break;
@@ -642,10 +664,243 @@ void UDMFLevel::SetLineID(int special, int tag, UDMFLine &line)
 {
    line.id = tag;
 }
+
+//
+// portal info from special
+//
+struct PortalInfo
+{
+   PortalKind kind;
+   int anchorspec;
+   bool floor;
+   bool ceiling;
+
+   inline bool IsAnchored() const
+   {
+      return kind == PortalKind::anchored || kind == PortalKind::twoway || kind == PortalKind::linked;
+   }
+
+   PortalInfo(int special) : anchorspec(), floor(), ceiling()
+   {
+      switch (special)
+      {
+         case EV_STATIC_PORTAL_ANCHORED_CEILING:
+            kind = PortalKind::anchored;
+            anchorspec = EV_STATIC_PORTAL_ANCHOR;
+            ceiling = true;
+            break;
+         case EV_STATIC_PORTAL_HORIZON_CEILING:
+            kind = PortalKind::horizon;
+            ceiling = true;
+            break;
+         case EV_STATIC_PORTAL_LINKED_CEILING:
+            kind = PortalKind::linked;
+            anchorspec = EV_STATIC_PORTAL_LINKED_ANCHOR;
+            ceiling = true;
+            break;
+         case EV_STATIC_PORTAL_PLANE_CEILING:
+            kind = PortalKind::plane;
+            ceiling = true;
+            break;
+         case EV_STATIC_PORTAL_SKYBOX_CEILING:
+            kind = PortalKind::skybox;
+            ceiling = true;
+            break;
+         case EV_STATIC_PORTAL_TWOWAY_CEILING:
+            kind = PortalKind::twoway;
+            anchorspec = EV_STATIC_PORTAL_TWOWAY_ANCHOR;
+            ceiling = true;
+            break;
+         case EV_STATIC_PORTAL_ANCHORED_CEILING_FLOOR:
+            kind = PortalKind::anchored;
+            anchorspec = EV_STATIC_PORTAL_ANCHOR;
+            floor = true;
+            ceiling = true;
+            break;
+         case EV_STATIC_PORTAL_HORIZON_CEILING_FLOOR:
+            kind = PortalKind::horizon;
+            floor = true;
+            ceiling = true;
+            break;
+         case EV_STATIC_PORTAL_PLANE_CEILING_FLOOR:
+            kind = PortalKind::plane;
+            floor = true;
+            ceiling = true;
+            break;
+         case EV_STATIC_PORTAL_SKYBOX_CEILING_FLOOR:
+            kind = PortalKind::skybox;
+            ceiling = floor = true;
+            break;
+         case EV_STATIC_PORTAL_ANCHORED_FLOOR:
+            kind = PortalKind::anchored;
+            anchorspec = EV_STATIC_PORTAL_ANCHOR_FLOOR;
+            floor = true;
+            break;
+         case EV_STATIC_PORTAL_HORIZON_FLOOR:
+            kind = PortalKind::horizon;
+            floor = true;
+            break;
+         case EV_STATIC_PORTAL_LINKED_FLOOR:
+            kind = PortalKind::linked;
+            anchorspec = EV_STATIC_PORTAL_LINKED_ANCHOR_FLOOR;
+            floor = true;
+            break;
+         case EV_STATIC_PORTAL_PLANE_FLOOR:
+            kind = PortalKind::plane;
+            floor = true;
+            break;
+         case EV_STATIC_PORTAL_SKYBOX_FLOOR:
+            kind = PortalKind::skybox;
+            floor = true;
+            break;
+         case EV_STATIC_PORTAL_TWOWAY_FLOOR:
+            kind = PortalKind::twoway;
+            anchorspec = EV_STATIC_PORTAL_TWOWAY_ANCHOR_FLOOR;
+            floor = true;
+            break;
+
+         default:
+            return;
+      }
+   }
+};
+
+//
+// All the complex portal_define logic.
+//
 void UDMFLevel::PortalDefine(int special, int tag, UDMFLine &line)
 {
+   const PortalInfo info(special);
+   int curindex = IndexOf(line);
+
+   printf("Found portal line %d\n", curindex);
+
+   int portalid = 0;
+   if (info.IsAnchored())
+   {
+      // check if already defined
+
+      const UDMFVertex *myv[2] = { GetVertex(line.v[0]), GetVertex(line.v[1]) };
+      if(!myv[0] || !myv[1])
+      {
+         fprintf(stderr, "Line %d is invalid\n", curindex);
+         return;
+      }
+
+      double myx = (myv[0]->x + myv[1]->x) / 2;
+      double myy = (myv[0]->y + myv[1]->y) / 2;
+
+      for (const Linedef &otherline : mDoomLevel.GetLinedefs())
+      {
+         int otherindex = mDoomLevel.IndexOf(otherline);
+         if(curindex == otherindex || otherline.tag != tag || otherline.special != info.anchorspec)
+            continue;
+
+         const Vertex *ov[2] = {
+            mDoomLevel.GetVertex(otherline.v1),
+            mDoomLevel.GetVertex(otherline.v2)
+         };
+         if(!ov[0] || !ov[1])
+            continue;
+
+         // Reverse direction
+         double dx = myx - (ov[0]->x + ov[1]->x) / 2.0;
+         double dy = myy - (ov[0]->y + ov[1]->y) / 2.0;
+
+         printf("Anchor offset is %g %g\n", dx, dy);
+
+         AnchoredPortal portal = {};
+         portal.kind = info.kind;
+         portal.dx = dx;
+         portal.dy = dy;
+
+         for(const AnchoredPortal &oportal : mPortals)
+         {
+            if(oportal == portal)
+            {
+               portalid = oportal.id;
+               printf("Line %d reuses portal %d\n", curindex, portalid);
+            }
+            else if(oportal.IsOpposite(portal))
+            {
+               portalid = -oportal.id;
+               printf("Line %d mirrors portal %d\n", curindex, -portalid);
+            }
+            if(portalid)
+               break;
+         }
+         // portalid none, so add this
+         if(!portalid)
+         {
+            portalid = portal.id = MakeNextPortalID();
+            mPortals.push_back(portal);
+
+            DeferredLineSetup setup = {};
+            setup.index = otherindex;
+            setup.special = Portal_Define;
+            setup.arg[0] = portal.id;
+            setup.arg[1] = int(info.kind);
+            setup.arg[2] = tag;
+            mDeferredLines.push_back(setup);
+
+            line.id = tag;
+            printf("Line %d makes new portal %d\n", curindex, portalid);
+         }
+
+         break;
+      }
+   }
+   else
+   {
+      line.special = Portal_Define;
+      portalid = line.arg[0] = MakeNextPortalID();
+      line.arg[1] = int(info.kind);
+   }
+
+   if(!portalid)
+      return;
+   for(UDMFSector &sector : mSectors)
+   {
+      if(sector.id == tag)
+      {
+         if(info.ceiling)
+            sector.portalceiling = portalid;
+         if(info.floor)
+            sector.portalfloor = portalid;
+         printf("Sector %d gets floor(%d) or ceiling(%d) portal %d\n", IndexOf(sector), info.floor,
+                info.ceiling, portalid);
+      }
+   }
+
+   for (const Linedef &cline : mDoomLevel.GetLinedefs())
+   {
+      if(cline.tag != tag)
+         continue;
+      if(cline.special == EV_STATIC_PORTAL_LINE)
+      {
+         DeferredLineSetup setup = {};
+         setup.index = mDoomLevel.IndexOf(cline);
+         setup.portal = portalid;
+         mDeferredLines.push_back(setup);
+      }
+      else if(cline.special == EV_STATIC_PORTAL_APPLY_FRONTSECTOR)
+      {
+         int secnum = mDoomLevel.GetFrontSectorIndex(cline);
+         if(secnum != -1)
+         {
+            UDMFSector &sector = mSectors[secnum];
+            if(info.ceiling)
+               sector.portalceiling = portalid;
+            if(info.floor)
+               sector.portalfloor = portalid;
+            printf("Sector %d copies floor(%d) or ceiling(%d) portal %d\n", IndexOf(sector),
+                   info.floor, info.ceiling, portalid);
+         }
+      }
+   }
 
 }
+
 void UDMFLevel::QuickLinePortal(int special, int tag, UDMFLine &line)
 {
    // Classic mode: same tag, different specials
@@ -661,12 +916,17 @@ void UDMFLevel::TranslucentLine(int special, int tag, UDMFLine &line)
    const char *midtex = side.texturemiddle.c_str();
    if(!strcasecmp(midtex, "tranmap"))
       line.tranmap = "TRANMAP";
-   else if(mWad)
+   else if(mDoomLevel.GetWad())
    {
       // check lump
-      const Lump *lump = mWad->FindLump(midtex);
+      const Lump *lump = mDoomLevel.GetWad()->FindLump(midtex);
       if(lump && lump->Data().size() == 65536)
+      {
          line.tranmap = midtex;
+         printf("Line %d gets tranmap '%s'\n", IndexOf(line), midtex);
+      }
+      else
+         fprintf(stderr, "Line %d FAILS tranmap '%s'\n", IndexOf(line), midtex);
    }
 }
 
@@ -683,4 +943,12 @@ UDMFSector *UDMFLevel::GetFrontSector(const UDMFLine &line)
    if(secnum < 0 || secnum >= mSectors.size())
       return nullptr;
    return &mSectors[secnum];
+}
+
+//
+// Returns a vertex if index is valid.
+//
+const UDMFVertex *UDMFLevel::GetVertex(int index) const
+{
+   return index >= 0 && index < mVertices.size() ? &mVertices[index] : nullptr;
 }

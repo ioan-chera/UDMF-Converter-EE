@@ -100,6 +100,17 @@ std::vector<LumpInfo> DoomLevel::FindLevelLumps(const Wad &wad)
 }
 
 //
+// Gets index of front sector if valid. Otherwise 0
+//
+int DoomLevel::GetFrontSectorIndex(const Linedef &line) const
+{
+   const Sidedef *side = GetSidedef(line.sidenum[0]);
+   if (!side)
+      return -1;
+   return side->sector >= 0 && side->sector < mSectors.size() ? side->sector : -1;
+}
+
+//
 // Loads all things
 //
 void DoomLevel::LoadThings(const Lump &lump)

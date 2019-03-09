@@ -277,6 +277,16 @@ public:
    virtual void TranslucentLine(int special, int tag, UDMFLine &line) = 0;
 };
 
+enum class PortalKind : int
+{
+   plane = 0,
+   horizon = 1,
+   skybox = 2,
+   anchored = 3,
+   twoway = 4,
+   linked = 5
+};
+
 //
 // The entire UDMF level
 //
@@ -296,7 +306,48 @@ public:
    virtual void TranslucentLine(int special, int tag, UDMFLine &line) override;
 
 private:
+
+   struct AnchoredPortal
+   {
+      int id;
+      PortalKind kind;
+      double dx;
+      double dy;
+
+      bool operator == (const AnchoredPortal &other) const
+      {
+         return kind == other.kind && dx == other.dx && dy == other.dy;
+      }
+      bool IsOpposite(const AnchoredPortal &other) const
+      {
+         return kind == other.kind && dx == -other.dx && dy == -other.dy;
+      }
+   };
+
+   struct DeferredLineSetup
+   {
+      int index;
+      int tag;
+      int special;
+      int arg[5];
+      int portal;
+   };
+
+   int IndexOf(const UDMFLine &line) const
+   {
+      return int(&line - &mLines[0]);
+   }
+   int IndexOf(const UDMFSector &sector) const
+   {
+      return int(&sector - &mSectors[0]);
+   }
+
    UDMFSector *GetFrontSector(const UDMFLine &line);
+   const UDMFVertex *GetVertex(int index) const;
+   int MakeNextPortalID()
+   {
+      return mNextPortalID++;
+   }
 
    const ExtraData &mExtraData;
 
@@ -306,7 +357,11 @@ private:
    std::vector<UDMFSide> mSides;
    std::vector<UDMFLine> mLines;
 
-   const Wad *const mWad;
+   const DoomLevel &mDoomLevel;
+   int mNextPortalID = 1;
+
+   std::vector<AnchoredPortal> mPortals;
+   std::vector<DeferredLineSetup> mDeferredLines;
 };
 
 #endif /* UDMFItems_hpp */

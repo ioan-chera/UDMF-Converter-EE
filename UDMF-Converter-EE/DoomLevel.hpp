@@ -75,7 +75,24 @@ public:
       return mWad;
    }
 
+   const Vertex *GetVertex(int index) const
+   {
+      return index >= 0 && index < mVertices.size() ? &mVertices[index] : nullptr;
+   }
+
+   int IndexOf(const Linedef& line) const
+   {
+      return int(&line - &mLinedefs[0]);
+   }
+
+   int GetFrontSectorIndex(const Linedef &line) const;
+
 private:
+   const Sidedef *GetSidedef(int index) const
+   {
+      return index >= 0 && index < mSidedefs.size() ? &mSidedefs[index] : nullptr;
+   }
+
    void LoadThings(const Lump &lump);
    void LoadLinedefs(const Lump &lump);
    void LoadSidedefs(const Lump &lump);
