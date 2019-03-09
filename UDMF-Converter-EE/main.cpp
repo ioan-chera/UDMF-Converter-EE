@@ -64,9 +64,10 @@ int main(int argc, const char * argv[])
    }
 
    const std::vector<const char *> *thinglists = args.Get("things");
+   ThingMapping thingnames;
    if (thinglists)
       for (const char *list : *thinglists)
-         AddThingMapping(list);
+         thingnames.AddFromFile(list);
 
    // Initialize line mapping
    InitLineMapping();
@@ -84,14 +85,11 @@ int main(int argc, const char * argv[])
       emapinfo.ParseLump(*info.lump);
    }
 
-   // TODO: parse ExtraData and EDF. Load the maps. Then run the converter.
-   
-
    // Convert the maps
    for(const LumpInfo &info : levelLumps)
    {
       const LevelInfo *levelInfo = emapinfo.Get(info.lump->Name());
-      ExtraData extraData;
+      ExtraData extraData(thingnames);
       if(levelInfo)
       {
          auto it = levelInfo->find("extradata");

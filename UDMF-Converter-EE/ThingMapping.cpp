@@ -29,10 +29,7 @@
 #include "Helpers.hpp"
 #include "ThingMapping.hpp"
 
-
-static std::unordered_map<std::string, int> gMap;
-
-void AddThingMapping(const char *path)
+void ThingMapping::AddFromFile(const char *path)
 {
    std::ifstream f(path);
    if (!f.is_open())
@@ -53,10 +50,12 @@ void AddThingMapping(const char *path)
          continue;
       }
       MakeLowerCase(data);
-      gMap[data] = value;
+      mMap[data] = value;
    }
 }
-int GetThingType(const char *name)
+
+int ThingMapping::operator[](const char *name) const
 {
-   return gMap[LowerCase(name)];
+   auto it = mMap.find(name);
+   return it == mMap.end() ? -1 : it->second;
 }

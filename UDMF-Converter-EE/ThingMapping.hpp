@@ -25,7 +25,20 @@
 #ifndef ThingMapping_hpp
 #define ThingMapping_hpp
 
-void AddThingMapping(const char *path);
-int GetThingType(const char *name);
+#include <string>
+#include <unordered_map>
+
+class ThingMapping
+{
+public:
+   void AddFromFile(const char *path);
+   int operator[](const char *name) const;
+
+private:
+   std::unordered_map<std::string, int> mMap;
+};
+
+
+
 
 #endif /* ThingMapping_hpp */

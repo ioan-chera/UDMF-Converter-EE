@@ -556,7 +556,7 @@ static const char *ExtractPrefix(const char *value, char *prefixbuf, int buflen)
 // Parses thing type fields in ExtraData. Allows resolving of
 // EDF thingtype mnemonics to their corresponding doomednums.
 //
-static int ParseTypeField(const char *value)
+int ExtraData::ParseTypeField(const char *value) const
 {
    char *numpos = nullptr;
    long num = strtol(value, &numpos, 0);
@@ -571,7 +571,7 @@ static int ParseTypeField(const char *value)
       else
          strval = value;
 
-      int type = GetThingType(strval);
+      int type = mThingMapping[strval];
       if(type <= 0)
       {
          fprintf(stderr, "Unknown thing type %s\n", strval);

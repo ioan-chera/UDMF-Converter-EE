@@ -28,6 +28,7 @@
 #include <string>
 #include <unordered_map>
 
+class ThingMapping;
 class Wad;
 struct cfg_t;
 
@@ -220,6 +221,10 @@ struct EDSector
 class ExtraData
 {
 public:
+   explicit ExtraData(const ThingMapping &thingMapping) : mThingMapping(thingMapping)
+   {
+   }
+
    bool LoadLump(const Wad &wad, const char *name);
    const EDThing *GetThing(int recordnum) const
    {
@@ -249,6 +254,10 @@ private:
          return &it->second;
       return nullptr;
    }
+
+   int ParseTypeField(const char *value) const;
+
+   const ThingMapping &mThingMapping;
 
    std::unordered_map<int, EDThing> mThings;
    std::unordered_map<int, EDLine> mLines;
