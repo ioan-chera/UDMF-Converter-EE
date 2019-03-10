@@ -57,6 +57,10 @@ public:
    {
       return mVertices;
    }
+   const std::vector<Vertex> &GetNodeVertices() const
+   {
+      return mNodeVertices;
+   }
    const std::vector<Sector> &GetSectors() const
    {
       return mSectors;
@@ -72,6 +76,14 @@ public:
    const std::vector<Node> &GetNodes() const
    {
       return mNodes;
+   }
+   const std::vector<Subsector> &GetSubsectors() const
+   {
+      return mSubsectors;
+   }
+   const std::vector<Seg> &GetSegs() const
+   {
+      return mSegs;
    }
 
    const Wad *GetWad() const

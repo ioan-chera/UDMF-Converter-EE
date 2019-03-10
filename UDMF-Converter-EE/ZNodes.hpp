@@ -27,10 +27,6 @@
 
 class DoomLevel;
 
-class ZNodes
-{
-public:
-   ZNodes(const DoomLevel &level);
-};
+void WriteZNodes(const DoomLevel &level, FILE *stream);
 
 #endif /* ZNodes_hpp */

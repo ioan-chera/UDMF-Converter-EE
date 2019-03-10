@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4F30BC962234FC6C00A240DA /* ZNodes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F30BC942234FC6C00A240DA /* ZNodes.cpp */; };
-		4F30BC992234FF5700A240DA /* SubsectorMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F30BC972234FF5700A240DA /* SubsectorMap.cpp */; };
-		4F30BC9C2235077D00A240DA /* LineEq.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F30BC9A2235077D00A240DA /* LineEq.cpp */; };
 		4F32C285221DD69400FAA243 /* UDMFItems.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F32C283221DD69400FAA243 /* UDMFItems.cpp */; };
 		4F32C288221DE2F000FAA243 /* ExtraData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F32C286221DE2F000FAA243 /* ExtraData.cpp */; };
 		4F7C7F0322341E8A00FF5A9F /* ThingMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C7F0122341E8A00FF5A9F /* ThingMapping.cpp */; };
@@ -47,10 +45,6 @@
 		4F30BC92223423FE00A240DA /* doom.things */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = doom.things; sourceTree = "<group>"; };
 		4F30BC942234FC6C00A240DA /* ZNodes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZNodes.cpp; sourceTree = "<group>"; };
 		4F30BC952234FC6C00A240DA /* ZNodes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ZNodes.hpp; sourceTree = "<group>"; };
-		4F30BC972234FF5700A240DA /* SubsectorMap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SubsectorMap.cpp; sourceTree = "<group>"; };
-		4F30BC982234FF5700A240DA /* SubsectorMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SubsectorMap.hpp; sourceTree = "<group>"; };
-		4F30BC9A2235077D00A240DA /* LineEq.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LineEq.cpp; sourceTree = "<group>"; };
-		4F30BC9B2235077D00A240DA /* LineEq.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LineEq.hpp; sourceTree = "<group>"; };
 		4F32C283221DD69400FAA243 /* UDMFItems.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UDMFItems.cpp; sourceTree = "<group>"; };
 		4F32C284221DD69400FAA243 /* UDMFItems.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UDMFItems.hpp; sourceTree = "<group>"; };
 		4F32C286221DE2F000FAA243 /* ExtraData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtraData.cpp; sourceTree = "<group>"; };
@@ -145,8 +139,6 @@
 				4F32C286221DE2F000FAA243 /* ExtraData.cpp */,
 				4F32C287221DE2F000FAA243 /* ExtraData.hpp */,
 				4FC0A96F1E243A52006CEC45 /* hal */,
-				4F30BC9A2235077D00A240DA /* LineEq.cpp */,
-				4F30BC9B2235077D00A240DA /* LineEq.hpp */,
 				4F8234C51F5AD92000761B6E /* LineSpecialMapping.cpp */,
 				4F8234C61F5AD92000761B6E /* LineSpecialMapping.hpp */,
 				4F8234B91F5AA17800761B6E /* Lump.cpp */,
@@ -158,8 +150,6 @@
 				4F8234BD1F5AA25A00761B6E /* Result.hpp */,
 				4F8234BF1F5AB98D00761B6E /* Helpers.cpp */,
 				4F8234C01F5AB98D00761B6E /* Helpers.hpp */,
-				4F30BC972234FF5700A240DA /* SubsectorMap.cpp */,
-				4F30BC982234FF5700A240DA /* SubsectorMap.hpp */,
 				4F7C7F0122341E8A00FF5A9F /* ThingMapping.cpp */,
 				4F7C7F0222341E8A00FF5A9F /* ThingMapping.hpp */,
 				4F8234B61F5AA11200761B6E /* Wad.cpp */,
@@ -266,11 +256,9 @@
 			files = (
 				4F8234BE1F5AA25A00761B6E /* Result.cpp in Sources */,
 				4FF7108820AA1AFA00A150E4 /* lexer.cpp in Sources */,
-				4F30BC9C2235077D00A240DA /* LineEq.cpp in Sources */,
 				4FF7108C20AA1DFF00A150E4 /* d_io.cpp in Sources */,
 				4F8234B81F5AA11200761B6E /* Wad.cpp in Sources */,
 				4FC0A94F1E2435C8006CEC45 /* main.cpp in Sources */,
-				4F30BC992234FF5700A240DA /* SubsectorMap.cpp in Sources */,
 				4FF7108920AA1AFA00A150E4 /* confuse.cpp in Sources */,
 				4F8234BB1F5AA17800761B6E /* Lump.cpp in Sources */,
 				4F32C285221DD69400FAA243 /* UDMFItems.cpp in Sources */,
