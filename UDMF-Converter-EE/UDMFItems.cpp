@@ -25,8 +25,43 @@
 #include <string.h>
 #include "DoomLevel.hpp"
 #include "ExtraData.hpp"
+#include "Helpers.hpp"
 #include "LineSpecialMapping.hpp"
 #include "Wad.hpp"
+
+static void Print(FILE *stream, const char *name, int value, int def = 0)
+{
+   if(value != def)
+      fprintf(stream, "%s=%d;\n", name, value);
+}
+static void Print(FILE *stream, const char *name, double value, double def = 0)
+{
+   if(value != def)
+      fprintf(stream, "%s=%.16g;\n", name, value);
+}
+static void Print(FILE *stream, const char *name, bool value)
+{
+   if(value)
+      fprintf(stream, "%s=true;\n", name);
+}
+static void Print(FILE *stream, const char *name, const std::string &value, const char *def = "")
+{
+   if(value != def)
+      fprintf(stream, "%s=\"%s\";\n", name, Escape(value).c_str());
+}
+static void PrintFlag(FILE *stream, const char *name, unsigned flags, unsigned flag)
+{
+   if(flags & flag)
+      fprintf(stream, "%s=true;\n", name);
+}
+
+void UDMFVertex::WriteToStream(FILE *f, int index) const
+{
+   fprintf(f, "vertex // %d\n{\n", index);
+   Print(f, "x", x, NAN);
+   Print(f, "y", y, NAN);
+   fprintf(f, "}\n");
+}
 
 //
 // Gets a UDMF thing from a basic thing
@@ -69,7 +104,7 @@ health()
 //
 void UDMFThing::SetUDMFFlagsFromDoomFlags(unsigned thflags)
 {
-   flags = UTF_SINGLE | UTF_DM | UTF_COOP;
+   flags = UTF_SINGLE | UTF_DM | UTF_COOP | UTF_CLASS1 | UTF_CLASS2 | UTF_CLASS3;
    if(thflags & TF_RESERVED)
       thflags &= TF_EASY | TF_NORMAL | TF_HARD | TF_AMBUSH | TF_NOTSINGLE;
    if(thflags & TF_EASY)
@@ -90,6 +125,44 @@ void UDMFThing::SetUDMFFlagsFromDoomFlags(unsigned thflags)
       flags |= UTF_FRIEND;
    if(thflags & TF_DORMANT)
       flags |= UTF_DORMANT;
+}
+
+void UDMFThing::WriteToStream(FILE *f, int index) const
+{
+   fprintf(f, "thing // %d\n{\n", index);
+   Print(f, "id", id);
+   Print(f, "x", x, NAN);
+   Print(f, "y", y, NAN);
+   Print(f, "height", height);
+   Print(f, "angle", angle);
+   Print(f, "type", type, INT_MIN);
+   Print(f, "special", special);
+   Print(f, "arg0", arg[0]);
+   Print(f, "arg1", arg[1]);
+   Print(f, "arg2", arg[2]);
+   Print(f, "arg3", arg[3]);
+   Print(f, "arg4", arg[4]);
+   Print(f, "health", health);
+
+   PrintFlag(f, "skill1", flags, UTF_SKILL1);
+   PrintFlag(f, "skill2", flags, UTF_SKILL2);
+   PrintFlag(f, "skill3", flags, UTF_SKILL3);
+   PrintFlag(f, "skill4", flags, UTF_SKILL4);
+   PrintFlag(f, "skill5", flags, UTF_SKILL5);
+   PrintFlag(f, "ambush", flags, UTF_AMBUSH);
+   PrintFlag(f, "single", flags, UTF_SINGLE);
+   PrintFlag(f, "dm", flags, UTF_DM);
+   PrintFlag(f, "coop", flags, UTF_COOP);
+   PrintFlag(f, "friend", flags, UTF_FRIEND);
+   PrintFlag(f, "dormant", flags, UTF_DORMANT);
+   PrintFlag(f, "class1", flags, UTF_CLASS1);
+   PrintFlag(f, "class2", flags, UTF_CLASS2);
+   PrintFlag(f, "class3", flags, UTF_CLASS3);
+   PrintFlag(f, "standing", flags, UTF_STANDING);
+   PrintFlag(f, "strifeally", flags, UTF_STRIFEALLY);
+   PrintFlag(f, "translucent", flags, UTF_TRANSLUCENT);
+   PrintFlag(f, "invisible", flags, UTF_INVISIBLE);
+   fprintf(f, "}\n");
 }
 
 //
@@ -928,6 +1001,20 @@ void UDMFLevel::TranslucentLine(int special, int tag, UDMFLine &line)
       else
          fprintf(stderr, "Line %d FAILS tranmap '%s'\n", IndexOf(line), midtex);
    }
+}
+
+//
+// Writes to a file its content
+//
+void UDMFLevel::WriteToStream(FILE *stream) const
+{
+   fprintf(stream, "namespace=\"eternity\";\n");
+   int i = 0;
+   for (const UDMFThing &thing : mThings)
+      thing.WriteToStream(stream, i++);
+   i = 0;
+   for (const UDMFVertex &vertex : mVertices)
+      vertex.WriteToStream(stream, i++);
 }
 
 //

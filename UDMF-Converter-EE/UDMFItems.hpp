@@ -130,6 +130,8 @@ struct UDMFVertex
    UDMFVertex(const Vertex &v) : x(v.x), y(v.y)
    {
    }
+
+   void WriteToStream(FILE *stream, int index) const;
 };
 
 //
@@ -151,6 +153,8 @@ struct UDMFThing
 
    UDMFThing(const Thing &thing, const ExtraData &extraData);
 
+   void WriteToStream(FILE *stream, int index) const;
+
 private:
    void SetUDMFFlagsFromDoomFlags(unsigned thflags);
 };
@@ -163,6 +167,8 @@ struct UDMFLine
    UDMFLine(const Linedef &linedef, LinedefConversion &conversion);
 
    void HandleDoomSpecial(int special, int tag, LinedefConversion &conversion);
+
+   void WriteToStream(FILE *stream, int index) const;
 
    int id;
    int v[2];
@@ -200,6 +206,8 @@ struct UDMFSide
    sector(side.sector)
    {
    }
+
+   void WriteToStream(FILE *stream, int index) const;
 };
 
 //
@@ -208,6 +216,8 @@ struct UDMFSide
 struct UDMFSector
 {
    UDMFSector(const Sector &sector);
+
+   void WriteToStream(FILE *stream, int index) const;
 
    double heightfloor;
    double heightceiling;
@@ -304,6 +314,8 @@ public:
    virtual void PortalDefine(int special, int tag, UDMFLine &line) override;
    virtual void QuickLinePortal(int special, int tag, UDMFLine &line) override;
    virtual void TranslucentLine(int special, int tag, UDMFLine &line) override;
+
+   void WriteToStream(FILE *stream) const;
 
 private:
 
