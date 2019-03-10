@@ -70,6 +70,8 @@
 #define TriggerType           0x0007
 #define TriggerTypeShift      0
 
+#define NF_SUBSECTOR    0x80000000
+
 //
 // Simple vertex definition
 //

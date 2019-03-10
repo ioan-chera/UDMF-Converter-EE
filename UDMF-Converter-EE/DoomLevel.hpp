@@ -69,6 +69,10 @@ public:
    {
       return mLinedefs;
    }
+   const std::vector<Node> &GetNodes() const
+   {
+      return mNodes;
+   }
 
    const Wad *GetWad() const
    {
@@ -84,8 +88,13 @@ public:
    {
       return int(&line - &mLinedefs[0]);
    }
+   int IndexOf(const Node& node) const
+   {
+      return int(&node - &mNodes[0]);
+   }
 
    int GetFrontSectorIndex(const Linedef &line) const;
+   void GetBounds(int &left, int &bottom, int &right, int &top) const;
 
 private:
    const Sidedef *GetSidedef(int index) const

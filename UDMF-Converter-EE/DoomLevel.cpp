@@ -110,6 +110,25 @@ int DoomLevel::GetFrontSectorIndex(const Linedef &line) const
    return side->sector >= 0 && side->sector < mSectors.size() ? side->sector : -1;
 }
 
+void DoomLevel::GetBounds(int &left, int &bottom, int &right, int &top) const
+{
+   left = bottom = INT_MAX;
+   right = top = INT_MIN;
+
+   // only look in editor vertices
+   for(const Vertex &vertex : mVertices)
+   {
+      if(vertex.x < left)
+         left = vertex.x;
+      if(vertex.x > right)
+         right = vertex.x;
+      if(vertex.y < bottom)
+         bottom = vertex.y;
+      if(vertex.y > top)
+         top = vertex.y;
+   }
+}
+
 //
 // Loads all things
 //
