@@ -254,6 +254,63 @@ void UDMFLine::HandleDoomSpecial(int lnspecial, int tag, LinedefConversion &conv
 }
 
 //
+// Writes a line to stream
+//
+void UDMFLine::WriteToStream(FILE *f, int index) const
+{
+   fprintf(f, "linedef // %d\n{\n", index);
+   Print(f, "id", id);  // NOTE: use default of 0
+   Print(f, "v1", v[0], INT_MIN);
+   Print(f, "v2", v[1], INT_MIN);
+   Print(f, "special", special);
+   Print(f, "arg0", arg[0]);
+   Print(f, "arg1", arg[1]);
+   Print(f, "arg2", arg[2]);
+   Print(f, "arg3", arg[3]);
+   Print(f, "arg4", arg[4]);
+   Print(f, "sidefront", sidefront, INT_MIN);
+   Print(f, "sideback", sideback, -1);
+
+   Print(f, "portal", portal);
+   Print(f, "alpha", alpha, 1.0);
+   Print(f, "renderstyle", renderstyle, "");
+
+   PrintFlag(f, "blocking", flags, ULF_BLOCKING);
+   PrintFlag(f, "blockmonsters", flags, ULF_BLOCKMONSTERS);
+   PrintFlag(f, "twosided", flags, ULF_TWOSIDED);
+   PrintFlag(f, "dontpegtop", flags, ULF_DONTPEGTOP);
+   PrintFlag(f, "dontpegbottom", flags, ULF_DONTPEGBOTTOM);
+   PrintFlag(f, "secret", flags, ULF_SECRET);
+   PrintFlag(f, "blocksound", flags, ULF_BLOCKSOUND);
+   PrintFlag(f, "dontdraw", flags, ULF_DONTDRAW);
+   PrintFlag(f, "mapped", flags, ULF_MAPPED);
+   PrintFlag(f, "passuse", flags, ULF_PASSUSE);
+   PrintFlag(f, "translucent", flags, ULF_TRANSLUCENT);
+   PrintFlag(f, "jumpover", flags, ULF_JUMPOVER);
+   PrintFlag(f, "blockfloaters", flags, ULF_BLOCKFLOATERS);
+   PrintFlag(f, "playercross", flags, ULF_PLAYERCROSS);
+   PrintFlag(f, "playeruse", flags, ULF_PLAYERUSE);
+   PrintFlag(f, "monstercross", flags, ULF_MONSTERCROSS);
+   PrintFlag(f, "monsteruse", flags, ULF_MONSTERUSE);
+   PrintFlag(f, "impact", flags, ULF_IMPACT);
+   PrintFlag(f, "monstershoot", flags, ULF_MONSTERSHOOT);
+   PrintFlag(f, "playerpush", flags, ULF_PLAYERPUSH);
+   PrintFlag(f, "monsterpush", flags, ULF_MONSTERPUSH);
+   PrintFlag(f, "missilecross", flags, ULF_MISSILECROSS);
+   PrintFlag(f, "repeatspecial", flags, ULF_REPEATSPECIAL);
+   PrintFlag(f, "polycross", flags, ULF_POLYCROSS);
+   PrintFlag(f, "midtex3d", flags, ULF_MIDTEX3D);
+   PrintFlag(f, "firstsideonly", flags, ULF_FIRSTSIDEONLY);
+   PrintFlag(f, "blockeverything", flags, ULF_BLOCKEVERYTHING);
+   PrintFlag(f, "zoneboundary", flags, ULF_ZONEBOUNDARY);
+   PrintFlag(f, "clipmidtex", flags, ULF_CLIPMIDTEX);
+   PrintFlag(f, "midtex3dimpassible", flags, ULF_MIDTEX3DIMPASSIBLE);
+   PrintFlag(f, "lowerportal", flags, ULF_LOWERPORTAL);
+   PrintFlag(f, "upperportal", flags, ULF_UPPERPORTAL);
+   fprintf(f, "}\n");
+}
+
+//
 // Get the sector now
 // We can't get info from ExtraData immediately, we need to have a linedef first
 //
@@ -1015,6 +1072,9 @@ void UDMFLevel::WriteToStream(FILE *stream) const
    i = 0;
    for (const UDMFVertex &vertex : mVertices)
       vertex.WriteToStream(stream, i++);
+   i = 0;
+   for (const UDMFLine &line : mLines)
+      line.WriteToStream(stream, i++);
 }
 
 //
