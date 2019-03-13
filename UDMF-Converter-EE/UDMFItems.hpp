@@ -25,6 +25,7 @@
 #ifndef UDMFItems_hpp
 #define UDMFItems_hpp
 
+#include <ostream>
 #include <string>
 #include <vector>
 #include "MapItems.h"
@@ -131,7 +132,7 @@ struct UDMFVertex
    {
    }
 
-   void WriteToStream(FILE *stream, int index) const;
+   void WriteToStream(std::ostream &os, int index) const;
 };
 
 //
@@ -153,7 +154,7 @@ struct UDMFThing
 
    UDMFThing(const Thing &thing, const ExtraData &extraData);
 
-   void WriteToStream(FILE *stream, int index) const;
+   void WriteToStream(std::ostream &os, int index) const;
 
 private:
    void SetUDMFFlagsFromDoomFlags(unsigned thflags);
@@ -168,7 +169,7 @@ struct UDMFLine
 
    void HandleDoomSpecial(int special, int tag, LinedefConversion &conversion);
 
-   void WriteToStream(FILE *stream, int index) const;
+   void WriteToStream(std::ostream &os, int index) const;
 
    int id;
    int v[2];
@@ -315,7 +316,7 @@ public:
    virtual void QuickLinePortal(int special, int tag, UDMFLine &line) override;
    virtual void TranslucentLine(int special, int tag, UDMFLine &line) override;
 
-   void WriteToStream(FILE *stream) const;
+   friend std::ostream &operator << (std::ostream &os, const UDMFLevel &level);
 
 private:
 
@@ -375,5 +376,7 @@ private:
    std::vector<AnchoredPortal> mPortals;
    std::vector<DeferredLineSetup> mDeferredLines;
 };
+
+std::ostream &operator << (std::ostream &os, const UDMFLevel &level);
 
 #endif /* UDMFItems_hpp */

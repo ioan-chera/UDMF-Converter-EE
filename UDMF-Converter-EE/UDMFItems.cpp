@@ -29,38 +29,38 @@
 #include "LineSpecialMapping.hpp"
 #include "Wad.hpp"
 
-static void Print(FILE *stream, const char *name, int value, int def = 0)
+static void Print(std::ostream &os, const char *name, int value, int def = 0)
 {
    if(value != def)
-      fprintf(stream, "%s=%d;\n", name, value);
+      os << name << '=' << value << ";\n";
 }
-static void Print(FILE *stream, const char *name, double value, double def = 0)
+static void Print(std::ostream &os, const char *name, double value, double def = 0)
 {
    if(value != def)
-      fprintf(stream, "%s=%.16g;\n", name, value);
+      os << name << '=' << value << ";\n";
 }
-static void Print(FILE *stream, const char *name, bool value)
+static void Print(std::ostream &os, const char *name, bool value)
 {
    if(value)
-      fprintf(stream, "%s=true;\n", name);
+      os << name << "=true;\n";
 }
-static void Print(FILE *stream, const char *name, const std::string &value, const char *def = "")
+static void Print(std::ostream &os, const char *name, const std::string &value, const char *def = "")
 {
    if(value != def)
-      fprintf(stream, "%s=\"%s\";\n", name, Escape(value).c_str());
+      os << name << "=\"" << Escape(value) << "\";\n";
 }
-static void PrintFlag(FILE *stream, const char *name, unsigned flags, unsigned flag)
+static void PrintFlag(std::ostream &os, const char *name, unsigned flags, unsigned flag)
 {
    if(flags & flag)
-      fprintf(stream, "%s=true;\n", name);
+      os << name << "=true;\n";
 }
 
-void UDMFVertex::WriteToStream(FILE *f, int index) const
+void UDMFVertex::WriteToStream(std::ostream &os, int index) const
 {
-   fprintf(f, "vertex // %d\n{\n", index);
-   Print(f, "x", x, NAN);
-   Print(f, "y", y, NAN);
-   fprintf(f, "}\n");
+   os << "vertex // " << index << "\n{\n";
+   Print(os, "x", x, NAN);
+   Print(os, "y", y, NAN);
+   os << "}\n";
 }
 
 //
@@ -127,42 +127,44 @@ void UDMFThing::SetUDMFFlagsFromDoomFlags(unsigned thflags)
       flags |= UTF_DORMANT;
 }
 
-void UDMFThing::WriteToStream(FILE *f, int index) const
+void UDMFThing::WriteToStream(std::ostream &os, int index) const
 {
-   fprintf(f, "thing // %d\n{\n", index);
-   Print(f, "id", id);
-   Print(f, "x", x, NAN);
-   Print(f, "y", y, NAN);
-   Print(f, "height", height);
-   Print(f, "angle", angle);
-   Print(f, "type", type, INT_MIN);
-   Print(f, "special", special);
-   Print(f, "arg0", arg[0]);
-   Print(f, "arg1", arg[1]);
-   Print(f, "arg2", arg[2]);
-   Print(f, "arg3", arg[3]);
-   Print(f, "arg4", arg[4]);
-   Print(f, "health", health);
+   os << "thing // " << index << "\n{\n";
 
-   PrintFlag(f, "skill1", flags, UTF_SKILL1);
-   PrintFlag(f, "skill2", flags, UTF_SKILL2);
-   PrintFlag(f, "skill3", flags, UTF_SKILL3);
-   PrintFlag(f, "skill4", flags, UTF_SKILL4);
-   PrintFlag(f, "skill5", flags, UTF_SKILL5);
-   PrintFlag(f, "ambush", flags, UTF_AMBUSH);
-   PrintFlag(f, "single", flags, UTF_SINGLE);
-   PrintFlag(f, "dm", flags, UTF_DM);
-   PrintFlag(f, "coop", flags, UTF_COOP);
-   PrintFlag(f, "friend", flags, UTF_FRIEND);
-   PrintFlag(f, "dormant", flags, UTF_DORMANT);
-   PrintFlag(f, "class1", flags, UTF_CLASS1);
-   PrintFlag(f, "class2", flags, UTF_CLASS2);
-   PrintFlag(f, "class3", flags, UTF_CLASS3);
-   PrintFlag(f, "standing", flags, UTF_STANDING);
-   PrintFlag(f, "strifeally", flags, UTF_STRIFEALLY);
-   PrintFlag(f, "translucent", flags, UTF_TRANSLUCENT);
-   PrintFlag(f, "invisible", flags, UTF_INVISIBLE);
-   fprintf(f, "}\n");
+   Print(os, "id", id);
+   Print(os, "x", x, NAN);
+   Print(os, "y", y, NAN);
+   Print(os, "height", height);
+   Print(os, "angle", angle);
+   Print(os, "type", type, INT_MIN);
+   Print(os, "special", special);
+   Print(os, "arg0", arg[0]);
+   Print(os, "arg1", arg[1]);
+   Print(os, "arg2", arg[2]);
+   Print(os, "arg3", arg[3]);
+   Print(os, "arg4", arg[4]);
+   Print(os, "health", health);
+
+   PrintFlag(os, "skill1", flags, UTF_SKILL1);
+   PrintFlag(os, "skill2", flags, UTF_SKILL2);
+   PrintFlag(os, "skill3", flags, UTF_SKILL3);
+   PrintFlag(os, "skill4", flags, UTF_SKILL4);
+   PrintFlag(os, "skill5", flags, UTF_SKILL5);
+   PrintFlag(os, "ambush", flags, UTF_AMBUSH);
+   PrintFlag(os, "single", flags, UTF_SINGLE);
+   PrintFlag(os, "dm", flags, UTF_DM);
+   PrintFlag(os, "coop", flags, UTF_COOP);
+   PrintFlag(os, "friend", flags, UTF_FRIEND);
+   PrintFlag(os, "dormant", flags, UTF_DORMANT);
+   PrintFlag(os, "class1", flags, UTF_CLASS1);
+   PrintFlag(os, "class2", flags, UTF_CLASS2);
+   PrintFlag(os, "class3", flags, UTF_CLASS3);
+   PrintFlag(os, "standing", flags, UTF_STANDING);
+   PrintFlag(os, "strifeally", flags, UTF_STRIFEALLY);
+   PrintFlag(os, "translucent", flags, UTF_TRANSLUCENT);
+   PrintFlag(os, "invisible", flags, UTF_INVISIBLE);
+
+   os << "}\n";
 }
 
 //
@@ -256,58 +258,58 @@ void UDMFLine::HandleDoomSpecial(int lnspecial, int tag, LinedefConversion &conv
 //
 // Writes a line to stream
 //
-void UDMFLine::WriteToStream(FILE *f, int index) const
+void UDMFLine::WriteToStream(std::ostream &os, int index) const
 {
-   fprintf(f, "linedef // %d\n{\n", index);
-   Print(f, "id", id);  // NOTE: use default of 0
-   Print(f, "v1", v[0], INT_MIN);
-   Print(f, "v2", v[1], INT_MIN);
-   Print(f, "special", special);
-   Print(f, "arg0", arg[0]);
-   Print(f, "arg1", arg[1]);
-   Print(f, "arg2", arg[2]);
-   Print(f, "arg3", arg[3]);
-   Print(f, "arg4", arg[4]);
-   Print(f, "sidefront", sidefront, INT_MIN);
-   Print(f, "sideback", sideback, -1);
+   os << "linedef // " << index << "\n{\n";
+   Print(os, "id", id);  // NOTE: use default of 0
+   Print(os, "v1", v[0], INT_MIN);
+   Print(os, "v2", v[1], INT_MIN);
+   Print(os, "special", special);
+   Print(os, "arg0", arg[0]);
+   Print(os, "arg1", arg[1]);
+   Print(os, "arg2", arg[2]);
+   Print(os, "arg3", arg[3]);
+   Print(os, "arg4", arg[4]);
+   Print(os, "sidefront", sidefront, INT_MIN);
+   Print(os, "sideback", sideback, -1);
 
-   Print(f, "portal", portal);
-   Print(f, "alpha", alpha, 1.0);
-   Print(f, "renderstyle", renderstyle, "");
+   Print(os, "portal", portal);
+   Print(os, "alpha", alpha, 1.0);
+   Print(os, "renderstyle", renderstyle, "");
 
-   PrintFlag(f, "blocking", flags, ULF_BLOCKING);
-   PrintFlag(f, "blockmonsters", flags, ULF_BLOCKMONSTERS);
-   PrintFlag(f, "twosided", flags, ULF_TWOSIDED);
-   PrintFlag(f, "dontpegtop", flags, ULF_DONTPEGTOP);
-   PrintFlag(f, "dontpegbottom", flags, ULF_DONTPEGBOTTOM);
-   PrintFlag(f, "secret", flags, ULF_SECRET);
-   PrintFlag(f, "blocksound", flags, ULF_BLOCKSOUND);
-   PrintFlag(f, "dontdraw", flags, ULF_DONTDRAW);
-   PrintFlag(f, "mapped", flags, ULF_MAPPED);
-   PrintFlag(f, "passuse", flags, ULF_PASSUSE);
-   PrintFlag(f, "translucent", flags, ULF_TRANSLUCENT);
-   PrintFlag(f, "jumpover", flags, ULF_JUMPOVER);
-   PrintFlag(f, "blockfloaters", flags, ULF_BLOCKFLOATERS);
-   PrintFlag(f, "playercross", flags, ULF_PLAYERCROSS);
-   PrintFlag(f, "playeruse", flags, ULF_PLAYERUSE);
-   PrintFlag(f, "monstercross", flags, ULF_MONSTERCROSS);
-   PrintFlag(f, "monsteruse", flags, ULF_MONSTERUSE);
-   PrintFlag(f, "impact", flags, ULF_IMPACT);
-   PrintFlag(f, "monstershoot", flags, ULF_MONSTERSHOOT);
-   PrintFlag(f, "playerpush", flags, ULF_PLAYERPUSH);
-   PrintFlag(f, "monsterpush", flags, ULF_MONSTERPUSH);
-   PrintFlag(f, "missilecross", flags, ULF_MISSILECROSS);
-   PrintFlag(f, "repeatspecial", flags, ULF_REPEATSPECIAL);
-   PrintFlag(f, "polycross", flags, ULF_POLYCROSS);
-   PrintFlag(f, "midtex3d", flags, ULF_MIDTEX3D);
-   PrintFlag(f, "firstsideonly", flags, ULF_FIRSTSIDEONLY);
-   PrintFlag(f, "blockeverything", flags, ULF_BLOCKEVERYTHING);
-   PrintFlag(f, "zoneboundary", flags, ULF_ZONEBOUNDARY);
-   PrintFlag(f, "clipmidtex", flags, ULF_CLIPMIDTEX);
-   PrintFlag(f, "midtex3dimpassible", flags, ULF_MIDTEX3DIMPASSIBLE);
-   PrintFlag(f, "lowerportal", flags, ULF_LOWERPORTAL);
-   PrintFlag(f, "upperportal", flags, ULF_UPPERPORTAL);
-   fprintf(f, "}\n");
+   PrintFlag(os, "blocking", flags, ULF_BLOCKING);
+   PrintFlag(os, "blockmonsters", flags, ULF_BLOCKMONSTERS);
+   PrintFlag(os, "twosided", flags, ULF_TWOSIDED);
+   PrintFlag(os, "dontpegtop", flags, ULF_DONTPEGTOP);
+   PrintFlag(os, "dontpegbottom", flags, ULF_DONTPEGBOTTOM);
+   PrintFlag(os, "secret", flags, ULF_SECRET);
+   PrintFlag(os, "blocksound", flags, ULF_BLOCKSOUND);
+   PrintFlag(os, "dontdraw", flags, ULF_DONTDRAW);
+   PrintFlag(os, "mapped", flags, ULF_MAPPED);
+   PrintFlag(os, "passuse", flags, ULF_PASSUSE);
+   PrintFlag(os, "translucent", flags, ULF_TRANSLUCENT);
+   PrintFlag(os, "jumpover", flags, ULF_JUMPOVER);
+   PrintFlag(os, "blockfloaters", flags, ULF_BLOCKFLOATERS);
+   PrintFlag(os, "playercross", flags, ULF_PLAYERCROSS);
+   PrintFlag(os, "playeruse", flags, ULF_PLAYERUSE);
+   PrintFlag(os, "monstercross", flags, ULF_MONSTERCROSS);
+   PrintFlag(os, "monsteruse", flags, ULF_MONSTERUSE);
+   PrintFlag(os, "impact", flags, ULF_IMPACT);
+   PrintFlag(os, "monstershoot", flags, ULF_MONSTERSHOOT);
+   PrintFlag(os, "playerpush", flags, ULF_PLAYERPUSH);
+   PrintFlag(os, "monsterpush", flags, ULF_MONSTERPUSH);
+   PrintFlag(os, "missilecross", flags, ULF_MISSILECROSS);
+   PrintFlag(os, "repeatspecial", flags, ULF_REPEATSPECIAL);
+   PrintFlag(os, "polycross", flags, ULF_POLYCROSS);
+   PrintFlag(os, "midtex3d", flags, ULF_MIDTEX3D);
+   PrintFlag(os, "firstsideonly", flags, ULF_FIRSTSIDEONLY);
+   PrintFlag(os, "blockeverything", flags, ULF_BLOCKEVERYTHING);
+   PrintFlag(os, "zoneboundary", flags, ULF_ZONEBOUNDARY);
+   PrintFlag(os, "clipmidtex", flags, ULF_CLIPMIDTEX);
+   PrintFlag(os, "midtex3dimpassible", flags, ULF_MIDTEX3DIMPASSIBLE);
+   PrintFlag(os, "lowerportal", flags, ULF_LOWERPORTAL);
+   PrintFlag(os, "upperportal", flags, ULF_UPPERPORTAL);
+   os << "}\n";
 }
 
 //
@@ -1061,23 +1063,6 @@ void UDMFLevel::TranslucentLine(int special, int tag, UDMFLine &line)
 }
 
 //
-// Writes to a file its content
-//
-void UDMFLevel::WriteToStream(FILE *stream) const
-{
-   fprintf(stream, "namespace=\"eternity\";\n");
-   int i = 0;
-   for (const UDMFThing &thing : mThings)
-      thing.WriteToStream(stream, i++);
-   i = 0;
-   for (const UDMFVertex &vertex : mVertices)
-      vertex.WriteToStream(stream, i++);
-   i = 0;
-   for (const UDMFLine &line : mLines)
-      line.WriteToStream(stream, i++);
-}
-
-//
 // Gets a linedef's front sector, if available
 //
 UDMFSector *UDMFLevel::GetFrontSector(const UDMFLine &line) 
@@ -1098,4 +1083,22 @@ UDMFSector *UDMFLevel::GetFrontSector(const UDMFLine &line)
 const UDMFVertex *UDMFLevel::GetVertex(int index) const
 {
    return index >= 0 && index < mVertices.size() ? &mVertices[index] : nullptr;
+}
+
+//
+// Write to stream
+//
+std::ostream &operator << (std::ostream &os, const UDMFLevel &level)
+{
+   os << "namespace=\"eternity\";\n";
+   int i = 0;
+   for (const UDMFThing &thing : level.mThings)
+      thing.WriteToStream(os, i++);
+   i = 0;
+   for (const UDMFVertex &vertex : level.mVertices)
+      vertex.WriteToStream(os, i++);
+   i = 0;
+   for (const UDMFLine &line : level.mLines)
+      line.WriteToStream(os, i++);
+   return os;
 }
