@@ -26,79 +26,75 @@
 #include "DoomLevel.hpp"
 #include "ZNodes.hpp"
 
-void WriteZNodes(const DoomLevel &level, FILE *f)
+static void WriteAsInt(intptr_t number, std::ostream &os)
 {
-   fputs("XGL3", f);
+   char n[4];
+   n[0] = number & 0xff;
+   n[1] = number >> 8 & 0xff;
+   n[2] = number >> 16 & 0xff;
+   n[3] = number >> 24 & 0xff;
+   os.write(n, 4);
+}
 
-   uint32_t val = (uint32_t)level.GetVertices().size();
-   fwrite(&val, 4, 1, f);
+static void WriteShort(intptr_t number, std::ostream &os)
+{
+   char n[2];
+   n[0] = number & 0xff;
+   n[1] = number >> 8 & 0xff;
+   os.write(n, 2);
+}
 
-   val = (uint32_t)level.GetNodeVertices().size();
-   fwrite(&val, 4, 1, f);
+void WriteZNodes(const DoomLevel &level, std::ostream &os)
+{
+   os << "XGL3";
+
+   WriteAsInt(level.GetVertices().size(), os);
+   WriteAsInt(level.GetNodeVertices().size(), os);
 
    int32_t ival;
 
    for(const Vertex &vertex : level.GetNodeVertices())
    {
-      ival = vertex.x << 16;
-      fwrite(&ival, 4, 1, f);
-      ival = vertex.y << 16;
-      fwrite(&ival, 4, 1, f);
+      WriteAsInt(vertex.x << 16, os);
+      WriteAsInt(vertex.y << 16, os);
    }
 
-   val = (uint32_t)level.GetSubsectors().size();
-   fwrite(&val, 4, 1, f);
+   WriteAsInt(level.GetSubsectors().size(), os);
 
    for(const Subsector &ss : level.GetSubsectors())
    {
-      val = ss.segcount * 2; // needed because of the GL3 single-vertex format
-      fwrite(&val, 4, 1, f);
+      // needed because of the GL3 single-vertex format
+      WriteAsInt(ss.segcount * 2, os);
    }
 
-   val = (uint32_t)(level.GetSegs().size() * 2);
-   fwrite(&val, 4, 1, f);
+   WriteAsInt(level.GetSegs().size() * 2, os);
 
    for (const Seg &seg : level.GetSegs())
    {
-      val = seg.startVertex;
-      fwrite(&val, 4, 1, f);
-      fputs("\xff\xff\xff\xff", f);
-      val = seg.linedef;
-      fwrite(&val, 4, 1, f);
-      putc(seg.dir, f);
+      WriteAsInt(seg.startVertex, os);
+      os.write("\xff\xff\xff\xff", 4);
+      WriteAsInt(seg.linedef, os);
+      os.put(!!seg.dir);
 
       // now draw the virtual gl seg, just to define endVertex of previous physical one
-      val = seg.endVertex;
-      fwrite(&val, 4, 1, f);
-      fputs("\xff\xff\xff\xff\xff\xff\xff\xff", f); // mark it as virtual
-      putc(0, f);
+      WriteAsInt(seg.endVertex, os);
+      os.write("\xff\xff\xff\xff\xff\xff\xff\xff", 8);   // mark it as virtual
+      os.put(0);
    }
 
-   val = (uint32_t)level.GetNodes().size();
-   fwrite(&val, 4, 1, f);
+   WriteAsInt(level.GetNodes().size(), os);
+
    for(const Node &node : level.GetNodes())
    {
-      ival = node.partx << 16;
-      fwrite(&ival, 4, 1, f);
-      ival = node.party << 16;
-      fwrite(&ival, 4, 1, f);
-      ival = node.dx << 16;
-      fwrite(&ival, 4, 1, f);
-      ival = node.dy << 16;
-      fwrite(&ival, 4, 1, f);
+      WriteAsInt(node.partx << 16, os);
+      WriteAsInt(node.party << 16, os);
+      WriteAsInt(node.dx << 16, os);
+      WriteAsInt(node.dy << 16, os);
       for(int i = 0; i < 4; ++i)
-      {
-         int16_t sv = node.rightbox[i];
-         fwrite(&sv, 2, 1, f);
-      }
+         WriteShort(node.rightbox[i], os);
       for(int i = 0; i < 4; ++i)
-      {
-         int16_t sv = node.leftbox[i];
-         fwrite(&sv, 2, 1, f);
-      }
-      val = node.rightchild;
-      fwrite(&val, 4, 1, f);
-      val = node.leftchild;
-      fwrite(&val, 4, 1, f);
+         WriteShort(node.leftbox[i], os);
+      WriteAsInt(node.rightchild, os);
+      WriteAsInt(node.leftchild, os);
    }
 }

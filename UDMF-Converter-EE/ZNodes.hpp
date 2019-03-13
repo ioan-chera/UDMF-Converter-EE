@@ -25,8 +25,10 @@
 #ifndef ZNodes_hpp
 #define ZNodes_hpp
 
+#include <ostream>
+
 class DoomLevel;
 
-void WriteZNodes(const DoomLevel &level, FILE *stream);
+void WriteZNodes(const DoomLevel &level, std::ostream &os);
 
 #endif /* ZNodes_hpp */
