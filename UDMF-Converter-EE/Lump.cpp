@@ -24,30 +24,16 @@
 
 #include "Lump.hpp"
 
-enum
-{
-   ReadSize = 4096,  // Read at most this size
-};
-
 //
 // Tries loading lump from a stream
 //
-Result Lump::Load(FILE *f, size_t size)
+Result Lump::Load(std::istream &is, size_t size)
 {
    std::vector<uint8_t> data;
-   // Protect against excessive size by being able to quit on EOF
-   size_t toRead;
-   uint8_t block[ReadSize];
-   for(size_t i = 0; i < size; i += toRead)
-   {
-      toRead = ReadSize;
-      if(size - i < toRead)
-         toRead = size - i;
-      if(fread(block, 1, toRead, f) < toRead)
-         return Result::BadFile;
-      for(size_t j = 0; j < toRead; ++j)
-         data.push_back(block[j]);
-   }
+   data.resize(size);
+
+   if(!is.read(reinterpret_cast<char *>(data.data()), size))
+      return Result::BadFile;
 
    mData = std::move(data);
    return Result::OK;

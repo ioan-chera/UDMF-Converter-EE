@@ -22,6 +22,8 @@
 // Authors: Ioan Chera
 //
 
+#include <fstream>
+#include "IOHelpers.hpp"
 #include "Wad.hpp"
 
 //
@@ -29,11 +31,12 @@
 //
 Result Wad::AddFile(const char *path)
 {
-   FILE *f = fopen(path, "rb");
-   if(!f)
+   std::ifstream is(path, std::ios::in | std::ios::binary);
+   if(!is.is_open())
       return Result::CannotOpen;
+
    Result result = Result::OK;
-   char headtag[5];
+   char headtag[5] = {};
    WadType type;
    int numlumps;
    int infotableofs;
@@ -46,40 +49,30 @@ Result Wad::AddFile(const char *path)
    std::vector<Lump> lumps;
 
    RangePath rangePath;
+   if(!is.read(headtag, 4))
+      return Result::BadFile;
 
-   if(fread(headtag, 1, 4, f) != 4)
-   {
-      result = Result::BadFile;
-      goto cleanup;
-   }
    headtag[4] = 0;
    if(!strcmp(headtag, "PWAD"))
       type = WadType::Pwad;
    else if(!strcmp(headtag, "IWAD"))
       type = WadType::Iwad;
    else
-   {
-      result = Result::BadFile;
-      goto cleanup;
-   }
-   if(fread(&numlumps, 4, 1, f) != 1 || fread(&infotableofs, 4, 1, f) != 1 ||
-      fseek(f, infotableofs, SEEK_SET) == -1)
-   {
-      result = Result::BadFile;
-      goto cleanup;
-   }
+      return Result::BadFile;
+
+   if(!ReadInt(is, numlumps) || !ReadInt(is, infotableofs) || !is.seekg(infotableofs))
+      return Result::BadFile;
+
    // Don't reserve numlumps: it may be purposefully set huge to lock-up the app
    // Let it grow slowly so that we have a chance to bail out if we reach EOF
    // before it gets too big.
    for(int i = 0; i < numlumps; ++i)
    {
-      LumpDirEntry lde;
-      if(fread(&lde.filepos, 4, 1, f) != 1 || fread(&lde.size, 4, 1, f) != 1 ||
-         fread(lde.name, 1, LumpNameLength, f) != LumpNameLength)
-      {
-         result = Result::BadFile;
-         goto cleanup;
-      }
+      LumpDirEntry lde = {};
+
+      if(!ReadInt(is, lde.filepos) || !ReadInt(is, lde.size) || !is.read(lde.name, LumpNameLength))
+         return Result::BadFile;
+
       lde.name[LumpNameLength] = 0;
       directory.push_back(lde);
    }
@@ -87,14 +80,12 @@ Result Wad::AddFile(const char *path)
    for(const LumpDirEntry &lde : directory)
    {
       Lump lump(lde.name);
-      if(fseek(f, lde.filepos, SEEK_SET) == -1)
-      {
-         result = Result::BadFile;
-         goto cleanup;
-      }
-      result = lump.Load(f, lde.size);
+      if(!is.seekg(lde.filepos))
+         return Result::BadFile;
+
+      result = lump.Load(is, lde.size);
       if(result != Result::OK)
-         goto cleanup;
+         return result;
       lumps.push_back(std::move(lump));
    }
 
@@ -106,9 +97,6 @@ Result Wad::AddFile(const char *path)
    mLumps.insert(mLumps.end(), lumps.begin(), lumps.end());
    mRangePaths.push_back(rangePath);
 
-cleanup:
-   if(f)
-      fclose(f);
    return result;
 }
 

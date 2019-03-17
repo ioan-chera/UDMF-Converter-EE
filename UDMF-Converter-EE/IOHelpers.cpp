@@ -1,6 +1,6 @@
 //
 // UDMF Converter EE
-// Copyright (C) 2017 Ioan Chera
+// Copyright (C) 2019 Ioan Chera
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,53 +18,35 @@
 // Additional terms and conditions compatible with the GPLv3 apply. See the
 // file COPYING-EE for details.
 //
-// Purpose: Lump data class
+// Purpose: Helpers for iostream
 // Authors: Ioan Chera
 //
 
-#ifndef Lump_hpp
-#define Lump_hpp
+#include "IOHelpers.hpp"
 
-#include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
-#include <istream>
-#include <vector>
-#include "Result.hpp"
-
-enum
+bool ReadInt(std::istream &is, int &number)
 {
-   LumpNameLength = 8,  // lump name size is limited
-};
+   char n[4];
+   if(!is.read(n, 4))
+      return false;
+   number = n[0] | n[1] << 8 | n[2] << 16 | n[3] << 24;
+   return true;
+}
 
-//
-// Lump class
-//
-class Lump
+void WriteInt(intptr_t number, std::ostream &os)
 {
-public:
-   Lump()
-   {
-      memset(mName, 0, sizeof(mName));
-   }
-   explicit Lump(const char name[LumpNameLength + 1])
-   {
-      strcpy(mName, name);
-   }
+   char n[4];
+   n[0] = number & 0xff;
+   n[1] = number >> 8 & 0xff;
+   n[2] = number >> 16 & 0xff;
+   n[3] = number >> 24 & 0xff;
+   os.write(n, 4);
+}
 
-   Result Load(std::istream &is, size_t size);
-   const char *Name() const
-   {
-      return mName;
-   }
-
-   const std::vector<uint8_t> &Data() const
-   {
-      return mData;
-   }
-private:
-   char mName[LumpNameLength + 1];  // lump name
-   std::vector<uint8_t> mData;      // lump content
-};
-
-#endif /* Lump_hpp */
+void WriteShort(intptr_t number, std::ostream &os)
+{
+   char n[2];
+   n[0] = number & 0xff;
+   n[1] = number >> 8 & 0xff;
+   os.write(n, 2);
+}

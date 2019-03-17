@@ -208,7 +208,7 @@ struct UDMFSide
    {
    }
 
-   void WriteToStream(FILE *stream, int index) const;
+   void WriteToStream(std::ostream &os, int index) const;
 };
 
 //
@@ -218,7 +218,7 @@ struct UDMFSector
 {
    UDMFSector(const Sector &sector);
 
-   void WriteToStream(FILE *stream, int index) const;
+   void WriteToStream(std::ostream &os, int index) const;
 
    double heightfloor;
    double heightceiling;

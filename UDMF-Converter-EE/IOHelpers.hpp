@@ -1,6 +1,6 @@
 //
 // UDMF Converter EE
-// Copyright (C) 2017 Ioan Chera
+// Copyright (C) 2019 Ioan Chera
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,53 +18,20 @@
 // Additional terms and conditions compatible with the GPLv3 apply. See the
 // file COPYING-EE for details.
 //
-// Purpose: Lump data class
+// Purpose: Helpers for iostream
 // Authors: Ioan Chera
 //
 
-#ifndef Lump_hpp
-#define Lump_hpp
+#ifndef IOHelpers_hpp
+#define IOHelpers_hpp
 
 #include <stdint.h>
-#include <stdlib.h>
-#include <string.h>
 #include <istream>
-#include <vector>
-#include "Result.hpp"
+#include <ostream>
 
-enum
-{
-   LumpNameLength = 8,  // lump name size is limited
-};
+bool ReadInt(std::istream &is, int &number);
 
-//
-// Lump class
-//
-class Lump
-{
-public:
-   Lump()
-   {
-      memset(mName, 0, sizeof(mName));
-   }
-   explicit Lump(const char name[LumpNameLength + 1])
-   {
-      strcpy(mName, name);
-   }
+void WriteInt(intptr_t number, std::ostream &os);
+void WriteShort(intptr_t number, std::ostream &os);
 
-   Result Load(std::istream &is, size_t size);
-   const char *Name() const
-   {
-      return mName;
-   }
-
-   const std::vector<uint8_t> &Data() const
-   {
-      return mData;
-   }
-private:
-   char mName[LumpNameLength + 1];  // lump name
-   std::vector<uint8_t> mData;      // lump content
-};
-
-#endif /* Lump_hpp */
+#endif /* IOHelpers_hpp */
