@@ -51,6 +51,15 @@ public:
    {
       strcpy(mName, name);
    }
+   Lump(const char name[LumpNameLength + 1], const std::string &text);
+
+   template<typename T>
+   Lump(const char name[LumpNameLength + 1], const std::vector<T> &data)
+   {
+      strcpy(mName, name);
+      mData.resize(data.size() * sizeof(T));
+      memcpy(mData.data(), data.data(), data.size() * sizeof(T));
+   }
 
    Result Load(std::istream &is, size_t size);
    const char *Name() const

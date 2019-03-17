@@ -85,6 +85,14 @@ public:
    {
       return mSegs;
    }
+   const std::vector<uint8_t> &GetReject() const
+   {
+      return mReject;
+   }
+   const std::vector<int16_t> &GetBlockmap() const
+   {
+      return mBlockmap;
+   }
 
    const Wad *GetWad() const
    {

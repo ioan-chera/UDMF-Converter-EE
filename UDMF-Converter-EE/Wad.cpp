@@ -100,6 +100,30 @@ Result Wad::AddFile(const char *path)
    return result;
 }
 
+Result Wad::WriteFile(const char *path) const
+{
+   std::ofstream os(path, std::ios::out | std::ios::binary | std::ios::trunc);
+   if(!os.is_open())
+      return Result::CannotOpen;
+
+   os.write("PWAD", 4);
+   WriteInt(mLumps.size(), os);
+   WriteInt(12, os);
+   off_t filepos = 12 + mLumps.size() * 16;
+   for(const Lump &lump : mLumps)
+   {
+      WriteInt(filepos, os);
+      WriteInt(lump.Data().size(), os);
+      filepos += lump.Data().size();
+      os.write(lump.Name(), 8);
+   }
+
+   for(const Lump &lump : mLumps)
+      WriteData(lump.Data(), os);
+
+   return Result::OK;
+}
+
 //
 // Finds a lump from the wad, searching backwards.
 //

@@ -24,6 +24,13 @@
 
 #include "Lump.hpp"
 
+Lump::Lump(const char name[LumpNameLength + 1], const std::string &text)
+{
+   strcpy(mName, name);
+   mData.resize(text.size());
+   memcpy(mData.data(), text.c_str(), text.size());
+}
+
 //
 // Tries loading lump from a stream
 //

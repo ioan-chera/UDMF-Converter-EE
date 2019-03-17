@@ -22,14 +22,17 @@
 // Authors: Ioan Chera
 //
 
+#include <sstream>
 #include "Arguments.hpp"
 #include "DoomLevel.hpp"
 #include "ExtraData.hpp"
 #include "Helpers.hpp"
 #include "LineSpecialMapping.hpp"
 #include "ThingMapping.hpp"
+#include "UDMFItems.hpp"
 #include "Wad.hpp"
 #include "XLEMapInfoParser.hpp"
+#include "ZNodes.hpp"
 
 //
 // Entry point
@@ -86,9 +89,11 @@ int main(int argc, const char * argv[])
    }
 
    // Convert the maps
+   Wad outWad;
    for(const LumpInfo &info : levelLumps)
    {
-      const LevelInfo *levelInfo = emapinfo.Get(info.lump->Name());
+      const char *name = info.lump->Name();
+      const LevelInfo *levelInfo = emapinfo.Get(name);
       ExtraData extraData(thingnames);
       if(levelInfo)
       {
@@ -98,24 +103,44 @@ int main(int argc, const char * argv[])
             if(!extraData.LoadLump(wad, it->second.c_str()))
             {
                fprintf(stderr, "Warning: failed loading ExtraData %s for %s\n", it->second.c_str(),
-                       info.lump->Name());
+                       name);
             }
             // Delete the ExtraData reference: it will be undesired in UDMF
-            emapinfo.Erase(info.lump->Name(), "extradata");
+            emapinfo.Erase(name, "extradata");
          }
       }
 
       DoomLevel level;
       if(!level.LoadWad(wad, info.index))
       {
-         fprintf(stderr, "Failed loading level %s\n", info.lump->Name());
+         fprintf(stderr, "Failed loading level %s\n", name);
          continue;
       }
-      printf("Loaded level %s\n", info.lump->Name());
+      printf("Loaded level %s\n", name);
 
       // Now we have both the level and its ExtraData loaded. Let's see how we convert it now
+      UDMFLevel udmfLevel(level, extraData);
 
-      
+      // Create a wad with the new level lumps
+      outWad.AddLump(Lump(name));   // marker
+      std::ostringstream oss;
+      oss << udmfLevel;
+      outWad.AddLump(Lump("TEXTMAP", oss.str()));
+      oss.clear();
+      oss.seekp(0);
+      WriteZNodes(level, oss);
+      outWad.AddLump(Lump("ZNODES", oss.str()));
+      // Also add reject and blockmap
+      outWad.AddLump(Lump("REJECT", level.GetReject()));
+      outWad.AddLump(Lump("BLOCKMAP", level.GetBlockmap()));
+      outWad.AddLump(Lump("ENDMAP"));
+   }
+
+   result = wad.WriteFile(outPath);
+   if(result != Result::OK)
+   {
+      fprintf(stderr, "Failed writing file '%s'. %s\n", outPath, ResultMessage(result));
+      return EXIT_FAILURE;
    }
 
    return 0;

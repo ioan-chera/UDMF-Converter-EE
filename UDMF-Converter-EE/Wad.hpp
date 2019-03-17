@@ -59,6 +59,7 @@ public:
    }
 
    Result AddFile(const char *path);
+   Result WriteFile(const char *path) const;
 
    const std::vector<Lump> &Lumps() const
    {
@@ -66,9 +67,16 @@ public:
    }
 
    const Lump *FindLump(const char *name, int *index = nullptr) const;
+
+   void AddLump(Lump &&lump)
+   {
+      mLumps.push_back(std::move(lump));
+   }
    
 private:
    std::vector<Lump> mLumps;
+
+   // used to keep track to which disk files the lumps belong for a loaded wad
    std::vector<RangePath> mRangePaths;
 };
 

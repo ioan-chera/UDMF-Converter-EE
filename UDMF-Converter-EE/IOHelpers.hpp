@@ -34,4 +34,10 @@ bool ReadInt(std::istream &is, int &number);
 void WriteInt(intptr_t number, std::ostream &os);
 void WriteShort(intptr_t number, std::ostream &os);
 
+template <typename T>
+void WriteData(const std::vector<T> &data, std::ostream &os)
+{
+   os.write(reinterpret_cast<const char *>(data.data()), data.size() * sizeof(T));
+}
+
 #endif /* IOHelpers_hpp */
