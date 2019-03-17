@@ -39,11 +39,6 @@ static void Print(std::ostream &os, const char *name, double value, double def =
    if(value != def)
       os << name << '=' << value << ";\n";
 }
-static void Print(std::ostream &os, const char *name, bool value)
-{
-   if(value)
-      os << name << "=true;\n";
-}
 static void Print(std::ostream &os, const char *name, const std::string &value, const char *def = "")
 {
    if(value != def)
@@ -312,6 +307,18 @@ void UDMFLine::WriteToStream(std::ostream &os, int index) const
    os << "}\n";
 }
 
+void UDMFSide::WriteToStream(std::ostream &os, int index) const
+{
+   os << "sidedef // " << index << "\n{\n";
+   Print(os, "offsetx", offsetx);
+   Print(os, "offsety", offsety);
+   Print(os, "texturetop", texturetop, "-");
+   Print(os, "texturebottom", texturebottom, "-");
+   Print(os, "texturemiddle", texturemiddle, "-");
+   Print(os, "sector", sector, INT_MIN);
+   os << "}\n";
+}
+
 //
 // Get the sector now
 // We can't get info from ExtraData immediately, we need to have a linedef first
@@ -452,6 +459,91 @@ alphaceiling(1)
          break;
       }
    }
+}
+
+void UDMFSector::WriteToStream(std::ostream &os, int index) const
+{
+   os << "sector // " << index << "\n{\n";
+   Print(os, "heightfloor", heightfloor);
+   Print(os, "heightceiling", heightceiling);
+   Print(os, "texturefloor", texturefloor);
+   Print(os, "textureceiling", textureceiling);
+   Print(os, "lightlevel", lightlevel, 160);
+   Print(os, "special", special);
+   Print(os, "id", id);
+
+   Print(os, "xpanningfloor", xpanningfloor);
+   Print(os, "ypanningfloor", ypanningfloor);
+   Print(os, "xpanningceiling", xpanningceiling);
+   Print(os, "ypanningceiling", ypanningceiling);
+
+   Print(os, "xscalefloor", xscalefloor, 1.0);
+   Print(os, "yscalefloor", yscalefloor, 1.0);
+   Print(os, "xscaleceiling", xscaleceiling, 1.0);
+   Print(os, "yscaleceiling", yscaleceiling, 1.0);
+
+   Print(os, "rotationfloor", rotationfloor);
+   Print(os, "rotationceiling", rotationceiling);
+
+   Print(os, "friction", friction, -1);
+   Print(os, "leakiness", leakiness);
+   Print(os, "damageamount", damageamount);
+   Print(os, "damageinterval", damageinterval);
+
+   Print(os, "damagetype", damagetype, "Unknown");
+   Print(os, "floorterrain", floorterrain, "@flat");
+   Print(os, "ceilingterrain", ceilingterrain, "@flat");
+   Print(os, "lightfloor", lightfloor);
+   Print(os, "lightceiling", lightceiling);
+   Print(os, "colormaptop", colormaptop, "@default");
+   Print(os, "colormapmid", colormapmid, "@default");
+   Print(os, "colormapbottom", colormapbottom, "@default");
+
+   Print(os, "scroll_ceil_x", scroll_ceil_x);
+   Print(os, "scroll_ceil_y", scroll_ceil_y);
+   Print(os, "scroll_floor_x", scroll_floor_x);
+   Print(os, "scroll_floor_y", scroll_floor_y);
+
+   Print(os, "scroll_ceil_type", scroll_ceil_type, "none");
+   Print(os, "scroll_floor_type", scroll_floor_type, "none");
+
+   Print(os, "floorid", floorid);
+   Print(os, "ceilingid", ceilingid);
+   Print(os, "attachfloor", attachfloor);
+   Print(os, "attachceiling", attachceiling);
+
+   Print(os, "soundsequence", soundsequence);
+   Print(os, "portalfloor", portalfloor);
+   Print(os, "portalceiling", portalceiling);
+
+   Print(os, "portal_floor_overlaytype", portal_floor_overlaytype, "none");
+   Print(os, "portal_ceil_overlaytype", portal_ceil_overlaytype, "none");
+   Print(os, "alphafloor", alphafloor, 1.0);
+   Print(os, "alphaceiling", alphaceiling, 1.0);
+
+   PrintFlag(os, "secret", flags, USF_SECRET);
+   PrintFlag(os, "damage_endgodmode", flags, USF_DAMAGE_ENDGODMODE);
+   PrintFlag(os, "damage_exitlevel", flags, USF_DAMAGE_EXITLEVEL);
+   PrintFlag(os, "damage_terraineffect", flags, USF_DAMAGETERRAINEFFECT);
+   PrintFlag(os, "lightfloorabsolute", flags, USF_LIGHTFLOORABSOLUTE);
+   PrintFlag(os, "lightceilingabsolute", flags, USF_LIGHTCEILINGABSOLUTE);
+   PrintFlag(os, "portal_floor_disabled", flags, USF_PORTAL_FLOOR_DISABLED);
+   PrintFlag(os, "portal_floor_norender", flags, USF_PORTAL_FLOOR_NORENDER);
+   PrintFlag(os, "portal_floor_nopass", flags, USF_PORTAL_FLOOR_NOPASS);
+   PrintFlag(os, "portal_floor_blocksound", flags, USF_PORTAL_FLOOR_BLOCKSOUND);
+   PrintFlag(os, "portal_floor_useglobaltex", flags, USF_PORTAL_FLOOR_USEGLOBALTEX);
+   PrintFlag(os, "portal_floor_attached", flags, USF_PORTAL_FLOOR_ATTACHED);
+   PrintFlag(os, "portal_ceil_disabled", flags, USF_PORTAL_CEIL_DISABLED);
+   PrintFlag(os, "portal_ceil_norender", flags, USF_PORTAL_CEIL_NORENDER);
+   PrintFlag(os, "portal_ceil_nopass", flags, USF_PORTAL_CEIL_NOPASS);
+   PrintFlag(os, "portal_ceil_blocksound", flags, USF_PORTAL_CEIL_BLOCKSOUND);
+   PrintFlag(os, "portal_ceil_useglobaltex", flags, USF_PORTAL_CEIL_USEGLOBALTEX);
+   PrintFlag(os, "portal_ceil_attached", flags, USF_PORTAL_CEIL_ATTACHED);
+   PrintFlag(os, "phasedlight", flags, USF_PHASEDLIGHT);
+   PrintFlag(os, "lightsequence", flags, USF_LIGHTSEQUENCE);
+   PrintFlag(os, "lightseqalt", flags, USF_LIGHTSEQALT);
+
+   os << "}";
 }
 
 //
@@ -1100,5 +1192,11 @@ std::ostream &operator << (std::ostream &os, const UDMFLevel &level)
    i = 0;
    for (const UDMFLine &line : level.mLines)
       line.WriteToStream(os, i++);
+   i = 0;
+   for (const UDMFSide &side : level.mSides)
+      side.WriteToStream(os, i++);
+   i = 0;
+   for (const UDMFSector &sector : level.mSectors)
+      sector.WriteToStream(os, i++);
    return os;
 }
