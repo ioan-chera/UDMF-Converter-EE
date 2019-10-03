@@ -227,7 +227,7 @@
 		4FC0A9431E2435C8006CEC45 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1100;
 				ORGANIZATIONNAME = "Team Eternity";
 				TargetAttributes = {
 					4FC0A94A1E2435C8006CEC45 = {
@@ -239,10 +239,11 @@
 			};
 			buildConfigurationList = 4FC0A9461E2435C8006CEC45 /* Build configuration list for PBXProject "UDMF-Converter-EE" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 4FC0A9421E2435C8006CEC45;
 			productRefGroup = 4FC0A94C1E2435C8006CEC45 /* Products */;
@@ -289,6 +290,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -342,6 +344,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -387,6 +390,7 @@
 		4FC0A9531E2435C8006CEC45 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				DEVELOPMENT_TEAM = 66L236F264;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -395,6 +399,7 @@
 		4FC0A9541E2435C8006CEC45 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				DEVELOPMENT_TEAM = 66L236F264;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
